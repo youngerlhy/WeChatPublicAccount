@@ -1,6 +1,6 @@
 module.exports = function(app, context){
 app.get('/',function(req,res){
-res.render('test',{issuccess:"success"})
+res.render('index',{});
 });
 app.get('/interface',function(req,res){
     var token="falcon";

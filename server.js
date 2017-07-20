@@ -11,5 +11,5 @@ require('./initiator')(context);
 require('./router')(app, context);      //router config file
 
 server.listen(80,function(){
-console.log('App start,port 80.');
+  console.log('App start,port 80.');
 });
