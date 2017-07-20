@@ -36,11 +36,11 @@ function createButtons(context){
   var postData = qs.stringify({
      "button":[
       {
-           "name":"badminton",
+           "name":"羽毛球",
            "sub_button":[
            {
                "type":"click",
-               "name":"sign up",
+               "name":"打球报名",
                "url":"http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/",
                "key":"sign up"
             }]
@@ -51,7 +51,11 @@ function createButtons(context){
     hostname: 'api.weixin.qq.com',
     port: 443,
     path: "/cgi-bin/menu/create?access_token=" + context.accessToken,
-    method: 'POST'
+    method: 'POST',
+	headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Content-Length': Buffer.byteLength(postData)
+	}
   };
 
   var req = https.request(options, (res) => {
