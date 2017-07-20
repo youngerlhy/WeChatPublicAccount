@@ -1,3 +1,6 @@
+var https = require('https');
+var qs = require('querystring');
+
 function getAccessToken(context){
   var parameters = {
     grant_type: "client_credential",

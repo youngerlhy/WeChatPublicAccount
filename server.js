@@ -1,5 +1,3 @@
-var https = require('https');
-var qs = require('querystring');
 var express = require("express");
 var path=require('path');
 var app = express();
