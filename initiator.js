@@ -31,6 +31,7 @@ function createButtons(context){
       setTimeout(createButtons, 0, context);
       return;
   }
+  console.log("init button with token:", context.accessToken);
 
   var postData = qs.stringify({
      "button":[
@@ -40,7 +41,8 @@ function createButtons(context){
            {
                "type":"click",
                "name":"打球报名",
-               "url":"http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/"
+               "url":"http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/",
+               "key":"sign up"
             }]
        }]
   });
