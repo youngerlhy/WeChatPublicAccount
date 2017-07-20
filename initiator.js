@@ -26,7 +26,50 @@ function getAccessToken(context){
   });
 };
 
+function createButtons(context){
+  if (!context.accessToken) {
+      setTimeout("createButtons(context)");
+      return;
+  }
+
+  var postData = qs.stringify({
+     "button":[
+      {
+           "name":"羽毛球",
+           "sub_button":[
+           {
+               "type":"click",
+               "name":"打球报名",
+               "url":"http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/"
+            }]
+       }]
+  });
+  
+  var options = {
+    hostname: 'api.weixin.qq.com',
+    port: 443,
+    path: "/cgi-bin/menu/create?access_token=" + context.accessToken,
+    method: 'POST'
+  };
+
+  var req = https.request(options, (res) => {
+    console.log('statusCode:', res.statusCode);
+    console.log('headers:', res.headers);
+
+    res.on('data', (data) => {
+      var result = JSON.parse(data);
+      console.log("result:", result);
+    });
+  });
+  req.on('error', (e) => {
+    console.error(e);
+  });
+  req.write(postData);
+  req.end();
+}
+
 module.exports = function(context){
   getAccessToken(context);
   setInterval(getAccessToken, 7100 * 1000, context);
+  setTimeout("createButtons(context)");
 };
