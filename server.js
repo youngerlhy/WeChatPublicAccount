@@ -30,7 +30,7 @@ function getAccessToken(context) {
   https.get(url, (res) => {
     console.log('statusCode:', res.statusCode);
     console.log('headers:', res.headers);
-  
+
     res.on('data', (data) => {
       console.log('data', data);
       var result = JSON.parse(data);
