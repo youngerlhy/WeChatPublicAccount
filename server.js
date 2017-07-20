@@ -1,6 +1,8 @@
 var express = require("express");
 var path=require('path');
 var app = express();
+app.use(express.static('css'));
+
 server  = require('http').Server(app);
 app.set('views',__dirname);    // config view 
 app.set('view engine', 'html'); 
