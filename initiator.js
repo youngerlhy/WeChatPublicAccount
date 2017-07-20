@@ -28,7 +28,7 @@ function getAccessToken(context){
 
 function createButtons(context){
   if (!context.accessToken) {
-      setTimeout("createButtons(context)");
+      setTimeout(createButtons, 0, context);
       return;
   }
 
@@ -71,5 +71,5 @@ function createButtons(context){
 module.exports = function(context){
   getAccessToken(context);
   setInterval(getAccessToken, 7100 * 1000, context);
-  setTimeout("createButtons(context)");
+  setTimeout(createButtons, 0, context);
 };
