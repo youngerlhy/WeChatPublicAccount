@@ -31,31 +31,32 @@ function createButtons(context){
       setTimeout(createButtons, 0, context);
       return;
   }
-  console.log("init button with token:", context.accessToken);
+  console.log("init button with token: ", context.accessToken);
 
   var postData = qs.stringify({
-     "button":[
+     button:[
       {
-           "name":"badminton",
-           "sub_button":[
+           name:"badminton",
+           sub_button:[
            {
-               "type":"click",
-               "name":"sign up",
-               "url":"http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/",
-               "key":"sign up"
+               type:"click",
+               name:"sign up",
+               url:"http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/",
+               key:"sign up"
             }]
        }]
   });
+  console.log("postData: ", postData);
   
   var options = {
     hostname: 'api.weixin.qq.com',
     port: 443,
     path: "/cgi-bin/menu/create?access_token=" + context.accessToken,
     method: 'POST',
-	headers: {
+    headers: {
       'Content-Type': 'application/json; charset=utf-8',
       'Content-Length': Buffer.byteLength(postData)
-	}
+    }
   };
 
   var req = https.request(options, (res) => {
