@@ -33,7 +33,7 @@ function createButtons(context){
   }
   console.log("init button with token: ", context.accessToken);
 
-  var postData = qs.stringify({
+  var postData = JSON.stringify({
      button:[
       {
            name:"badminton",
