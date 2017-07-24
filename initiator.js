@@ -5,8 +5,8 @@ var _context = null;
 function getAccessToken(context){
   var parameters = {
     grant_type: "client_credential",
-    appid: "wx06b3b86f63137f4f",
-    secret: "15faf94a01a96db4567af88de17ae998"
+    appid: "wx067aa7e646581331",
+    secret: "d26907f7504d80d5aea6305db84ec510"
   };
 
   var parametersAsString = qs.stringify(parameters);
@@ -104,13 +104,46 @@ function createDefaultButtons(accessToken){
   var postData = JSON.stringify({
      button:[
       {
-           name:"羽毛球",
+           name:"活动",
            sub_button:[
            {
                type:"click",
-               name:"打球报名",
+               name:"羽毛球报名",
                url:"http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/",
                key:"sign up"
+            }]
+       },{
+           name:"新闻",
+           sub_button:[
+           {
+               type:"click",
+               name:"News In BID",
+               url:"",
+               key:"News In BID"
+            },{
+               type:"click",
+               name:"Old News",
+               url:"",
+               key:"Old News"
+            }]
+       },{
+           name:"友链",
+           sub_button:[
+           {
+               type:"click",
+               name:"妥尼唠英文",
+               url:"",
+               key:"Tony English"
+            },{
+               type:"click",
+               name:"Leo Public Account",
+               url:"",
+               key:"Leo Public Account"
+            },{
+               type:"click",
+               name:"大车车",
+               url:"",
+               key:"Big Car"
             }]
        }]
   });
@@ -194,7 +227,7 @@ function createConditionalButtons(accessToken){
 function tokenReady(accessToken){
   queryTagIdAndCreateIfNotExist("主席", accessToken);
   createDefaultButtons(accessToken);
-  createConditionalButtons(accessToken);
+  //createConditionalButtons(accessToken);
 };
 
 function init(context){
