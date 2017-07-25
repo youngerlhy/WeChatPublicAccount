@@ -1,5 +1,5 @@
 var https = require('https');
-var fs = reauire('fs');
+var fs = require('fs');
 
 var FILE = "adminList.json";
 
