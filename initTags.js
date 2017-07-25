@@ -1,3 +1,4 @@
+var https = require('https');
 var ADMIN_TAG_NAME = "admin";
 
 function queryTagIdAndCreateIfNotExist(tagName, callback) {
