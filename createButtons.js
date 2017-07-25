@@ -10,7 +10,7 @@ function createDefaultButtons(callback) {
 							sub_button : [ {
 								type : "click",
 								name : "羽毛球报名",
-								url : "http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/",
+								url : "http://www.baidu.com",
 								key : "sign up"
 							} ]
 						}, {
