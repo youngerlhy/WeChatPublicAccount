@@ -1,5 +1,4 @@
 var https = require('https');
-var ADMIN_TAG_NAME = "admin";
 
 function queryTagIdAndCreateIfNotExist(tagName, callback) {
 	console.log('Start to query if tag %s is created ...', tagName);

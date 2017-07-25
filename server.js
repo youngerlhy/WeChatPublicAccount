@@ -1,7 +1,9 @@
 var express = require("express");
 var path = require('path');
 var app = express();
-app.use(express.static('css'));
+ADMIN_TAG_NAME = "admin";
+
+app.use(express.static(path.join(__dirname, 'css')));
 
 server = require('http').Server(app);
 app.set('views', __dirname); // config view 
