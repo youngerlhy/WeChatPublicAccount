@@ -44,6 +44,8 @@ var DEFAULT_BUTTONS = {
 		} ]
 	}
 
+var defaultButtonsClone = JSON.parse(JSON.stringify(DEFAULT_BUTTONS));
+	
 function createDefaultButtons(callback) {
 	console.log('Start to create default buttons ...');
 	var postData = JSON.stringify(DEFAULT_BUTTONS);
@@ -82,8 +84,6 @@ function createDefaultButtons(callback) {
 
 function createConditionalButtons() {
 	console.log('Start to create conditional buttons ...');
-	var defaultButtonsStr = JSON.stringify(DEFAULT_BUTTONS);
-	var defaultButtonsClone = JSON.parse(defaultButtonsStr);
 	defaultButtonsClone.button.push({
 		name : "管理",
 		sub_button : [{
