@@ -28,17 +28,17 @@ var DEFAULT_BUTTONS = {
 			sub_button : [ {
 				type : "view",
 				name : "妥尼唠英文",
-				url : "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzU5NzA4MDA4MA==#wechat_redirect",
+				url : "http://www.baidu.com",
 				key : "Tony English"
 			}, {
 				type : "view",
 				name : "卡司游影",
-				url : "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI1MDM3NzgzNQ==&scene=124#wechat_redirect",
+				url : "http://www.baidu.com",
 				key : "Leo Public Account"
 			}, {
 				type : "view",
 				name : "不务正业的大车车",
-				url : "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI4OTIwOTc5Mg==&scene=124#wechat_redirect",
+				url : "http://www.baidu.com",
 				key : "Big Car"
 			} ]
 		} ]
