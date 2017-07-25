@@ -119,7 +119,7 @@ function tagAdminGroup() {
 
 		res.on('data', function(data) {
 			var result = JSON.parse(data);
-			console.log("result:\n", result);
+			console.log("tag admin group result:\n", result);
 			if (result.errcode && 0 != result.errcode) {
 				console.error(result.errmsg);
 				return;
