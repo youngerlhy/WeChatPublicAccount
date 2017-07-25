@@ -25,9 +25,9 @@
 			"name" : "友链",
 			"sub_button" : [ {
 				"type" : "view",
-				"name" : "妥尼唠英文",
-				"url" : "http://www.baidu.com",
-				"key" : "Tony English"
+				"name" : "Staff Public Accounts",
+				"url" : "http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/link",
+				"key" : "Staff Public Accounts"
 			}, {
 				"type" : "view",
 				"name" : "卡司游影",
