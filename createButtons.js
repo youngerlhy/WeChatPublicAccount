@@ -1,53 +1,13 @@
 var https = require('https');
+var fs = require('fs');
 
-var DEFAULT_BUTTONS = {
-	button : [
-		{
-			name : "活动",
-			sub_button : [ {
-				type : "view",
-				name : "羽毛球报名",
-				url : "http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/",
-				key : "sign up"
-			} ]
-		}, {
-			name : "新闻",
-			sub_button : [ {
-				type : "view",
-				name : "News In BID",
-				url : "http://www.baidu.com",
-				key : "News In BID"
-			}, {
-				type : "view",
-				name : "Old News",
-				url : "http://www.baidu.com",
-				key : "Old News"
-			} ]
-		}, {
-			name : "友链",
-			sub_button : [ {
-				type : "view",
-				name : "妥尼唠英文",
-				url : "http://www.baidu.com",
-				key : "Tony English"
-			}, {
-				type : "view",
-				name : "卡司游影",
-				url : "http://www.baidu.com",
-				key : "Leo Public Account"
-			}, {
-				type : "view",
-				name : "不务正业的大车车",
-				url : "http://www.baidu.com",
-				key : "Big Car"
-			} ]
-		} ]
-	}
-	
+var FILE = "buttons.json";
+
 function createDefaultButtons(callback) {
 	console.log('Start to create default buttons ...');
-	var postData = JSON.stringify(DEFAULT_BUTTONS);
-
+	var postData = fs.readFileSync(FILE);
+    console.log('post data:\n', postData);
+	
 	var options = {
 		hostname : 'api.weixin.qq.com',
 		port : 443,
@@ -82,7 +42,8 @@ function createDefaultButtons(callback) {
 
 function createConditionalButtons() {
 	console.log('Start to create conditional buttons ...');
-	DEFAULT_BUTTONS.button.push({
+	var buttons = JSON.parse(fs.readFileSync(FILE));
+	buttons.button.push({
 		name : "管理",
 		sub_button : [{
 			name : "发起报名",
@@ -94,11 +55,12 @@ function createConditionalButtons() {
 			key : "stop sign up"
 		}]
 	});
-	DEFAULT_BUTTONS.matchrule = {
+	buttons.matchrule = {
 		tag_id : context.tags[ADMIN_TAG_NAME],
 	};
-	var postData = JSON.stringify(DEFAULT_BUTTONS);
-
+	var postData = JSON.stringify(buttons);
+    console.log('post data:\n', postData);
+	
 	var options = {
 		hostname : 'api.weixin.qq.com',
 		port : 443,
