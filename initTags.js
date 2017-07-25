@@ -134,5 +134,9 @@ function tagAdminGroup() {
 };
 
 module.exports = function(callback) {
-    queryTagIdAndCreateIfNotExist(ADMIN_TAG_NAME, callback);
+	function callbackExt() {
+		tagAdminGroup();
+		callback();
+	};
+    queryTagIdAndCreateIfNotExist(ADMIN_TAG_NAME, callbackExt);
 };
