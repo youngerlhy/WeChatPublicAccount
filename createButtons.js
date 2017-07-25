@@ -31,17 +31,17 @@ function createDefaultButtons(callback) {
 							sub_button : [ {
 								type : "view",
 								name : "妥尼唠英文",
-								url : "http://www.baidu.com",
+								url : "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzU5NzA4MDA4MA==#wechat_redirect",
 								key : "Tony English"
 							}, {
 								type : "view",
-								name : "Leo Public Account",
-								url : "http://www.baidu.com",
+								name : "卡司游影",
+								url : "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI1MDM3NzgzNQ==&scene=124#wechat_redirect",
 								key : "Leo Public Account"
 							}, {
 								type : "view",
-								name : "大车车",
-								url : "http://www.baidu.com",
+								name : "不务正业的大车车",
+								url : "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI4OTIwOTc5Mg==&scene=124#wechat_redirect",
 								key : "Big Car"
 							} ]
 						} ]
