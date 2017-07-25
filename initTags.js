@@ -1,4 +1,7 @@
 var https = require('https');
+var fs = reauire('fs');
+
+var FILE = "adminList.json";
 
 function queryTagIdAndCreateIfNotExist(tagName, callback) {
 	console.log('Start to query if tag %s is created ...', tagName);
@@ -94,16 +97,15 @@ function putTagId(tagName, tagId) {
 
 function tagAdminGroup() {
 	console.log('Start to tag admin group ...');
-	var postData = JSON.stringify({
-		"tag" : {
-			"name" : tagName
-		}
-	});
+	
+	var postDataObj = JSON.parse(fs.readFileSync(FILE));
+	postDataObj.tagid = context.tags[ADMIN_TAG_NAME];
+	var postData = JSON.stringify(postDataObj);
 
 	var options = {
 		hostname : 'api.weixin.qq.com',
 		port : 443,
-		path : "/cgi-bin/tags/create?access_token=" + context.accessToken,
+		path : "/cgi-bin/tags/members/batchtagging?access_token=" + context.accessToken,
 		method : 'POST',
 		headers : {
 			'Content-Type' : 'application/json; charset=utf-8',
@@ -122,9 +124,6 @@ function tagAdminGroup() {
 				console.error(result.errmsg);
 				return;
 			}
-			console.log("tagId = ", result.tag.id);
-			putTagId(tagName, result.tag.id);
-			callback();
 		});
 	});
 	req.on('error', function(e) {
