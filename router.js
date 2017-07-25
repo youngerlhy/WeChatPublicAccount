@@ -2,6 +2,10 @@ module.exports = function(app) {
 	app.get('/', function(req, res) {
 		res.render('index', {});
 	});
+	
+	app.get('/', function(req, res) {
+		res.render('externalLink', {});
+	});
 	app.get('/interface', function(req, res) {
 		var token = "falcon";
 		var signature = req.query.signature;
