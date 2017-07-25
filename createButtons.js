@@ -18,12 +18,12 @@ function createDefaultButtons(callback) {
 							sub_button : [ {
 								type : "view",
 								name : "News In BID",
-								url : "",
+								url : "http://www.baidu.com",
 								key : "News In BID"
 							}, {
 								type : "view",
 								name : "Old News",
-								url : "",
+								url : "http://www.baidu.com",
 								key : "Old News"
 							} ]
 						}, {
@@ -31,17 +31,17 @@ function createDefaultButtons(callback) {
 							sub_button : [ {
 								type : "view",
 								name : "妥尼唠英文",
-								url : "",
+								url : "http://www.baidu.com",
 								key : "Tony English"
 							}, {
 								type : "view",
 								name : "Leo Public Account",
-								url : "",
+								url : "http://www.baidu.com",
 								key : "Leo Public Account"
 							}, {
 								type : "view",
 								name : "大车车",
-								url : "",
+								url : "http://www.baidu.com",
 								key : "Big Car"
 							} ]
 						} ]
