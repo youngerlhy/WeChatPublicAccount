@@ -5,7 +5,8 @@ var FILE = "buttons.json";
 
 function createDefaultButtons(callback) {
 	console.log('Start to create default buttons ...');
-	var postData = fs.readFileSync(FILE);
+	var buttons = JSON.parse(fs.readFileSync(FILE));
+	var postData = JSON.stringify(buttons);
     console.log('post data:\n', postData);
 	
 	var options = {
