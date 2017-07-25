@@ -8,20 +8,20 @@ function createDefaultButtons(callback) {
 						{
 							name : "活动",
 							sub_button : [ {
-								type : "click",
+								type : "view",
 								name : "羽毛球报名",
-								url : "http://www.baidu.com",
+								url : "http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/",
 								key : "sign up"
 							} ]
 						}, {
 							name : "新闻",
 							sub_button : [ {
-								type : "click",
+								type : "view",
 								name : "News In BID",
 								url : "",
 								key : "News In BID"
 							}, {
-								type : "click",
+								type : "view",
 								name : "Old News",
 								url : "",
 								key : "Old News"
@@ -29,17 +29,17 @@ function createDefaultButtons(callback) {
 						}, {
 							name : "友链",
 							sub_button : [ {
-								type : "click",
+								type : "view",
 								name : "妥尼唠英文",
 								url : "",
 								key : "Tony English"
 							}, {
-								type : "click",
+								type : "view",
 								name : "Leo Public Account",
 								url : "",
 								key : "Leo Public Account"
 							}, {
-								type : "click",
+								type : "view",
 								name : "大车车",
 								url : "",
 								key : "Big Car"
