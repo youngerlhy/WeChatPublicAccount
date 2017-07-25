@@ -133,10 +133,55 @@ function tagAdminGroup() {
 	req.end();
 };
 
+function deleteTags(tagName, callback) {
+	console.log('Start to delete Tag %s ...', tagName);
+	var postData = JSON.stringify({
+		"tag" : {
+			"id" : context.tags[tagName]
+		}
+	});
+
+	var options = {
+		hostname : 'api.weixin.qq.com',
+		port : 443,
+		path : "/cgi-bin/tags/delete?access_token=" + context.accessToken,
+		method : 'POST',
+		headers : {
+			'Content-Type' : 'application/json; charset=utf-8',
+			'Content-Length' : Buffer.byteLength(postData)
+		}
+	};
+
+	var req = https.request(options, function(res) {
+		console.log('statusCode:', res.statusCode);
+		console.log('headers:\n', res.headers);
+
+		res.on('data', function(data) {
+			var result = JSON.parse(data);
+			console.log("result:\n", result);
+			if (result.errcode && 0 != result.errcode) {
+				console.error(result.errmsg);
+				return;
+			}
+			console.log("tagId = ", result.tag.id);
+			delete context.tags[tagName];
+			callback();
+		});
+	});
+	req.on('error', function(e) {
+		console.error(e);
+	});
+	req.write(postData);
+	req.end();
+};
+
 module.exports = function(callback) {
-	function callbackExt() {
+	function callbackExt2() {
 		tagAdminGroup();
 		callback();
 	};
-    queryTagIdAndCreateIfNotExist(ADMIN_TAG_NAME, callbackExt);
+	function callbackExt1() {
+		queryTagIdAndCreateIfNotExist(ADMIN_TAG_NAME, callbackExt2);
+	};
+	deleteTags(ADMIN_TAG_NAME, callbackExt1);
 };
