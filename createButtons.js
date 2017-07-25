@@ -43,8 +43,6 @@ var DEFAULT_BUTTONS = {
 			} ]
 		} ]
 	}
-
-var defaultButtonsClone = JSON.parse(JSON.stringify(DEFAULT_BUTTONS));
 	
 function createDefaultButtons(callback) {
 	console.log('Start to create default buttons ...');
@@ -84,7 +82,7 @@ function createDefaultButtons(callback) {
 
 function createConditionalButtons() {
 	console.log('Start to create conditional buttons ...');
-	defaultButtonsClone.button.push({
+	DEFAULT_BUTTONS.button.push({
 		name : "管理",
 		sub_button : [{
 			name : "发起报名",
@@ -96,10 +94,10 @@ function createConditionalButtons() {
 			key : "stop sign up"
 		}]
 	});
-	defaultButtonsClone.matchrule = {
+	DEFAULT_BUTTONS.matchrule = {
 		tag_id : context.tags[ADMIN_TAG_NAME],
 	};
-	var postData = JSON.stringify(defaultButtonsClone);
+	var postData = JSON.stringify(DEFAULT_BUTTONS);
 
 	var options = {
 		hostname : 'api.weixin.qq.com',
