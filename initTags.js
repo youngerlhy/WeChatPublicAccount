@@ -92,6 +92,48 @@ function putTagId(tagName, tagId) {
 	eval("context.tags." + tagName + "=" + tagId);
 };
 
+function tagAdminGroup() {
+	console.log('Start to tag admin group ...');
+	var postData = JSON.stringify({
+		"tag" : {
+			"name" : tagName
+		}
+	});
+
+	var options = {
+		hostname : 'api.weixin.qq.com',
+		port : 443,
+		path : "/cgi-bin/tags/create?access_token=" + context.accessToken,
+		method : 'POST',
+		headers : {
+			'Content-Type' : 'application/json; charset=utf-8',
+			'Content-Length' : Buffer.byteLength(postData)
+		}
+	};
+
+	var req = https.request(options, function(res) {
+		console.log('statusCode:', res.statusCode);
+		console.log('headers:\n', res.headers);
+
+		res.on('data', function(data) {
+			var result = JSON.parse(data);
+			console.log("result:\n", result);
+			if (result.errcode && 0 != result.errcode) {
+				console.error(result.errmsg);
+				return;
+			}
+			console.log("tagId = ", result.tag.id);
+			putTagId(tagName, result.tag.id);
+			callback();
+		});
+	});
+	req.on('error', function(e) {
+		console.error(e);
+	});
+	req.write(postData);
+	req.end();
+};
+
 module.exports = function(callback) {
     queryTagIdAndCreateIfNotExist(ADMIN_TAG_NAME, callback);
 };

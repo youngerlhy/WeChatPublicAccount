@@ -3,7 +3,7 @@ var path = require('path');
 var app = express();
 ADMIN_TAG_NAME = "admin";
 
-app.use(express.static(path.join(__dirname, 'css')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 server = require('http').Server(app);
 app.set('views', __dirname); // config view 
