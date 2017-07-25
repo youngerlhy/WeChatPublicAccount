@@ -8,8 +8,8 @@ app.set('views',__dirname);    // config view
 app.set('view engine', 'html'); 
 app.engine( '.html', require( 'ejs' ).__express );
 
-var context = {};
-require('./initiator')(context);
+context = {};
+require('./initiator')();
 require('./router')(app, context);      //router config file
 
 server.listen(80,function(){

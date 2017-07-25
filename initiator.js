@@ -1,8 +1,7 @@
 var https = require('https');
 var qs = require('querystring');
-var _context = null;
 
-function getAccessToken(context){
+function getAccessToken(callback){
   var parameters = {
     grant_type: "client_credential",
     appid: "wx067aa7e646581331",
@@ -20,6 +19,9 @@ function getAccessToken(context){
       var result = JSON.parse(data);
       console.log("access token:", result.access_token);
       context.accessToken = result.access_token;
+	  if (typeof callback == "function") {
+		callback();
+	  };
     });
 
   }).on('error', (e) => {
@@ -224,24 +226,13 @@ function createConditionalButtons(accessToken){
   req.end();
 };
 
-function tokenReady(accessToken){
-  queryTagIdAndCreateIfNotExist("主席", accessToken);
-  createDefaultButtons(accessToken);
-  //createConditionalButtons(accessToken);
+function onTokenReady(){
+  queryTagIdAndCreateIfNotExist("主席", context.accessToken);
+  createDefaultButtons(context.accessToken);
+  //createConditionalButtons(context);
 };
 
-function init(context){
-  if (!context.accessToken) {
-      setTimeout(init, 0, context);
-      return;
-  }
-  console.log("init with token: ", context.accessToken);
-  tokenReady(context.accessToken);
-};
-
-module.exports = function(context){
-  _context = context;
-  getAccessToken(context);
-  setInterval(getAccessToken, 7100 * 1000, context);
-  setTimeout(init, 0, context);
+module.exports = function(){
+  getAccessToken(onTokenReady);
+  setInterval(getAccessToken, 7100 * 1000);
 };
