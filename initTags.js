@@ -163,7 +163,6 @@ function deleteTags(tagName, callback) {
 				console.error(result.errmsg);
 				return;
 			}
-			console.log("tagId = ", result.tag.id);
 			callback();
 		});
 	});
@@ -179,8 +178,10 @@ module.exports = function(callback) {
 		tagAdminGroup();
 		callback();
 	};
-	function callbackExt1() {
-		queryTagIdAndCreateIfNotExist(ADMIN_TAG_NAME, callbackExt2);
-	};
-	deleteTags(ADMIN_TAG_NAME, callbackExt1);
+	//function callbackExt1() {
+	//	queryTagIdAndCreateIfNotExist(ADMIN_TAG_NAME, callbackExt2);
+	//};
+	//deleteTags(ADMIN_TAG_NAME, callbackExt1);
+	
+	queryTagIdAndCreateIfNotExist(ADMIN_TAG_NAME, callbackExt2);
 };
