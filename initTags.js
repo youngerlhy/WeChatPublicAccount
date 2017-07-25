@@ -137,7 +137,7 @@ function deleteTags(tagName, callback) {
 	console.log('Start to delete Tag %s ...', tagName);
 	var postData = JSON.stringify({
 		"tag" : {
-			"id" : context.tags[tagName]
+			"id" : 101
 		}
 	});
 
@@ -164,7 +164,6 @@ function deleteTags(tagName, callback) {
 				return;
 			}
 			console.log("tagId = ", result.tag.id);
-			delete context.tags[tagName];
 			callback();
 		});
 	});
