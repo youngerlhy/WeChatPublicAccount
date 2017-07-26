@@ -6,6 +6,13 @@ module.exports = function(app) {
 	app.get('/link', function(req, res) {
 		res.render('externalLink', {});
 	});
+	
+	app.get('/leo', function(req, res) {
+		res.render('leo', {});
+	});
+	app.get('/affleck', function(req, res) {
+		res.render('affleck', {});
+	});
 	app.get('/interface', function(req, res) {
 		var token = "falcon";
 		var signature = req.query.signature;
