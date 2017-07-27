@@ -3,7 +3,7 @@ var fs = require('fs');
 
 var FILE = "buttons.json";
 
-function createDefaultButtons(callback) {
+function createDefaultButtons() {
 	console.log('Start to create default buttons ...');
 	var buttons = JSON.parse(fs.readFileSync(FILE));
 	var postData = JSON.stringify(buttons);
@@ -31,7 +31,6 @@ function createDefaultButtons(callback) {
 				console.error(result.errmsg);
 				return;
 			}
-			callback();
 		});
 	});
 	req.on('error', function(e) {
@@ -91,5 +90,5 @@ function createConditionalButtons() {
 };
 
 module.exports = function() {
-	createDefaultButtons(createConditionalButtons);
+	createDefaultButtons();
 };

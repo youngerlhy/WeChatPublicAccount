@@ -39,5 +39,16 @@
 				"url" : "http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/affleck",
 				"key" : "Big Car"
 			} ]
-		} ]
+		}, {
+			"name" : "管理",
+			"sub_button" : [{
+				"name" : "发起报名",
+				"type" : "click",
+				"key" : "launch sign up"
+			},{
+				"name" : "结束报名",
+				"type" : "click",
+				"key" : "stop sign up"
+			} ]
+		}]
 }
