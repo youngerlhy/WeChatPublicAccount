@@ -1,6 +1,7 @@
 var request = require('request');
 
 module.exports = function(app) {
+
 	app.get('/', function(req, res) {
 		res.render('index', {});
 	});
@@ -60,7 +61,8 @@ module.exports = function(app) {
 		// 第一步：用户同意授权，获取code
 		var get_code = 'get_wx_access_token';
 		// 这是编码后的地址
-		var return_uri = 'http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2Foauth%2F' + get_code;  
+		var return_uri = 'http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'+get_code;
+console.log('https://open.weixin.qq.com/connect/oauth2/authorize?appid='+context.appid+'&redirect_uri='+return_uri+'&response_type=code&scope='+scope+'&state=STATE#wechat_redirect');
 		var scope = 'snsapi_userinfo';
 	
 		res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid='+context.appid+'&redirect_uri='+return_uri+'&response_type=code&scope='+scope+'&state=STATE#wechat_redirect');
@@ -99,12 +101,14 @@ module.exports = function(app) {
 								console.log('获取微信信息成功！');
 	
 								// 小测试，实际应用中，可以由此创建一个帐户
-								res.send("\
+							/*	res.send("\
 									<h1>"+userinfo.nickname+" 的个人信息</h1>\
 									<p><img src='"+userinfo.headimgurl+"' /></p>\
 									<p>"+userinfo.city+"，"+userinfo.province+"，"+userinfo.country+"</p>\
-								");
-	
+								"); */
+console.log(openid);
+//req.session.openid = openid;
+res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/?nickname='+userinfo.nickname+'&headimgurl='+userinfo.headimgurl);
 							}else{
 								console.log(response.statusCode);
 							}
