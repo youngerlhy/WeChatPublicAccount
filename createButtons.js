@@ -3,7 +3,7 @@ var fs = require('fs');
 
 var FILE = __dirname + "/buttons.json";
 
-function createDefaultButtons() {
+function createDefaultButtons(callback) {
 	console.log('Start to create default buttons ...');
 	var buttons = JSON.parse(fs.readFileSync(FILE));
 	var postData = JSON.stringify(buttons);
@@ -31,6 +31,7 @@ function createDefaultButtons() {
 				console.error(result.errmsg);
 				return;
 			}
+			callback();
 		});
 	});
 	req.on('error', function(e) {
@@ -43,17 +44,15 @@ function createDefaultButtons() {
 function createConditionalButtons() {
 	console.log('Start to create conditional buttons ...');
 	var buttons = JSON.parse(fs.readFileSync(FILE));
-	buttons.button.push({
-		name : "管理",
-		sub_button : [{
-			name : "发起报名",
-			type : "click",
-			key : "launch sign up"
-		},{
-			name : "结束报名",
-			type : "click",
-			key : "stop sign up"
-		}]
+	buttons.button[0].sub_button.push({
+		name : "发起报名",
+		type : "click",
+		key : "launch sign up"
+	});
+	buttons.button[0].sub_button.push({
+		name : "结束报名",
+		type : "click",
+		key : "stop sign up"
 	});
 	buttons.matchrule = {
 		tag_id : context.tags[ADMIN_TAG_NAME],
@@ -90,5 +89,5 @@ function createConditionalButtons() {
 };
 
 module.exports = function() {
-	createDefaultButtons();
+	createDefaultButtons(createConditionalButtons);
 };
