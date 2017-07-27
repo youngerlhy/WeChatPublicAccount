@@ -13,6 +13,7 @@ app.engine('.html', require('ejs').__express);
 context = {};
 require('./initiator')();
 require('./router')(app); //router config file
+require('./oauth')(); //router config file
 
 server.listen(80, function() {
 	console.log('App start,port 80.');
