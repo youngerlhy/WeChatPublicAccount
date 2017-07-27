@@ -1,7 +1,7 @@
 var https = require('https');
 var fs = require('fs');
 
-var FILE = "adminList.json";
+var FILE = __dirname + "/adminList.json";
 
 function queryTagIdAndCreateIfNotExist(tagName, callback) {
 	console.log('Start to query if tag %s is created ...', tagName);

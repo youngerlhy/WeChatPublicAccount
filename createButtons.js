@@ -1,7 +1,7 @@
 var https = require('https');
 var fs = require('fs');
 
-var FILE = "buttons.json";
+var FILE = __dirname + "/buttons.json";
 
 function createDefaultButtons() {
 	console.log('Start to create default buttons ...');
