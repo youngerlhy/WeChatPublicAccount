@@ -9,8 +9,8 @@ function getAccessToken(callback) {
 
 	var parameters = {
 		grant_type : "client_credential",
-		appid : "wx067aa7e646581331",
-		secret : "d26907f7504d80d5aea6305db84ec510"
+		appid : context.appid,
+		secret : context.secret
 	};
 
 	var parametersAsString = qs.stringify(parameters);
