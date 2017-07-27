@@ -57,7 +57,7 @@ function createConditionalButtons() {
 	buttons.matchrule = {
 		tag_id : context.tags[ADMIN_TAG_NAME],
 	};
-	var postData = JSON.stringify(buttonStatic);
+	var postData = JSON.stringify(buttons);
     console.log('post data:\n', postData);
 	
 	var options = {
