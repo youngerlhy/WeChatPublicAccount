@@ -4,6 +4,9 @@ var app = express();
 ADMIN_TAG_NAME = "admin";
 
 app.use(express.static(path.join(__dirname, 'public')));
+var bodyParser = require('body-parser');
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 server = require('http').Server(app);
 app.set('views', __dirname); // config view 

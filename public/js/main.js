@@ -33,6 +33,14 @@ $(document).ready(function() {
 		$("#next_time_txt").attr('style',"display:none;");
 		$("#car_seat").attr('style',"display:none;");
 		$("#sign_up_successful").attr('style',"display:block;");
+        var num = $("#seat").val();
+        $.post("/insert_data", 
+        {
+            nickname:getQueryString("nickname"),
+            imageurl:getQueryString("headimgurl"),
+            seatnum:num
+        },
+        function(data,status){});
     });
 	
 	$("#not_have_car").click(function(){
@@ -43,3 +51,9 @@ $(document).ready(function() {
 		$("#sign_up_successful").attr('style',"display:block;");
     });	
 });
+
+function getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]); return null;
+}

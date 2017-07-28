@@ -1,7 +1,6 @@
 var request = require('request');
 
 module.exports = function(app) {
-
 	app.get('/', function(req, res) {
 		res.render('index', {});
 	});
@@ -54,6 +53,15 @@ module.exports = function(app) {
 	});
 	app.post('/interface', function(req, res) {
 	});
+
+        app.post('/insert_data', function(req, res) {
+            var nickname = req.body.nickname;
+            var imageurl = req.body.imageurl;
+            var num = req.body.seatnum;
+            console.log(nickname + " " + imageurl + " " + num);
+            insertSignUpData(nickname, imageurl, num);
+            res.send(nickname + ' ' + imageurl + ' ' + num);
+        });
 	
 	app.get('/wx_login', function(req,res, next){
 		//console.log("oauth - login")
@@ -121,3 +129,26 @@ res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/?nicknam
 		);
 	});
 }
+
+
+
+function insertSignUpData(name, url, num) {
+var MongoClient = require('mongodb').MongoClient;
+var DB_CONN_STR = 'mongodb://localhost:27017/wechatdb';
+MongoClient.connect(DB_CONN_STR, function(err, db) {
+    console.log("连接成功！");
+    var collection = db.collection('site');
+
+    var data = [{"nickname":name,"imageurl":url,"seatnum":num}];
+
+    collection.insert(data, function(err, result) {
+        if(err)
+        {
+            console.log('Error:'+ err);
+            return;
+        }
+    });
+   db.close();
+});
+}
+
