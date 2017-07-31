@@ -83,6 +83,7 @@ var Log = mongoose.model('Log', LogSchema);
 
 exports.save = function(){
 	
+	
 }
 
 
@@ -102,6 +103,26 @@ exports.test1 = function(){
 //};
 //
 //module.exports =  test1;
+module.exports = {
+	add: function() {
+		
+	},
+	del: function() {
+		
+	},
+	update: function() {
+		
+	},
+	findBy: function() {
+		
+	}
+	
+	//自动分车
+//	{findAllUsernonecar  FindAllCaravailableseat}
+}; 
+	 
+	
+
 
 
 
