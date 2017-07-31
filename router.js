@@ -114,8 +114,8 @@ console.log('https://open.weixin.qq.com/connect/oauth2/authorize?appid='+context
 									<p><img src='"+userinfo.headimgurl+"' /></p>\
 									<p>"+userinfo.city+"，"+userinfo.province+"，"+userinfo.country+"</p>\
 								"); */
-console.log(openid);
-//req.session.openid = openid;
+//								console.log(openid);
+								
 res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/?nickname='+userinfo.nickname+'&headimgurl='+userinfo.headimgurl);
 							}else{
 								console.log(response.statusCode);
