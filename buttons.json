@@ -1,19 +1,19 @@
 {
 	"button" : [
 		{
-			"name" : "æ´»åŠ¨",// activities
+			"name" : "活动",
 			"sub_button" : [ {
 				"type" : "view",
-				"name" : "ç¾½æ¯›ç�ƒæŠ¥å��",// Badminton sign up
+				"name" : "羽毛球报名",
 				"url" : "http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/wx_login",
 				"key" : "sign up"
 			} ]
 		}, {
-			"name" : "æ–°é—»",// News
+			"name" : "新闻",
 			"sub_button" : [ {
 				"type" : "view",
 				"name" : "News In BID",
-				"url" : "http://www.baidu.com",
+				"url" : "http://language.chinadaily.com.cn/2017-07/30/content_30295614.htm",
 				"key" : "News In BID"
 			}, {
 				"type" : "view",
@@ -22,20 +22,20 @@
 				"key" : "Old News"
 			} ]
 		}, {
-			"name" : "å�‹é“¾",// friends' links
+			"name" : "友链",
 			"sub_button" : [ {
 				"type" : "view",
-				"name" : "å¦¥å°¼çˆ±å” å—‘",// Tony speaking
+				"name" : "托尼唠英文",
 				"url" : "http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/tony",
 				"key" : "Tony English"
 			}, {
 				"type" : "view",
-				"name" : "å�¡å�¸æ¸¸å½±",// Leo Movies
+				"name" : "卡司游影",
 				"url" : "http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/leo",
 				"key" : "Leo Public Account"
 			}, {
 				"type" : "view",
-				"name" : "ä¸�åŠ¡æ­£ä¸šçš„å¤§è½¦è½¦",// Affleck speaking
+				"name" : "不务正业的大车车",
 				"url" : "http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/affleck",
 				"key" : "Big Car"
 			} ]
