@@ -48,7 +48,8 @@ var User = mongoose.model('User', UserSchema);
 
 var CarSchema = new Schema({
 //	id
-	user:[{type:Schema.Types.ObjectId, ref:'User'}],
+	owner:[{type:Schema.Types.ObjectId, ref:'User'}],
+	passengers:[{type:Schema.Types.ObjectId, ref:'User'}],
 	available:{type:Boolean},
 	seatnum:{type:Number},
 	seatavailablenum:{type:Number},
