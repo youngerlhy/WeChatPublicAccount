@@ -95,23 +95,6 @@ module.exports = function(app) {
     });
   });
   
- app.get('/get_publish_access_token', function(req, res, next) {
-    // 第二步：通过code换取网页授权access_token
-    var code = req.query.code;
-    console.log('code is : '+code);
-    request.get({
-      url : 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + context.appid + '&secret='
-          + context.secret + '&code=' + code + '&grant_type=authorization_code',
-    }, function(error, response, body) {
-      if(response.statusCode == 200){
-        console.log('redirect to select_sign_up_date.html');
-        res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/select_sign_up_date.html');
-      }else{
-        console.log(response.statusCode);
-      }
-    });
-  });
-
   app.get('/close_out_game', function(req, res) {
     console.log('close out a game');
   //TODO show all the sign users info
@@ -134,9 +117,11 @@ module.exports = function(app) {
         + '&redirect_uri=' + return_uri + '&response_type=code&scope=' + scope
         + '&state=STATE#wechat_redirect');
 
-    res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + context.appid
-        + '&redirect_uri=' + return_uri + '&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect');
+    var scope = 'snsapi_userinfo';
 
+    res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + context.appid
+        + '&redirect_uri=' + return_uri + '&response_type=code&scope=' + scope
+        + '&state=STATE#wechat_redirect');
   });
 
   app.get('/get_wx_access_token', function(req, res, next) {
@@ -184,40 +169,8 @@ module.exports = function(app) {
     });
   });
 }
+
 function addPublishGame(startTime, endTime) {
-    var collection = db.collection('Game');
-    var data = [ {
-      "startTime" : startTime,
-      "endTime" : endTime,
-      "status": "start"
-    } ];
-    collection.insert(data, function(err, result) {
-      if (err) {
-        console.log('Error:' + err);
-        return;
-      }
-    });
+  mongoose.insertPublishGame(startTime,endTime);
+  res.send(startTime + ' , ' +endTime);
 };
-
-function insertSignUpData(name, url, num) {
-  var MongoClient = require('mongodb').MongoClient;
-  var DB_CONN_STR = 'mongodb://localhost:27017/wechatdb';
-  MongoClient.connect(DB_CONN_STR, function(err, db) {
-    console.log("连接成功！");
-    var collection = db.collection('site');
-
-    var data = [ {
-      "nickname" : name,
-      "imageurl" : url,
-      "seatnum" : num
-    } ];
-
-    collection.insert(data, function(err, result) {
-      if (err) {
-        console.log('Error:' + err);
-        return;
-      }
-    });
-    db.close();
-  });
-}

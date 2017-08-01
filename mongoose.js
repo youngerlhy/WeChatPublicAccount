@@ -47,7 +47,7 @@ var CarSchema = new Schema({
 var Car = mongoose.model('Car', CarSchema);
 
 var GameTypeSchema = new Schema({
-    typename:{type:String},
+    typename:{type:String, default: "Practice"},
     user:[{type:Schema.Types.ObjectId, ref:'User'}]
 });
 var GameType = mongoose.model('GameType', GameTypeSchema);
@@ -56,7 +56,7 @@ var GameSchema = new Schema({
 	gameType:[{type:Schema.Types.ObjectId, ref:'GameType'}],
 	startTime:{type:Date},
 	endTime:{type:Date},
-	status:{type:String},
+	status:{type:String, default: "Start"},
 	compition:[{type:Schema.Types.ObjectId, ref:'User'}],
 	winner:[{type:Schema.Types.ObjectId, ref:'User'}],
 });
@@ -102,6 +102,18 @@ person.save(function(err) {
     	console.log(err);}
     });
 }
+
+exports.insertPublishGame = function(startTime,endTime) {
+  var game = new Game({
+    startTime:startTime,
+    endTime:endTime
+  }) ;
+  game.save(function(err) {
+    if (err) {
+      return console.log(err);
+  }
+  });
+}
 exports.countUserByName = function(name, callback) {
 	User.count({nickname:name}, callback);
 }
@@ -126,7 +138,6 @@ exports.updateUserCar = function(name, callback){
 
 exports.allotUserCar = function(){
 }
-
 
 //for Test
 
