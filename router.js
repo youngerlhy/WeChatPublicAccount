@@ -114,7 +114,7 @@ module.exports = function(app) {
 
   app.get('/close_out_game', function(req, res) {
     console.log('close out a game');
-  //  res.render('cancel_sign_up', {});
+  //TODO show all the sign users info
   });
   
   app.post('/add_publish_game', function(req, res, next) {
@@ -122,7 +122,6 @@ module.exports = function(app) {
     var endTime = req.body.endTime;
     console.log("Start time is :" + startTime + " , end time is :" + endTime);
     addPublishGame(startTime, endTime);
-//    res.render(startTime + ' ' + endTime);
   });
 
   app.get('/wx_login', function(req, res, next) {

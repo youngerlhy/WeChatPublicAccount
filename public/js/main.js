@@ -64,10 +64,8 @@ $(document).ready(function() {
       endTime : endTime
     }, function(data, status) {
     });
-    $("#datetimeStart").attr('style', "display:none;");
-    $("#datetimeEnd").attr('style', "display:none;");
-    $("#publish_sign_up").attr('style', "display:none;");
-    $("#publish_success").innerHTML="发布成功!";
+    $("#publish_sign_up_div").attr('style', "display:none;");
+    $("#publish_success").attr('style', "display:block;");
   });
 });
 
