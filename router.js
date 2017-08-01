@@ -168,6 +168,7 @@ module.exports = function(app) {
       }
     });
   });
+  
 }
 
 function addPublishGame(startTime, endTime) {

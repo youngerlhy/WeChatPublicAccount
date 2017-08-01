@@ -120,6 +120,7 @@ exports.findAllUsers = function(callback){
 		});
 }
 
+
 exports.findUserByName = function(name, callback){
 	User.findOne({name:name}, function(err, obj){
 		callback(err, obj);
@@ -140,44 +141,46 @@ exports.deleteUserCar = function(name){
     });
 }
 
-exports.allotUserCar = function(){
-	var users = new Array();
-	users = User.find({}, function(err, result){
+exports.allotUserCar = function(callback){
+   var users = [];
+   User.find({}, function(err, users){
 		if(err){
-			console("Error:" + err);
+			console.log("Error:" + err);
 			return;
 		}else{
-			callback(result);
+			console.log("All users:"+users);
 		}
 	});
 	
-	var allotusers = new Array();
-	users.forEach(function(value, index, array){
-		if(value.car != null){   //
-			allotusers.push(value);
+	var allotusers = [];
+	users.forEach(function(user, index){
+		if(!user.car){ 
+			allotusers.push(user);
 		}
 	});
 	
-	var cars = new Array();
-	cars = Car.find({}, function(err, result){
+	var cars = [];
+	Car.find({}, function(err, cars){
 		if(err){
-			console("Error:" + err);
+			console.log("Error:" + err);
 			return;
 		}else{
-			callback(result);
+			console.log("All cars:"+cars);
 		}
 	});
 	
 	var seatnum = 0;
-	cars.forEach(function(value, index, array){
-		for(var i=0; i<cars[index].seatavailablenum; i++){
+	cars.forEach(function(item, index){
+		for(var i=0; i<item.seatavailablenum; i++){
 			if(seatnum+i+1 <= allotusers.length){
-				cars[index].passengers = allotusers[seatnum+i];
-				cars[index].save(function(err){});				
+				item.passengers = allotusers[seatnum+i];
+				item.save(function(err){
+					if(err)  return console.log(err);					
+				});				
 			}
 			// 若是座位数大于人数
 		}
-		seatnum += cars[index].seatavailablenum;
+		seatnum += item.seatavailablenum;
 	});
 }
 
