@@ -4,6 +4,10 @@ module.exports = function(app) {
   app.get('/', function(req, res) {
     res.render('index', {});
   });
+  
+  app.get('/dailyEnglish', function(req, res) {
+    res.render('dailyEnglish', {});
+  });
 
   app.get('/tony', function(req, res) {
     res.render('tony', {});
