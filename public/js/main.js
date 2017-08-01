@@ -59,12 +59,15 @@ $(document).ready(function() {
     var startTime = $("#datetimeStart").val();
     var endTime = $("#datetimeEnd").val();
     console.log(startTime);
-    $("#publish_success").innerHTML="发布成功!";
     $.post("/add_publish_game", {
       startTime : startTime,
       endTime : endTime
     }, function(data, status) {
     });
+    $("#datetimeStart").attr('style', "display:none;");
+    $("#datetimeEnd").attr('style', "display:none;");
+    $("#publish_sign_up").attr('style', "display:none;");
+    $("#publish_success").innerHTML="发布成功!";
   });
 });
 

@@ -76,9 +76,23 @@ module.exports = function(app) {
   
   app.get('/publish_game', function(req, res) {
     console.log('publish a game');
-  //  res.render('select_sign_up_date', {});
- var get_publish_access_token ='get_publish_access_token';
-    res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F"+get_publish_access_token+"&response_type=code&scope=snsapi_base&state=home#wechat_redirect");
+    var get_publish_access_token ='get_publish_access_token';
+    res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'+get_publish_access_token+'&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
+  });
+  
+  app.get('/get_publish_access_token', function(req, res, next) {
+    // 第二步：通过code换取网页授权access_token
+    var code = req.query.code;
+    request.get({
+      url : 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + context.appid + '&secret='
+          + context.secret + '&code=' + code + '&grant_type=authorization_code',
+    }, function(error, response, body) {
+      if(response.statusCode == 200){
+        res.render('select_sign_up_date', {});
+      }else{
+        console.log(response.statusCode);
+      }
+    });
   });
   
  app.get('/get_publish_access_token', function(req, res, next) {
@@ -108,12 +122,10 @@ module.exports = function(app) {
     var endTime = req.body.endTime;
     console.log("Start time is :" + startTime + " , end time is :" + endTime);
     addPublishGame(startTime, endTime);
-    res.send(startTime + ' ' + endTime);
+//    res.render(startTime + ' ' + endTime);
   });
 
   app.get('/wx_login', function(req, res, next) {
-    // console.log("oauth - login")
-
     // 第一步：用户同意授权，获取code
     var get_code = 'get_wx_access_token';
     // 这是编码后的地址
@@ -122,18 +134,13 @@ module.exports = function(app) {
     console.log('https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + context.appid
         + '&redirect_uri=' + return_uri + '&response_type=code&scope=' + scope
         + '&state=STATE#wechat_redirect');
-    var scope = 'snsapi_userinfo';
 
     res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + context.appid
-        + '&redirect_uri=' + return_uri + '&response_type=code&scope=' + scope
-        + '&state=STATE#wechat_redirect');
+        + '&redirect_uri=' + return_uri + '&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect');
 
   });
 
   app.get('/get_wx_access_token', function(req, res, next) {
-    // console.log("get_wx_access_token")
-    // console.log("code_return: "+req.query.code)
-
     // 第二步：通过code换取网页授权access_token
     var code = req.query.code;
     request.get({
