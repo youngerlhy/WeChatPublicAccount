@@ -82,22 +82,26 @@ exports.insertSignupData = function(nickName, imageUrl, seatnum) {
 		nickname : nickName,
 		imageurl : imageUrl
 	});
-	person.save(function(err) {
-		if (err) return console.log(err);
-		if (seatnum > 0) {
-			var car = new Car({
-				owner : person,
-				available : true,
-				seatnum : seatnum,
-				seatavailablenum : seatnum - 1 
-			});
-			car.save(function(err) {
-				if (err) return console.log(err);
-			});
-		}
-	});
-}
 
+if (seatnum > 0) {
+    var car = new Car({
+      owner : person,
+      available : true,
+      seatnum : seatnum,
+      seatavailablenum : seatnum - 1 
+	});
+	person.car = car;
+	car.save(function(err) {
+	if (err) {
+	    return console.log(err);
+	}
+    });
+}	
+person.save(function(err) {
+    if (err) {
+    	console.log(err);}
+    });
+}
 exports.countUserByName = function(name, callback) {
 	User.count({nickname:name}, callback);
 }
