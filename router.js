@@ -71,7 +71,7 @@ module.exports = function(app) {
     console.log('publish a game');
     res.render('select_sign_up_date', {});
   });
-  app.post('/publish_game', function(req, res, next) {
+  app.post('/add_publish_game', function(req, res, next) {
     var startTime = req.body.startTime;
     var endTime = req.body.endTime;
     console.log("Start time is :" + startTime + " , end time is :" + endTime);
