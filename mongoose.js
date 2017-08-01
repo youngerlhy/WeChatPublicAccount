@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
-var db = mongoose.createConnection();
-
+var db = mongoose.connect('mongodb://localhost/testdb', {
+	useMongoClient : true,
+});
 
 db.on('error', console.error.bind(console,'Database Connection error……'));
 
@@ -25,13 +26,9 @@ db.on('close', ()=>{
     console.log('db close');
 });
 
-
-db.openUri('mongodb://127.0.0.1:27017/runoob');
-
 var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
-//  id
     wechatId:{type:String, unique:true},
     nickname:{type:String},
     imageurl:{type:String},
@@ -51,15 +48,12 @@ var CarSchema = new Schema({
 var Car = mongoose.model('Car', CarSchema);
 
 var GameTypeSchema = new Schema({
-//  id
     typename:{type:String},
     user:[{type:Schema.Types.ObjectId, ref:'User'}]
-//  game 
 });
 var GameType = mongoose.model('GameType', GameTypeSchema);
 
 var GameSchema = new Schema({
-//	id
 	gameType:[{type:Schema.Types.ObjectId, ref:'GameType'}],
 	startTime:{type:Date},
 	endTime:{type:Date},
@@ -129,9 +123,6 @@ exports.updateUserCar = function(name, callback){
 
 exports.allotUserCar = function(){
 }
-
-
-
 
 
 //for Test
