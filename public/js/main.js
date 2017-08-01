@@ -52,7 +52,7 @@ $(document).ready(function() {
   $("#publish_sign_up").click(function() {
     $("#publish_sign_up").attr('style', "display:block;");
     var startTime = $("#datetimeStart").val();
-    var endTime = $("datetimeEnd").val();
+    var endTime = $("#datetimeEnd").val();
     $.post("/publish_game", {
       startTime : startTime,
       endTime : endTime

@@ -67,8 +67,10 @@ module.exports = function(app) {
     insertSignUpData(nickname, imageurl, num);
     res.send(nickname + ' ' + imageurl + ' ' + num);
   });
-
-  app.post('/publish_game', function(req, res) {
+  app.get('/publish_game', function(req, res) {
+    console.log('publish a game');
+  });
+  app.post('/publish_game', function(req, res, next) {
     var startTime = req.body.startTime;
     var endTime = req.body.endTime;
     console.log("Start time is :" + startTime + " , end time is :" + endTime);
