@@ -1,8 +1,3 @@
-/**
- * http://usejsdoc.org/
- */
-
-
 var mongoose = require('mongoose');
 var db = mongoose.createConnection();
 
@@ -47,7 +42,6 @@ var User = mongoose.model('User', UserSchema);
 
 
 var CarSchema = new Schema({
-//  id
     owner:[{type:Schema.Types.ObjectId, ref:'User'}],
     passengers:[{type:Schema.Types.ObjectId, ref:'User'}],
     available:{type:Boolean},
@@ -90,37 +84,43 @@ var LogSchema = new Schema({
 });
 var Log = mongoose.model('Log', LogSchema);
 
-/**
- * json:{"openid": " ",
- *       "nickname": " ",
- *       "imageurl":" ",
- *       "car":[{
- *       "available":"",
- *       "seatnum":" ",
- *       "seatavailablenum":" "
- *       }]
- * }
- */
 exports.saveUserCar = function(json,callback){
 	var data = JSON.parse(json);
-//	var temp = new 
 	
 }
-
-exports.findUserByName = function(name, callback){
-	User.findOne({name:name}, function(error, obj){
-		callback(error, obj)
+exports.insertSignupData = function(nickName, imageUrl, seatnum) {
+	var person = new User({
+		nickname : nickName,
+		imageurl : imageUrl
+	});
+	person.save(function(err) {
+		if (err) return console.log(err);
+		if (seatnum > 0) {
+			var car = new Car({
+				owner : person,
+				available : true,
+				seatnum : seatnum,
+				seatavailablenum : seatnum - 1 
+			});
+			car.save(function(err) {
+				if (err) return console.log(err);
+			});
+		}
 	});
 }
 
-exports.findCarByName = function(name,callback){
-	var user = findUserByName(name);
-	
+exports.countUserByName = function(name, callback) {
+	User.count({nickname:name}, callback);
 }
 
+exports.findUserByName = function(name, callback){
+	User.findOne({nickname:name}, callback);
+}
+
+exports.findCarByName = function(name, callback){
+}
 
 exports.deleteUserCar = function(name, callback){
-	
 }
 
 exports.updateUserCar = function(name, callback){
@@ -128,8 +128,6 @@ exports.updateUserCar = function(name, callback){
 }
 
 exports.allotUserCar = function(){
-	
-	
 }
 
 
@@ -142,44 +140,8 @@ exports.test1 = function(){
     console.log("This is the method test1");
 };
 
-
-
-
-
 //var mongoose = require("./mongoose");
 //mongoose.test1();
-
-
-//method2
-//function test1(){
-//  console.log("This is the method test1");
-//};
-//
-//module.exports =  test1;
-module.exports = {
-    add: function() {
-        
-    },
-    del: function() {
-        
-    },
-    update: function() {
-        
-    },
-    findBy: function() {
-        
-    }
-    
-    //自动分车
-//  {findAllUsernonecar  FindAllCaravailableseat}
-}; 
-     
-    
-
-
-
-
-
 
 
 //db.close();
