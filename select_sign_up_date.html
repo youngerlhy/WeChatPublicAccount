@@ -6,24 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1,maximum-scale=1,user-scalable=no">
     <meta name="description" content="">
     <meta name="author" content="Kuanghui Ding">
-    <link href="public/css/bootstrap.css" rel="stylesheet">
-	<link href="public/css/style.css" rel="stylesheet">
-	<link href="public/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="/css/bootstrap.css" rel="stylesheet">
+	<link href="/css/style.css" rel="stylesheet">
+	<link href="/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 	
 
 </head>
 <body>
 	<div class="div-img">
-		<img src="public/resource/badminton.png" class="img-responsive" alt="badminton"/> 
+		<img src="/resource/badminton.png" class="img-responsive" alt="badminton"/> 
 	</div>
-	<div id="publish_sign_up" class="div-center">
+	<div id="publish_sign_up_div" class="div-center">
 		<div class="div-center-div" style="text-align:center;">
-			<p><b>报名起止时间：</b></p>
+			<p><b>活动起止时间：</b></p>
 			<p>开始时间：<input size="16" type="text" id="datetimeStart" readonly class="form_datetime"></p>
 			<p>结束时间：<input size="16" type="text" id="datetimeEnd" readonly class="form_datetime"></p>
 			<p>
-				<button id="publish_sign_up_btn" type="button" class="btn btn-primary btn-lg">发布报名</button>
+				<button id="publish_sign_up" type="button" class="btn btn-primary btn-lg">发布活动</button>
 			</p>
+			<p id="publish_success"></p>
 		</div>
 	</div>
 	<footer>
@@ -34,8 +35,9 @@
 			Powered by Falcon Team
 		</p>
 	</footer>
-	<script src="public/js/jquery.js"></script>
-	<script src="public/js/bootstrap-datetimepicker.min.js"></script>
-	<script src="public/js/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="/js/jquery.js"></script>
+	<script src="/js/main.js"></script>
+	<script src="/js/bootstrap-datetimepicker.min.js"></script>
+	<script src="/js/bootstrap-datetimepicker.zh-CN.js"></script>
 </body>
 </html>

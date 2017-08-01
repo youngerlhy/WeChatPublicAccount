@@ -12,8 +12,13 @@
 			"name" : "新闻",
 			"sub_button" : [ {
 				"type" : "view",
+				"name" : "Daily English",
+				"url" : "http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/dailyEnglish",
+				"key" : "Daily English"
+			},{
+				"type" : "view",
 				"name" : "News In BID",
-				"url" : "http://language.chinadaily.com.cn/2017-07/30/content_30295614.htm",
+				"url" : "http://www.baidu.com",
 				"key" : "News In BID"
 			}, {
 				"type" : "view",
