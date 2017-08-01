@@ -8,6 +8,9 @@ module.exports = function(app) {
   app.get('/dailyEnglish', function(req, res) {
     res.render('dailyEnglish', {});
   });
+  app.get('/newsletter', function(req, res) {
+    res.render('newsletter', {});
+  });
 
   app.get('/tony', function(req, res) {
     res.render('tony', {});
