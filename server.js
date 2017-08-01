@@ -18,7 +18,6 @@ context = {
 	secret: "d26907f7504d80d5aea6305db84ec510"
 };
 require('./initiator')();
-require('./mongoose');
 require('./router')(app); //router config file
 
 server.listen(80, function() {
