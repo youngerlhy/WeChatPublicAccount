@@ -68,12 +68,21 @@ var GameSchema = new Schema({
 //	id
 	gameType:[{type:Schema.Types.ObjectId, ref:'GameType'}],
 	startTime:{type:Date},
+	endTime:{type:Date},
 	status:{type:String},
-	score:{type:String},
 	compition:[{type:Schema.Types.ObjectId, ref:'User'}],
 	winner:[{type:Schema.Types.ObjectId, ref:'User'}],
 });
 var Game = mongoose.model('Game',GameSchema);
+
+var ScoreSchema = new Schema({
+	game:[{type:Schema.Types.ObjectId, ref:'Game'}],
+	firstset:{type:String},
+	secondset:{type:String},
+	thirdset:{type:String},
+	totalPoints:{type:String},
+});
+var Score = mongoose.model('Score', ScoreSchema);
 
 var LogSchema = new Schema({
 	time:{type:Date},
@@ -81,11 +90,50 @@ var LogSchema = new Schema({
 });
 var Log = mongoose.model('Log', LogSchema);
 
+/**
+ * json:{"openid": " ",
+ *       "nickname": " ",
+ *       "imageurl":" ",
+ *       "car":[{
+ *       "available":"",
+ *       "seatnum":" ",
+ *       "seatavailablenum":" "
+ *       }]
+ * }
+ */
+exports.saveUserCar = function(json,callback){
+	var data = JSON.parse(json);
+//	var temp = new 
+	
+}
 
-exports.save = function(){
+exports.findUserByName = function(name, callback){
+	User.findOne({name:name}, function(error, obj){
+		callback(error, obj)
+	});
+}
+
+exports.findCarByName = function(name,callback){
+	var user = findUserByName(name);
+	
+}
+
+
+exports.deleteUserCar = function(name, callback){
+	
+}
+
+exports.updateUserCar = function(name, callback){
+	
+}
+
+exports.allotUserCar = function(){
 	
 	
 }
+
+
+
 
 
 //for Test
@@ -93,6 +141,10 @@ exports.save = function(){
 exports.test1 = function(){
 	console.log("This is the method test1");
 };
+
+
+
+
 
 //var mongoose = require("./mongoose");
 //mongoose.test1();
