@@ -8,9 +8,6 @@ module.exports = function(app) {
   app.get('/dailyEnglish', function(req, res) {
     res.render('dailyEnglish', {});
   });
-  app.get('/newsletter', function(req, res) {
-    res.render('newsletter', {});
-  });
 
   app.get('/tony', function(req, res) {
     res.render('tony', {});
@@ -80,9 +77,27 @@ module.exports = function(app) {
   app.get('/publish_game', function(req, res) {
     console.log('publish a game');
   //  res.render('select_sign_up_date', {});
-    res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2Fpublish_game&response_type=code&scope=snsapi_base&state=home#wechat_redirect");
+ var get_publish_access_token ='get_publish_access_token';
+    res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F"+get_publish_access_token+"&response_type=code&scope=snsapi_base&state=home#wechat_redirect");
   });
   
+ app.get('/get_publish_access_token', function(req, res, next) {
+    // 第二步：通过code换取网页授权access_token
+    var code = req.query.code;
+    console.log('code is : '+code);
+    request.get({
+      url : 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + context.appid + '&secret='
+          + context.secret + '&code=' + code + '&grant_type=authorization_code',
+    }, function(error, response, body) {
+      if(response.statusCode == 200){
+        console.log('redirect to select_sign_up_date.html');
+        res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/select_sign_up_date.html');
+      }else{
+        console.log(response.statusCode);
+      }
+    });
+  });
+
   app.get('/close_out_game', function(req, res) {
     console.log('close out a game');
   //  res.render('cancel_sign_up', {});
