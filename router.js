@@ -1,5 +1,5 @@
 var request = require('request');
-
+var mongoose = require('./mongoose');
 module.exports = function(app) {
   app.get('/', function(req, res) {
     res.render('index', {});
@@ -64,7 +64,13 @@ module.exports = function(app) {
     var imageurl = req.body.imageurl;
     var num = req.body.seatnum;
     console.log(nickname + " " + imageurl + " " + num);
-    insertSignUpData(nickname, imageurl, num);
+    mongoose.countUserByName(nickname, function (err, count) {
+          if (err)
+          return console.log(err);
+          if(count == 0) {
+             mongoose.insertSignupData(nickname, imageurl, num);
+          }
+        });
     res.send(nickname + ' ' + imageurl + ' ' + num);
   });
   

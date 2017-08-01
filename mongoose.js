@@ -29,17 +29,16 @@ db.on('close', ()=>{
 var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
-    wechatId:{type:String, unique:true},
     nickname:{type:String},
     imageurl:{type:String},
-    car:[{type:Schema.Types.ObjectId, ref:'Car'}],
+    car:{type:Schema.Types.ObjectId, ref:'Car'},
     gametype:[{type:Schema.Types.ObjectId, ref:'GameType'}]
 });
 var User = mongoose.model('User', UserSchema);
 
 
 var CarSchema = new Schema({
-    owner:[{type:Schema.Types.ObjectId, ref:'User'}],
+    owner:{type:Schema.Types.ObjectId, ref:'User'},
     passengers:[{type:Schema.Types.ObjectId, ref:'User'}],
     available:{type:Boolean},
     seatnum:{type:Number},
@@ -78,10 +77,6 @@ var LogSchema = new Schema({
 });
 var Log = mongoose.model('Log', LogSchema);
 
-exports.saveUserCar = function(json,callback){
-	var data = JSON.parse(json);
-	
-}
 exports.insertSignupData = function(nickName, imageUrl, seatnum) {
 	var person = new User({
 		nickname : nickName,
