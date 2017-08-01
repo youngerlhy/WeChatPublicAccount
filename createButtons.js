@@ -45,16 +45,14 @@ function createConditionalButtons() {
 	console.log('Start to create conditional buttons ...');
 	var buttons = JSON.parse(fs.readFileSync(FILE));
 	buttons.button[0].sub_button.push({
+	    type : "view",
 		name : "发起报名",
-		type : "click",
-		key : "launch sign up",
-		url :"http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/publish_game"
+		url :"http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/publish_game"
 	});
 	buttons.button[0].sub_button.push({
+	  type : "view",
 		name : "结束报名",
-		type : "click",
-		key : "stop sign up",
-		url :"http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/close_out_game"
+		url :"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2Fclose_out_game&response_type=code&scope=snsapi_base&state=home#wechat_redirect"
 	});
 	buttons.matchrule = {
 		tag_id : context.tags[ADMIN_TAG_NAME],

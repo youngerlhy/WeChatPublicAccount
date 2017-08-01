@@ -53,6 +53,7 @@ $(document).ready(function() {
     var startTime = $("#datetimeStart").val();
     var endTime = $("#datetimeEnd").val();
     console.log(startTime);
+    $("#publish_success").innerHTML="发布成功!";
     $.post("/add_publish_game", {
       startTime : startTime,
       endTime : endTime

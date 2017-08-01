@@ -67,10 +67,18 @@ module.exports = function(app) {
     insertSignUpData(nickname, imageurl, num);
     res.send(nickname + ' ' + imageurl + ' ' + num);
   });
+  
   app.get('/publish_game', function(req, res) {
     console.log('publish a game');
-    res.render('select_sign_up_date', {});
+  //  res.render('select_sign_up_date', {});
+    res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2Fpublish_game&response_type=code&scope=snsapi_base&state=home#wechat_redirect");
   });
+  
+  app.get('/close_out_game', function(req, res) {
+    console.log('close out a game');
+  //  res.render('cancel_sign_up', {});
+  });
+  
   app.post('/add_publish_game', function(req, res, next) {
     var startTime = req.body.startTime;
     var endTime = req.body.endTime;
