@@ -4,7 +4,9 @@
 
 
 var mongoose = require('mongoose');
-var db = mongoose.createConnection();
+var db = mongoose.connect('mongodb://localhost/testdb', {
+	useMongoClient : true,
+});
 
 
 db.on('error', console.error.bind(console,'Database Connection error……'));
@@ -30,9 +32,6 @@ db.on('close', ()=>{
 	console.log('db close');
 });
 
-
-db.openUri('mongodb://127.0.0.1:27017/runoob');
-
 var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
@@ -46,7 +45,7 @@ var User = mongoose.model('User', UserSchema);
 
 
 var CarSchema = new Schema({
-	owner:[{type:Schema.Types.ObjectId, ref:'User'}],
+	owner:{type:Schema.Types.ObjectId, ref:'User'},
 	passengers:[{type:Schema.Types.ObjectId, ref:'User'}],
 	available:{type:Boolean},
 	seatnum:{type:Number},
@@ -85,6 +84,42 @@ var LogSchema = new Schema({
 });
 var Log = mongoose.model('Log', LogSchema);
 
+exports.insertSignupData = function(nickName, imageUrl, seatnum) {
+	var person = new User({
+		nickname : nickName,
+		imageurl : imageUrl
+	});
+	person.save(function(err) {
+		if (err) return console.log(err);
+		if (seatnum > 0) {
+			var car = new Car({
+				owner : person,
+				available : true,
+				seatnum : seatnum,
+				seatavailablenum : seatnum - 1 
+			});
+			car.save(function(err) {
+				if (err) return console.log(err);
+			});
+		}
+	});
+}
+
+exports.countUserByName = function(name, callback) {
+	User.count({nickname:name}, callback);
+}
+
+exports.findAllUsers = function(callback){
+	 User.find({}, function(err, result){
+			if(err){
+				console("Error:" + err);
+				return;
+			}else{
+				callback(result);
+			}
+		});
+}
+
 exports.findUserByName = function(name, callback){
 	User.findOne({name:name}, function(err, obj){
 		callback(err, obj);
@@ -100,38 +135,9 @@ exports.findCarByName = function(name,callback){
 
 exports.deleteUserCar = function(name){
     User.findOne({nickname: name}).then(function(user){
-    Car.findOne({owner: user._id}).then(function(car){car.remove()});
-    user.remove();
-});
-}
-
-exports.updateUserCar = function(name,userdata,cardata,callback){
-	var updateStr = {$set:{userdata}};
-	User.update({name:name}, updateStr, function(err, result){
-		if(err){
-			console.log("Error:"+err);
-			return;
-		}else{
-			callback(result);
-		}
-	});
-	
-	if(cardata){
-		var user = User.findOne({name:name}, function(err, obj){
-			callback(err, obj);
-		});
-		updateStr = {$set:{cardata}};
-		Car.update({name:user.nickname}, updateStr, function(err, result){
-			if(err){
-				console.log("Error:"+err);
-				return;
-			}else{
-				callback(result);
-			}
-		});
-	}
-	
-	
+	    Car.findOne({owner: user._id}).then(function(car){car.remove()});
+	    user.remove();
+    });
 }
 
 exports.allotUserCar = function(){
