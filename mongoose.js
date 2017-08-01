@@ -113,7 +113,11 @@ exports.findUserByName = function(name, callback){
 exports.findCarByName = function(name, callback){
 }
 
-exports.deleteUserCar = function(name, callback){
+exports.deleteUserCar = function(name){
+    User.findOne({nickname: name}).then(function(user){
+    Car.findOne({owner: user._id}).then(function(car){car.remove()});
+    user.remove();
+});
 }
 
 exports.updateUserCar = function(name, callback){
