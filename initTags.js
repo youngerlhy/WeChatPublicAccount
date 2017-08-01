@@ -178,10 +178,6 @@ module.exports = function(callback) {
 		tagAdminGroup();
 		callback();
 	};
-	//function callbackExt1() {
-	//	queryTagIdAndCreateIfNotExist(ADMIN_TAG_NAME, callbackExt2);
-	//};
-	//deleteTags(ADMIN_TAG_NAME, callbackExt1);
 	
 	queryTagIdAndCreateIfNotExist(ADMIN_TAG_NAME, callbackExt2);
 };
