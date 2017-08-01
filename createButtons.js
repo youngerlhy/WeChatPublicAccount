@@ -47,12 +47,14 @@ function createConditionalButtons() {
 	buttons.button[0].sub_button.push({
 		name : "发起报名",
 		type : "click",
-		key : "launch sign up"
+		key : "launch sign up",
+		url :"http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/publish_game"
 	});
 	buttons.button[0].sub_button.push({
 		name : "结束报名",
 		type : "click",
-		key : "stop sign up"
+		key : "stop sign up",
+		url :"http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/close_out_game"
 	});
 	buttons.matchrule = {
 		tag_id : context.tags[ADMIN_TAG_NAME],
