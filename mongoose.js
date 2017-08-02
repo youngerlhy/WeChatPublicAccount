@@ -7,7 +7,6 @@ var db = mongoose.connect('mongodb://localhost/testdb', {
 	useMongoClient : true,
 });
 
-
 db.on('error', console.error.bind(console,'Database Connection error……'));
 
 db.on('open',function(callback){
