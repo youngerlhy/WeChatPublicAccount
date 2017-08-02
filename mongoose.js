@@ -33,7 +33,7 @@ var UserSchema = new Schema({
 	nickname:{type:String},
 	imageurl:{type:String},
 	car:{type:Schema.Types.ObjectId, ref:'Car'},
-	gametype:[{type:Schema.Types.ObjectId, ref:'GameType'}]
+	game:{type:Schema.Types.ObjectId, ref:'Game'}
 });
 var User = mongoose.model('User', UserSchema);
 
@@ -58,8 +58,8 @@ var GameSchema = new Schema({
 	endTime:{type:Date},
 	signupStatus:{type:String, default: "Started"},
 	gameStatus:{type:String, default: "Started"},
-	compition:[{type:Schema.Types.ObjectId, ref:'User'}],
-	winner:[{type:Schema.Types.ObjectId, ref:'User'}],
+	competitors:[{type:Schema.Types.ObjectId, ref:'User'}],
+	winners:[{type:Schema.Types.ObjectId, ref:'User'}],
 });
 var Game = mongoose.model('Game',GameSchema);
 
@@ -78,13 +78,13 @@ var LogSchema = new Schema({
 });
 var Log = mongoose.model('Log', LogSchema);
 
-exports.insertSignupData = function(nickName, imageUrl, seatnum) {
+exports.insertSignupData = function(nickName, imageUrl, seatnum, game) {
 	var person = new User({
 		nickname : nickName,
 		imageurl : imageUrl
 	});
-        if (seatnum > 0) {
-         var car = new Car({
+    if (seatnum > 0) {
+        var car = new Car({
              owner : person,
              available : true,
              seatnum : seatnum,
@@ -97,6 +97,8 @@ exports.insertSignupData = function(nickName, imageUrl, seatnum) {
 	}
         });
         }	
+        person.game = game;
+        game.competitors.push(person);
         person.save(function(err) {
         if (err) {
         	console.log(err);}
