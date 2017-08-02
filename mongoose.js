@@ -216,8 +216,8 @@ exports.insertPublishGame = function(startTime,endTime) {
 	  });
 }
 
-exports.findCurrentSignupGame = function(callback,result){
-	Game.find({signupStatus:"Ended",gameStatus:"Started"}).sort({"startTime":-1}).limit(1).exec(function(err,reusult){
+exports.findCurrentSignupGame = function(callback){
+	Game.find({signupStatus:"Ended",gameStatus:"Started"}).sort({"startTime":-1}).limit(1).exec(function(err,result){
 		if(err){
 			console.log("Get current signup game fail:" + err);
 			return;
@@ -227,12 +227,12 @@ exports.findCurrentSignupGame = function(callback,result){
 	});
 }
 
-exports.closeOutGame=function(startTime, endTime,callback,result){
+exports.closeOutGame=function(startTime, endTime,callback){
   var updateGameStatus = {$set: {gameStatus: "Ended" }};
   Game.update({
     startTime:startTime,
     endTime:endTime
-  }, updateGameStatus, function(error){
+  }, updateGameStatus, function(error,result){
     if(error) {
       console.log(error);
     } else {
