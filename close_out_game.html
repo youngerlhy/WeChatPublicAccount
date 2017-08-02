@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>结束羽毛球报名</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1,maximum-scale=1,user-scalable=no">
-	<meta name="description" content="">
-	<meta name="author" content="Kuanghui Ding">
-	<link href="/css/bootstrap.css" rel="stylesheet">
-	<link href="/css/style.css" rel="stylesheet">
-	<link href="/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<title>结束羽毛球报名</title>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0,minimum-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="description" content="">
+<meta name="author" content="Kuanghui Ding">
+<link href="/css/bootstrap.css" rel="stylesheet">
+<link href="/css/style.css" rel="stylesheet">
+<link href="/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 </head>
 <body>
 	<script src="/js/jquery.js"></script>
@@ -16,23 +17,17 @@
 	<script src="/js/bootstrap-datetimepicker.min.js"></script>
 	<script src="/js/bootstrap-datetimepicker.zh-CN.js"></script>
 	<script>
-    window.onload = function() {
-      var htmlContent = "";
-      $.ajax({
-        type : "get",
-        dataType : "json",
-        url : "/close_out_game",
-        data : startedGame,
-        error : function(err) {
-          alert("fail:" + err.status);
-        },
-        success : function(result) {
-          var startedTime = result.startedTime;
-          var endTime = result.endTime;
-          alert("startedTime:" + startedTime);
-          $("datetimeStart").text(startedTime);
-          $("datetimeEnd").text(endTime);
-        }
+    $(document).ready(function() {
+      showGameInfo();
+    });
+    showGameInfo = function() {
+      $.get("/close_out_game", {}, function(data) {
+        console.log(data);
+        var startedTime = data.startedTime;
+        var endTime = data.endTime;
+        alert("startedTime:" + startedTime);
+        $("#datetimeStart").val(startedTime);
+        $("#datetimeEnd").val(endTime);
       });
     }
   </script>
@@ -42,12 +37,22 @@
 	</div>
 	<div id="close_out_game_div" class="div-center">
 		<div class="div-center-div" style="text-align: center;">
-			<p><b>活动详情：</b></p>
-			<p>开始时间：<input size="16" type="text" id="datetimeStart" disabled class="form_datetime"></p>
-			<p> 结束时间：<input size="16" type="text" id="datetimeEnd" disabled class="form_datetime" ></p>
 			<p>
-				<button id="close_out_game_confirm" type="button" class="btn btn-primary btn-lg">确认</button>
-				<button id="close_out_game_cancel" type="button" class="btn btn-primary btn-lg">取消</button>
+				<b>活动详情：</b>
+			</p>
+			<p>
+				开始时间：<input size="16" type="text" id="datetimeStart" disabled
+					class="form_datetime">
+			</p>
+			<p>
+				结束时间：<input size="16" type="text" id="datetimeEnd" disabled
+					class="form_datetime">
+			</p>
+			<p>
+				<button id="close_out_game_confirm" type="button"
+					class="btn btn-primary btn-lg">确认</button>
+				<button id="close_out_game_cancel" type="button"
+					class="btn btn-primary btn-lg">取消</button>
 			</p>
 		</div>
 	</div>
