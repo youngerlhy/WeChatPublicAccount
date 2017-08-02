@@ -110,7 +110,7 @@ exports.countUserByName = function(name, callback) {
 exports.findAllUsers = function(callback){
 	 User.find({}, function(err, result){
 			if(err){
-				console("Error:" + err);
+				console("Find all users fail:" + err);
 				return;
 			}else{
 				callback(result);
@@ -215,4 +215,15 @@ exports.insertPublishGame = function(startTime,endTime) {
 	      return console.log(err);
 	  }
 	  });
+}
+
+exports.findCurrentGame = function(){
+	Game.find({status:"Start"}).sort({"time":-1}).limit(1).exec(function(err,reusult){
+		if(err){
+			console("Get current game fail:" + err);
+			return;
+		}else{
+			callback(result);
+		}
+	});
 }
