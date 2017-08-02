@@ -47,7 +47,7 @@ $(document).ready(function() {
     $("#next_time_txt").attr('style', "display:none;");
     $("#car_seat").attr('style', "display:none;");
     $("#sign_up_successful").attr('style', "display:block;");
-        $.post("/insert_data", {
+    $.post("/insert_data", {
       nickname : getQueryString("nickname"),
       imageurl : getQueryString("headimgurl"),
       seatnum : 0
@@ -75,6 +75,23 @@ $(document).ready(function() {
     });
     $("#publish_sign_up_div").attr('style', "display:none;");
     $("#publish_success").attr('style', "display:block;");
+  });
+
+  $("close_out_game_confirm").click(function() {
+    var startTime = $("#datetimeStart").val();
+    var endTime = $("#datetimeEnd").val();
+    $.post("/close_out_game_confirm", {
+      startTime : startTime,
+      endTime : endTime
+    }, function(data, status) {
+    });
+    $("#close_out_game_div").attr('style', "display:none;");
+    $("#close_out_game").attr('style', "display:block;");
+  });
+
+  $("close_out_game_cancel").click(function() {
+    $.post("/close_out_game_confirm", {}, function(data, status) {
+    });
   });
 });
 

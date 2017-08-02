@@ -108,7 +108,6 @@ module.exports = function(app) {
   });
 
   app.get('/get_publish_access_token', function(req, res, next) {
-    // 第二步：通过code换取网页授权access_token
     var code = req.query.code;
     request.get({
       url : 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + context.appid + '&secret='
@@ -124,12 +123,28 @@ module.exports = function(app) {
 
   app.get('/close_out_game',function(req, res) {
       console.log('close out a game');
-      // TODO show all the sign users info
-      var show_sign_result = 'show_sign_result';
-      res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'
-          + show_sign_result
-          + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
+      var game = getStartedGame();
+      if(isGameStarted(game)){
+        var startedGame = JSON.stringify(game);
+        res.render('close_out_game',{startedGame});
+      }else{
+         var show_sign_result = 'show_sign_result';
+         res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'+ show_sign_result + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
+      }
   });
+  
+  app.get('/close_out_game_confirm',function(req, res) {
+    var startTime = req.body.startTime;
+    var endTime = req.body.endTime;
+    console.log("close_out_game which Start time is :" + startTime + " , end time is :" + endTime);
+    closeOutGame(startTime, endTime);
+  });
+  
+  app.get('/close_out_game_cancel', function(req,res){
+    var show_sign_result = 'show_sign_result';
+    res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'+ show_sign_result + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
+  });
+  
 
   app.get('/show_sign_result', function(req, res) {
     // 第二步：通过code换取网页授权access_token
@@ -140,8 +155,8 @@ module.exports = function(app) {
     }, function(error, response, body) {
       if (response.statusCode == 200) {
         var allUsers = getAllUsers();
-        var allUsersStr = JSON.parse(allUsers);
-        console.log(str);
+        var allUsersStr = JSON.stringify(allUsers);
+        console.log(allUsersStr);
         res.render('sign_up_list', {allUsersStr});
       } else {
         console.log(response.statusCode);
@@ -231,6 +246,22 @@ function addPublishGame(startTime, endTime) {
 
 function getAllUsers() {
   mongoose.findAllUsers()
+};
+
+function isGameStarted(game){
+  var isStarted = false;
+  if("Started" == game.gameStatus.replace(/(^\s*)|(\s*$)/g, "")){
+    isStarted = true;
+  }
+  return isStarted;
+}
+
+function getStartedGame(){
+  mongoose.findCurrentSignupGame();
+}
+
+function closeOutGame(startTime, endTime){
+  mongoose.closeOutGame(startTime, endTime);
 }
 
 function isGameStarted() {
