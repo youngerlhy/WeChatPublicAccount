@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+mongoose.Promise = global.Promise;   
 var db = mongoose.connect('mongodb://localhost/testdb', {
 	useMongoClient : true,
 });
@@ -215,7 +216,7 @@ exports.insertPublishGame = function(startTime,endTime) {
 	  });
 }
 
-exports.findCurrentSignupGame = function(callback){
+exports.findCurrentSignupGame = function(callback,result){
 	Game.find({signupStatus:"Ended",gameStatus:"Started"}).sort({"startTime":-1}).limit(1).exec(function(err,reusult){
 		if(err){
 			console.log("Get current signup game fail:" + err);
@@ -226,7 +227,7 @@ exports.findCurrentSignupGame = function(callback){
 	});
 }
 
-exports.closeOutGame=function(startTime, endTime,callback){
+exports.closeOutGame=function(startTime, endTime,callback,result){
   var updateGameStatus = {$set: {gameStatus: "Ended" }};
   Game.update({
     startTime:startTime,
