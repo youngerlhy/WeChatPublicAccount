@@ -126,7 +126,6 @@ module.exports = function(app) {
       var game = getStartedGame();
       if(isGameStarted(game)){
         var startedGame = JSON.stringify(game);
-        res.render('close_out_game',{startedGame});
         res.render('close_out_game',{});
         console.log(startedGame);
         var startedTime = game.startTime;
