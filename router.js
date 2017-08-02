@@ -118,7 +118,7 @@ module.exports = function(app) {
   app.get('/close_out_game',function(req, res) {
       console.log('close out a game');
       var game = getStartedGame();
-      if(isGameStarted(game)){
+      if(gameStarted(game)){
         var startedTime = game.startTime;
         var endTime = game.endTime;
         $("#datetimeStart").val(startedTime);
@@ -245,7 +245,7 @@ function getAllUsers() {
   mongoose.findAllUsers()
 };
 
-function isGameStarted(game){
+function gameStarted(game){
   var isStarted = false;
   if("Started" == game.gameStatus.replace(/(^\s*)|(\s*$)/g, "")){
     isStarted = true;

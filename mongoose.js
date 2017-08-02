@@ -219,15 +219,15 @@ exports.insertPublishGame = function(startTime,endTime) {
 	  });
 }
 
-exports.findCurrentSignupGame = function(){
+exports.findCurrentSignupGame = function(callback){
 	Game.find({signupStatus:"Started",gameStatus:"Started"}).sort({"startTime":-1}).limit(1).exec(function(err,result){
 		if(err){
 			console.log("Get current signup game fail:" + err);
 			return;
 		}else{
-		console.log("Get sign game:"+result);
-		return result;
-}
+    		console.log("Get sign game:"+result);
+    		callback(result);
+		}
 	});
 }
 
