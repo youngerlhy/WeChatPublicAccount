@@ -7,6 +7,10 @@ module.exports = function(app) {
     res.render('index', {});
   });
 
+  app.get('/cancel_sign_up', function(req, res) {
+    res.render('cancel_sign_up', {});
+  });
+
   app.get('/dailyEnglish', function(req, res) {
     res.render('dailyEnglish', {});
   });
@@ -15,7 +19,15 @@ module.exports = function(app) {
     res.render('newsletter', {});
   });
 
+   app.get('/no_action', function(req, res) {
+    res.render('no_action', {});
+   });
+ 
+  app.get('/sign_up_list', function(req, res) {
+    res.render('sign_up_list', {});
+   });
 
+ 
   app.get('/tony', function(req, res) {
     res.render('tony', {});
   });
@@ -66,6 +78,13 @@ module.exports = function(app) {
   app.post('/interface', function(req, res) {
   });
 
+
+  app.post('/delete_data', function(req, res) {
+    var nickname = req.body.nickname;
+    mongoose.deleteUserCar(nickname);
+    res.send(nickname);
+  });
+
   app.post('/insert_data', function(req, res) {
     var nickname = req.body.nickname;
     var imageurl = req.body.imageurl;
@@ -89,7 +108,6 @@ module.exports = function(app) {
   });
 
   app.get('/get_publish_access_token', function(req, res, next) {
-    // 第二步：通过code换取网页授权access_token
     var code = req.query.code;
     request.get({
       url : 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + context.appid + '&secret='
@@ -105,12 +123,23 @@ module.exports = function(app) {
 
   app.get('/close_out_game',function(req, res) {
       console.log('close out a game');
-      // TODO show all the sign users info
-      var show_sign_result = 'show_sign_result';
-      res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'
-          + show_sign_result
-          + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
+      var game = getStartedGame();
+      if(isGameStarted(game)){
+        var startedGame = JSON.stringify(game);
+        res.render('close_out_game',{startedGame});
+      }else{
+         var show_sign_result = 'show_sign_result';
+         res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'+ show_sign_result + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
+      }
   });
+  
+  app.get('/close_out_game_confirm',function(req, res) {
+    var startTime = req.body.startTime;
+    var endTime = req.body.endTime;
+    console.log("close_out_game which Start time is :" + startTime + " , end time is :" + endTime);
+    closeOutGame(startTime, endTime);
+  });
+  
 
   app.get('/show_sign_result', function(req, res) {
     // 第二步：通过code换取网页授权access_token
@@ -121,8 +150,8 @@ module.exports = function(app) {
     }, function(error, response, body) {
       if (response.statusCode == 200) {
         var allUsers = getAllUsers();
-        var allUsersStr = JSON.parse(allUsers);
-        console.log(str);
+        var allUsersStr = JSON.stringify(allUsers);
+        console.log(allUsersStr);
         res.render('sign_up_list', {allUsersStr});
       } else {
         console.log(response.statusCode);
@@ -180,8 +209,20 @@ module.exports = function(app) {
             // console.log(JSON.parse(body));
             console.log('获取微信信息成功！');
 
-            res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/?nickname='
-                + userinfo.nickname + '&headimgurl=' + userinfo.headimgurl);
+            if(isGameStarted()) {
+                if(hasSignedup(userinfo.nickname)) {
+                    res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/cancel_sign_up?nickname=' + userinfo.nickname);
+                 } else {
+                    res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/?nickname='
+                    + userinfo.nickname + '&headimgurl=' + userinfo.headimgurl);
+                 }
+            }
+            else if(isGameEnded()) {
+               res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/show_sign_result');
+            }
+            else {
+               res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/no_action');
+            }
           } else {
             console.log(response.statusCode);
           }
@@ -200,4 +241,98 @@ function addPublishGame(startTime, endTime) {
 
 function getAllUsers() {
   mongoose.findAllUsers()
+};
+
+function isGameStarted(game){
+  var isStarted = false;
+  if("Started" == game.status.replace(/(^\s*)|(\s*$)/g, "")){
+    isStarted = true;
+  }
+  return isStarted;
+}
+
+function getStartedGame(){
+  mongoose.getStartedGame(Date.now);
+}
+
+function closeOutGame(startTime, endTime){
+  mongoose.closeOutGame(startTime, endTime);
+}
+
+function isGameStarted() {
+  var result = true;
+  return result;
+}
+
+function isGameEnded() {
+  return false;
+}
+
+function hasSignedup() {
+  return true;
+}
+
+function isGameStarted() {
+  var result = true;
+  return result;
+}
+
+function isGameEnded() {
+  return false;
+}
+
+function hasSignedup() {
+  return true;
+}
+
+function isGameStarted() {
+  var result = true;
+  return result;
+}
+
+function isGameEnded() {
+  return false;
+}
+
+function hasSignedup() {
+  return true;
+}
+
+function isGameStarted() {
+  var result = true;
+  return result;
+}
+
+function isGameEnded() {
+  return false;
+}
+
+function hasSignedup() {
+  return true;
+}
+
+function isGameStarted() {
+  var result = true;
+  return result;
+}
+
+function isGameEnded() {
+  return false;
+}
+
+function hasSignedup() {
+  return true;
+}
+
+function isGameStarted() {
+  var result = true;
+  return result;
+}
+
+function isGameEnded() {
+  return false;
+}
+
+function hasSignedup() {
+  return true;
 }

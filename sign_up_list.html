@@ -15,7 +15,7 @@
 <body>
 	<script src="/js/jquery.js"></script>
 	<script src="/js/main.js"></script>
-	<script type = "text/javascript">
+	<script type="text/javascript">
 		window.onload = function(){
 			var htmlContent= "";
 			$.ajax({
@@ -23,9 +23,7 @@
 				url:"/show_sign_result"
 				type:"get",
 				dataType:"json",
-				
-				beforeSend:function(){
-				},
+				data : allUsersStr,
 				error:function(err){
 					alert("fail:"+err.status);
 				},
@@ -43,12 +41,13 @@
 	</script>
 
 	<div class="div-img">
-		<img src="/resource/badminton.png" class="img-responsive" alt="badminton"/> 
+		<img src="/resource/badminton.png" class="img-responsive"
+			alt="badminton" />
 	</div>
 	<div id="sign_up_list" class="div-center">
 		<div class="div-center-div">
 			<table class="table table-hover table-responsive">
-			<caption>羽毛球报名人员表：</caption>
+				<caption>羽毛球报名人员表：</caption>
 				<thead>
 					<tr>
 						<th>头像</th>

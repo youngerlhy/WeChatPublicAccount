@@ -1,7 +1,3 @@
-/**
- * http://usejsdoc.org/
- */
-
 var mongoose = require('mongoose');
 var db = mongoose.connect('mongodb://localhost/testdb', {
 	useMongoClient : true,
@@ -33,14 +29,12 @@ db.on('close', ()=>{
 var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
-	wechatId:{type:String, unique:true},
 	nickname:{type:String},
 	imageurl:{type:String},
-	car:[{type:Schema.Types.ObjectId, ref:'Car'}],
+	car:{type:Schema.Types.ObjectId, ref:'Car'},
 	gametype:[{type:Schema.Types.ObjectId, ref:'GameType'}]
 });
 var User = mongoose.model('User', UserSchema);
-
 
 var CarSchema = new Schema({
 	owner:{type:Schema.Types.ObjectId, ref:'User'},
@@ -61,7 +55,8 @@ var GameSchema = new Schema({
 	gameType:[{type:Schema.Types.ObjectId, ref:'GameType'}],
 	startTime:{type:Date},
 	endTime:{type:Date},
-	status:{type:String, default: "Start"},
+	signupStatus:{type:String, default: "Started"},
+	gameStatus:{type:String, default: "Started"},
 	compition:[{type:Schema.Types.ObjectId, ref:'User'}],
 	winner:[{type:Schema.Types.ObjectId, ref:'User'}],
 });
@@ -87,20 +82,24 @@ exports.insertSignupData = function(nickName, imageUrl, seatnum) {
 		nickname : nickName,
 		imageurl : imageUrl
 	});
-	person.save(function(err) {
-		if (err) return console.log(err);
-		if (seatnum > 0) {
-			var car = new Car({
-				owner : person,
-				available : true,
-				seatnum : seatnum,
-				seatavailablenum : seatnum - 1 
-			});
-			car.save(function(err) {
-				if (err) return console.log(err);
-			});
-		}
-	});
+        if (seatnum > 0) {
+         var car = new Car({
+             owner : person,
+             available : true,
+             seatnum : seatnum,
+             seatavailablenum : seatnum - 1 
+         });
+	person.car = car;
+	car.save(function(err) {
+	if (err) {
+	    return console.log(err);
+	}
+        });
+        }	
+        person.save(function(err) {
+        if (err) {
+        	console.log(err);}
+        });
 }
 
 exports.countUserByName = function(name, callback) {
@@ -110,7 +109,7 @@ exports.countUserByName = function(name, callback) {
 exports.findAllUsers = function(callback){
 	 User.find({}, function(err, result){
 			if(err){
-				console("Find all users fail:" + err);
+				console.log("Find all users fail:" + err);
 				return;
 			}else{
 				callback(result);
@@ -193,7 +192,6 @@ exports.deleteAllUsersCars = function(){
 		}else{
 			console.log("Clean all cars success.")
 		}
-		
 	});
 	User.remove({}, function(err){
 		console.log("--------- Clean All Users ---------");
@@ -217,13 +215,15 @@ exports.insertPublishGame = function(startTime,endTime) {
 	  });
 }
 
-exports.findCurrentGame = function(){
-	Game.find({status:"Start"}).sort({"time":-1}).limit(1).exec(function(err,reusult){
+
+exports.findCurrentSignupGame = function(){
+	Game.find({signupStatus:"Ended",gameStatus:"Started"}).sort({"startTime":-1}).limit(1).exec(function(err,reusult){
 		if(err){
-			console("Get current game fail:" + err);
+			console.log("Get current signup game fail:" + err);
 			return;
 		}else{
 			callback(result);
 		}
 	});
 }
+
