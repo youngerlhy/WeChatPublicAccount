@@ -210,21 +210,7 @@ module.exports = function(app) {
             var userinfo = JSON.parse(body);
             // console.log(JSON.parse(body));
             console.log('获取微信信息成功！');
-
-            if(isGameStarted()) {
-                if(hasSignedup(userinfo.nickname)) {
-                    res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/cancel_sign_up?nickname=' + userinfo.nickname);
-                 } else {
-                    res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/?nickname='
-                    + userinfo.nickname + '&headimgurl=' + userinfo.headimgurl);
-                 }
-            }
-            else if(isGameEnded()) {
-               res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/show_sign_result');
-            }
-            else {
-               res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/no_action');
-            }
+            mongoose.queryAllStatus(userinfo.nickname, userinfo.headimgurl, function(str) {res.redirect(str);});
           } else {
             console.log(response.statusCode);
           }
@@ -263,8 +249,10 @@ function closeOutGame(startTime, endTime){
 
 function isGameStarted() {
   console.log("call isGameStarted()" );
-  var result = true;
-  return result;
+  var result = false;
+ mongoose.findCurrentSignupGame(function(game) {});
+  
+  return true;
 }
 
 function isGameEnded() {
@@ -272,5 +260,6 @@ function isGameEnded() {
 }
 
 function hasSignedup() {
-  return false;
+  
+  return true;
 }

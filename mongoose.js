@@ -122,10 +122,17 @@ exports.findAllUsers = function(callback){
 }
 
 exports.deleteUserCar = function(name){
-    User.findOne({nickname: name}).then(function(user){
-	    Car.findOne({owner: user._id}).then(function(car){car.remove()});
+Game.findOne({signupStatus: 'Started'}, function(error, gameResult) {
+        if(error) return console.log(error);
+        User.findOne({nickname: name, game: gameResult._id}, function(err, user) {
+               if(err) return console.log(err);
+                Car.findOne({owner: user._id}).then(function(car){car.remove()});
+            gameResult.competitors.pull(user);
+            gameResult.save();
 	    user.remove();
-    });
+        });
+});
+
 }
 
 exports.allotUserCar = function(callback){
@@ -234,6 +241,34 @@ exports.insertSignupAndGame = function(nickname, imageurl, num) {
 }
 
 
+exports.queryAllStatus = function(nickname,imgurl, callback) {
+      Game.findOne({signupStatus: 'Started'}, function(error, gameResult) {
+        if(error) return console.log(error);
+        if(gameResult != null) {
+        User.count({name: nickname, game: gameResult._id}, function(err, count) {
+                if(err) return console.log(err);
+                if(count == 0) {
+                    ///insert data page
+                   callback('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/?nickname='
+                    + nickname + '&headimgurl=' + imgurl);
 
+                } else {
+                   ///cancel data page
+                  callback('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/cancel_sign_up?nickname=' + nickname);
+                }
+        });
+} 
+    Game.findOne({signupStatus: 'Ended', gameStatus: 'Started'}, function(error, gameResult) {
+        if(error) return console.log(error);
+        if(gameResult !=null) {
+          //show result
+            callback('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/show_sign_result');
 
+         } else {
+          //no action
+           callback('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/no_action');
+         }
+    });
+});
 
+}
