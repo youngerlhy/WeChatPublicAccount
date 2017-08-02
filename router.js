@@ -1,10 +1,12 @@
 var request = require('request');
 var mongoose = require('./mongoose');
+mongoose.Promise = require('bluebird');
+
 module.exports = function(app) {
   app.get('/', function(req, res) {
     res.render('index', {});
   });
-  
+
   app.get('/dailyEnglish', function(req, res) {
     res.render('dailyEnglish', {});
   });
@@ -69,22 +71,23 @@ module.exports = function(app) {
     var imageurl = req.body.imageurl;
     var num = req.body.seatnum;
     console.log(nickname + " " + imageurl + " " + num);
-    mongoose.countUserByName(nickname, function (err, count) {
-          if (err)
-          return console.log(err);
-          if(count == 0) {
-             mongoose.insertSignupData(nickname, imageurl, num);
-          }
-        });
+    mongoose.countUserByName(nickname, function(err, count) {
+      if (err)
+        return console.log(err);
+      if (count == 0) {
+        mongoose.insertSignupData(nickname, imageurl, num);
+      }
+    });
     res.send(nickname + ' ' + imageurl + ' ' + num);
   });
-  
-  app.get('/publish_game', function(req, res) {
-    console.log('publish a game');
-    var get_publish_access_token ='get_publish_access_token';
-    res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'+get_publish_access_token+'&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
+
+  app.get('/publish_game',function(req, res) {
+     console.log('publish a game');
+     var get_publish_access_token = 'get_publish_access_token';
+     res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'
+          + get_publish_access_token + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
   });
-  
+
   app.get('/get_publish_access_token', function(req, res, next) {
     // 第二步：通过code换取网页授权access_token
     var code = req.query.code;
@@ -92,19 +95,41 @@ module.exports = function(app) {
       url : 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + context.appid + '&secret='
           + context.secret + '&code=' + code + '&grant_type=authorization_code',
     }, function(error, response, body) {
-      if(response.statusCode == 200){
+      if (response.statusCode == 200) {
         res.render('select_sign_up_date', {});
-      }else{
+      } else {
         console.log(response.statusCode);
       }
     });
   });
-  
-  app.get('/close_out_game', function(req, res) {
-    console.log('close out a game');
-  //TODO show all the sign users info
+
+  app.get('/close_out_game',function(req, res) {
+      console.log('close out a game');
+      // TODO show all the sign users info
+      var show_sign_result = 'show_sign_result';
+      res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'
+          + show_sign_result
+          + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
   });
-  
+
+  app.get('/show_sign_result', function(req, res) {
+    // 第二步：通过code换取网页授权access_token
+    var code = req.query.code;
+    request.get({
+      url : 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + context.appid + '&secret='
+          + context.secret + '&code=' + code + '&grant_type=authorization_code',
+    }, function(error, response, body) {
+      if (response.statusCode == 200) {
+        var allUsers = getAllUsers();
+        var allUsersStr = JSON.parse(allUsers);
+        console.log(str);
+        res.render('sign_up_list', {allUsersStr});
+      } else {
+        console.log(response.statusCode);
+      }
+    });
+  });
+
   app.post('/add_publish_game', function(req, res, next) {
     var startTime = req.body.startTime;
     var endTime = req.body.endTime;
@@ -155,13 +180,6 @@ module.exports = function(app) {
             // console.log(JSON.parse(body));
             console.log('获取微信信息成功！');
 
-            // 小测试，实际应用中，可以由此创建一个帐户
-            /*
-             * res.send("\ <h1>"+userinfo.nickname+" 的个人信息</h1>\ <p><img
-             * src='"+userinfo.headimgurl+"' /></p>\ <p>"+userinfo.city+"，"+userinfo.province+"，"+userinfo.country+"</p>\
-             * ");
-             */
-            // console.log(openid);
             res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/?nickname='
                 + userinfo.nickname + '&headimgurl=' + userinfo.headimgurl);
           } else {
@@ -177,6 +195,9 @@ module.exports = function(app) {
 }
 
 function addPublishGame(startTime, endTime) {
-  mongoose.insertPublishGame(startTime,endTime);
-  res.send(startTime + ' , ' +endTime);
+  mongoose.insertPublishGame(startTime, endTime);
 };
+
+function getAllUsers() {
+  mongoose.findAllUsers()
+}
