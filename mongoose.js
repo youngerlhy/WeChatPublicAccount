@@ -32,7 +32,7 @@ var UserSchema = new Schema({
 	nickname:{type:String},
 	imageurl:{type:String},
 	car:{type:Schema.Types.ObjectId, ref:'Car'},
-	gametype:[{type:Schema.Types.ObjectId, ref:'GameType'}]
+	game:[{type:Schema.Types.ObjectId, ref:'Game'}]
 });
 var User = mongoose.model('User', UserSchema);
 
@@ -56,8 +56,8 @@ var GameSchema = new Schema({
 	startTime:{type:Date},
 	endTime:{type:Date},
 	status:{type:String, default: "Started"},
-	compition:[{type:Schema.Types.ObjectId, ref:'User'}],
-	winner:[{type:Schema.Types.ObjectId, ref:'User'}],
+	competitors:[{type:Schema.Types.ObjectId, ref:'User'}],
+	winners:[{type:Schema.Types.ObjectId, ref:'User'}],
 });
 var Game = mongoose.model('Game',GameSchema);
 
@@ -215,7 +215,7 @@ exports.insertPublishGame = function(startTime,endTime) {
 }
 
 exports.findCurrentGame = function(){
-	Game.find({status:"Ended"}).sort({"startTime":-1}).limit(1).exec(function(err,reusult){
+	Game.find({status:"Ended"}).sort({"startTime":-1}).limit(1).exec(function(err,result){
 		if(err){
 			console.log("Get current game fail:" + err);
 			return;
