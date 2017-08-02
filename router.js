@@ -7,6 +7,10 @@ module.exports = function(app) {
     res.render('index', {});
   });
 
+  app.get('/cancel_sign_up', function(req, res) {
+    res.render('cancel_sign_up', {});
+  });
+
   app.get('/dailyEnglish', function(req, res) {
     res.render('dailyEnglish', {});
   });
@@ -15,7 +19,15 @@ module.exports = function(app) {
     res.render('newsletter', {});
   });
 
+   app.get('/no_action', function(req, res) {
+    res.render('no_action', {});
+   });
+ 
+  app.get('/sign_up_list', function(req, res) {
+    res.render('sign_up_list', {});
+   });
 
+ 
   app.get('/tony', function(req, res) {
     res.render('tony', {});
   });
@@ -64,6 +76,13 @@ module.exports = function(app) {
   });
 
   app.post('/interface', function(req, res) {
+  });
+
+
+  app.post('/delete_data', function(req, res) {
+    var nickname = req.body.nickname;
+    mongoose.deleteUserCar(nickname);
+    res.send(nickname);
   });
 
   app.post('/insert_data', function(req, res) {
@@ -180,8 +199,20 @@ module.exports = function(app) {
             // console.log(JSON.parse(body));
             console.log('获取微信信息成功！');
 
-            res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/?nickname='
-                + userinfo.nickname + '&headimgurl=' + userinfo.headimgurl);
+            if(isGameStarted()) {
+                if(hasSignedup(userinfo.nickname)) {
+                    res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/cancel_sign_up?nickname=' + userinfo.nickname);
+                 } else {
+                    res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/?nickname='
+                    + userinfo.nickname + '&headimgurl=' + userinfo.headimgurl);
+                 }
+            }
+            else if(isGameEnded()) {
+               res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/show_sign_result');
+            }
+            else {
+               res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/no_action');
+            }
           } else {
             console.log(response.statusCode);
           }
@@ -200,4 +231,17 @@ function addPublishGame(startTime, endTime) {
 
 function getAllUsers() {
   mongoose.findAllUsers()
+}
+
+function isGameStarted() {
+  var result = true;
+  return result;
+}
+
+function isGameEnded() {
+  return false;
+}
+
+function hasSignedup() {
+  return true;
 }

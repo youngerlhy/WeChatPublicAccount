@@ -55,6 +55,15 @@ $(document).ready(function() {
     });
   });
   
+  $("#confirm_cancel").click(function() {
+   $("#cancel_sign_up_successful").attr('style', "display:block;");
+   $("#cancel_sign_up").attr('style',"display:none;"); 
+   $.post("/delete_data", {
+      nickname : getQueryString("nickname"),
+    }, function(data, status) {
+    });
+  });
+  
   $("#publish_sign_up").click(function() {
     var startTime = $("#datetimeStart").val();
     var endTime = $("#datetimeEnd").val();

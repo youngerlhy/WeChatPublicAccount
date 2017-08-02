@@ -1,7 +1,3 @@
-/**
- * http://usejsdoc.org/
- */
-
 var mongoose = require('mongoose');
 var db = mongoose.connect('mongodb://localhost/testdb', {
 	useMongoClient : true,
@@ -33,14 +29,12 @@ db.on('close', ()=>{
 var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
-	wechatId:{type:String, unique:true},
 	nickname:{type:String},
 	imageurl:{type:String},
-	car:[{type:Schema.Types.ObjectId, ref:'Car'}],
+	car:{type:Schema.Types.ObjectId, ref:'Car'},
 	gametype:[{type:Schema.Types.ObjectId, ref:'GameType'}]
 });
 var User = mongoose.model('User', UserSchema);
-
 
 var CarSchema = new Schema({
 	owner:{type:Schema.Types.ObjectId, ref:'User'},
@@ -87,20 +81,24 @@ exports.insertSignupData = function(nickName, imageUrl, seatnum) {
 		nickname : nickName,
 		imageurl : imageUrl
 	});
-	person.save(function(err) {
-		if (err) return console.log(err);
-		if (seatnum > 0) {
-			var car = new Car({
-				owner : person,
-				available : true,
-				seatnum : seatnum,
-				seatavailablenum : seatnum - 1 
-			});
-			car.save(function(err) {
-				if (err) return console.log(err);
-			});
-		}
-	});
+        if (seatnum > 0) {
+         var car = new Car({
+             owner : person,
+             available : true,
+             seatnum : seatnum,
+             seatavailablenum : seatnum - 1 
+         });
+	person.car = car;
+	car.save(function(err) {
+	if (err) {
+	    return console.log(err);
+	}
+        });
+        }	
+        person.save(function(err) {
+        if (err) {
+        	console.log(err);}
+        });
 }
 
 exports.countUserByName = function(name, callback) {
@@ -193,7 +191,6 @@ exports.deleteAllUsersCars = function(){
 		}else{
 			console.log("Clean all cars success.")
 		}
-		
 	});
 	User.remove({}, function(err){
 		console.log("--------- Clean All Users ---------");
