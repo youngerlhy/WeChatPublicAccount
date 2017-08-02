@@ -78,7 +78,7 @@ var LogSchema = new Schema({
 });
 var Log = mongoose.model('Log', LogSchema);
 
-exports.insertSignupData = function(nickName, imageUrl, seatnum, game) {
+insertSignupData = function(nickName, imageUrl, seatnum, game) {
 	var person = new User({
 		nickname : nickName,
 		imageurl : imageUrl
@@ -99,6 +99,7 @@ exports.insertSignupData = function(nickName, imageUrl, seatnum, game) {
         }	
         person.game = game;
         game.competitors.push(person);
+        game.save();
         person.save(function(err) {
         if (err) {
         	console.log(err);}
@@ -224,9 +225,9 @@ exports.findCurrentSignupGame = function(){
 			console.log("Get current signup game fail:" + err);
 			return;
 		}else{
-		  console.log("Get current signup game :" + result);
-		  return result;
-		}
+		console.log("Get sign game:"+result);
+		return result;
+}
 	});
 }
 
@@ -254,6 +255,21 @@ exports.closeOutGame=function(startTime, endTime,callback){
     }
   });
 }
+
+exports.insertSignupAndGame = function(nickname, imageurl, num) {
+    Game.findOne({signupStatus: 'Started'}, function(error, gameResult) {
+        if(error) return console.log(error);
+        User.count({name: nickname, game: gameResult._id}, function(err, count) {
+                if(err) return console.log(err);
+                if(count == 0) {
+                        insertSignupData(nickname, imageurl, num, gameResult);
+                }
+        });
+});
+
+}
+
+
 
 
 
