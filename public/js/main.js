@@ -90,7 +90,8 @@ $(document).ready(function() {
   });
 
   $("close_out_game_cancel").click(function() {
-
+    $.post("/close_out_game_confirm", {}, function(data, status) {
+    });
   });
 });
 

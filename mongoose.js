@@ -215,7 +215,6 @@ exports.insertPublishGame = function(startTime,endTime) {
 	  });
 }
 
-
 exports.findCurrentSignupGame = function(){
 	Game.find({signupStatus:"Ended",gameStatus:"Started"}).sort({"startTime":-1}).limit(1).exec(function(err,reusult){
 		if(err){
@@ -226,4 +225,31 @@ exports.findCurrentSignupGame = function(){
 		}
 	});
 }
+
+exports.closeOutGame=function(startTime, endTime){
+  var updateGameStatus = {$set: {gameStatus: "Ended" }};
+  Game.update({
+    startTime:startTime,
+    endTime:endTime
+  }, updateGameStatus, function(error){
+    if(error) {
+      console.log(error);
+    } else {
+      console.log('Update success!');
+      Game.find({
+        startTime:startTime,
+        endTime:endTime,
+        gameStatus: "Ended"
+      }, function(err, docs){
+        if (err) {
+          console.log('查询出错：' + err);
+        } else {
+          callback(result);
+        }
+      });
+    }
+  });
+}
+
+
 

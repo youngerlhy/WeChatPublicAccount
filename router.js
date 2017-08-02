@@ -140,6 +140,11 @@ module.exports = function(app) {
     closeOutGame(startTime, endTime);
   });
   
+  app.get('/close_out_game_cancel', function(req,res){
+    var show_sign_result = 'show_sign_result';
+    res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'+ show_sign_result + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
+  });
+  
 
   app.get('/show_sign_result', function(req, res) {
     // 第二步：通过code换取网页授权access_token
@@ -245,96 +250,18 @@ function getAllUsers() {
 
 function isGameStarted(game){
   var isStarted = false;
-  if("Started" == game.status.replace(/(^\s*)|(\s*$)/g, "")){
+  if("Started" == game.gameStatus.replace(/(^\s*)|(\s*$)/g, "")){
     isStarted = true;
   }
   return isStarted;
 }
 
 function getStartedGame(){
-  mongoose.getStartedGame(Date.now);
+  mongoose.findCurrentSignupGame();
 }
 
 function closeOutGame(startTime, endTime){
   mongoose.closeOutGame(startTime, endTime);
-}
-
-function isGameStarted() {
-  var result = true;
-  return result;
-}
-
-function isGameEnded() {
-  return false;
-}
-
-function hasSignedup() {
-  return true;
-}
-
-function isGameStarted() {
-  var result = true;
-  return result;
-}
-
-function isGameEnded() {
-  return false;
-}
-
-function hasSignedup() {
-  return true;
-}
-
-function isGameStarted() {
-  var result = true;
-  return result;
-}
-
-function isGameEnded() {
-  return false;
-}
-
-function hasSignedup() {
-  return true;
-}
-
-function isGameStarted() {
-  var result = true;
-  return result;
-}
-
-function isGameEnded() {
-  return false;
-}
-
-function hasSignedup() {
-  return true;
-}
-
-function isGameStarted() {
-  var result = true;
-  return result;
-}
-
-function isGameEnded() {
-  return false;
-}
-
-function hasSignedup() {
-  return true;
-}
-
-function isGameStarted() {
-  var result = true;
-  return result;
-}
-
-function isGameEnded() {
-  return false;
-}
-
-function hasSignedup() {
-  return true;
 }
 
 function isGameStarted() {
