@@ -13,7 +13,7 @@ app.set('views', __dirname); // config view
 app.set('view engine', 'html');
 app.engine('.html', require('ejs').__express);
 
-context = {
+context = {	
 	appid: "wx067aa7e646581331",
 	secret: "d26907f7504d80d5aea6305db84ec510"
 };

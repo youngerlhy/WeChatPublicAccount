@@ -52,7 +52,7 @@ function createConditionalButtons() {
 	buttons.button[0].sub_button.push({
 	  type : "view",
 		name : "结束报名",
-		url :"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2Fclose_out_game&response_type=code&scope=snsapi_base&state=home#wechat_redirect"
+		url :"http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/close_out_game"
 	});
 	buttons.matchrule = {
 		tag_id : context.tags[ADMIN_TAG_NAME],

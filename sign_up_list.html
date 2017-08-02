@@ -1,55 +1,78 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-<title>羽毛球活动报名</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="Kuanghui Ding">
-    <link href="/css/bootstrap.css" rel="stylesheet">
-	<link href="/css/style.css" rel="stylesheet">
+<title>羽毛球活动报名结果</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="Kuanghui Ding">
+<link href="/css/bootstrap.css" rel="stylesheet">
+<link href="/css/style.css" rel="stylesheet">
+<script type='text/javascript'>
+  
+</script>
 </head>
 <body>
+	<script src="/js/jquery.js"></script>
+	<script src="/js/main.js"></script>
+	<script type="text/javascript">
+		window.onload = function(){
+			var htmlContent= "";
+			$.ajax({
+				async:true,
+				url:"/show_sign_result"
+				type:"get",
+				dataType:"json",
+				data : allUsersStr,
+				error:function(err){
+					alert("fail:"+err.status);
+				},
+				success:function(result){
+					$.each(result.user, fucntion(index,item){
+						var name = item.nickname;
+						var image = item.imageurl;
+						var carname  = item.car.owner.nickname;
+						htmlContent = "<tr><td>"+image+"</td><td>"+name+"</td><td>"+carname+"</td></tr>";
+					});
+					$("#sign_up_list_table").html(htmlContent);
+				}
+			});
+		}
+	</script>
 
-<div class="div-img">
-	<img src="/resource/badminton.png" class="img-responsive" alt="badminton"/> 
-</div>
-<div id="sign_up_list" class="div-center">
-	<div class="div-center-div">
-		<table class="table table-hover table-responsive">
-		<caption>羽毛球报名人员表：</caption>
-		<thead>
-			<tr>
-				<th>头像</th>
-				<th>姓名</th>
-				<th>车</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td background="url">photo</td>
-				<td>Name</td>
-				<td>car</td>
-			</tr>
-			<tr>
-				<td background="url">photo2</td>
-				<td>Name2</td>
-				<td>&nbsp;</td>
-			</tr>
-		</tbody>
-		</table>
+	<div class="div-img">
+		<img src="/resource/badminton.png" class="img-responsive"
+			alt="badminton" />
 	</div>
-</div>
-
-<footer>
-	<p>
-		BID CBC 羽毛球俱乐部
-	</p>
-	<p class="powered-by">
-		Powered by Falcon Team
-	</p>
-</footer>
-<script src="/js/jquery.js"></script>
-<script src="/js/main.js"></script>
+	<div id="sign_up_list" class="div-center">
+		<div class="div-center-div">
+			<table class="table table-hover table-responsive">
+				<caption>羽毛球报名人员表：</caption>
+				<thead>
+					<tr>
+						<th>头像</th>
+						<th>姓名</th>
+						<th>车</th>
+					</tr>
+				</thead>
+				<tbody id="sign_up_list_table">
+					<tr>
+						<td background="url">photo</td>
+						<td>Name</td>
+						<td>car</td>
+					</tr>
+					<tr>
+						<td background="url">photo2</td>
+						<td>Name2</td>
+						<td>&nbsp;</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<footer>
+		<p>BID CBC 羽毛球俱乐部</p>
+		<p class="powered-by">Powered by Falcon Team</p>
+	</footer>
 </body>
 </html>

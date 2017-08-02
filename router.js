@@ -1,14 +1,33 @@
 var request = require('request');
 var mongoose = require('./mongoose');
+mongoose.Promise = require('bluebird');
+
 module.exports = function(app) {
   app.get('/', function(req, res) {
     res.render('index', {});
   });
-  
+
+  app.get('/cancel_sign_up', function(req, res) {
+    res.render('cancel_sign_up', {});
+  });
+
   app.get('/dailyEnglish', function(req, res) {
     res.render('dailyEnglish', {});
   });
+  
+   app.get('/newsletter', function(req, res) {
+    res.render('newsletter', {});
+  });
 
+   app.get('/no_action', function(req, res) {
+    res.render('no_action', {});
+   });
+ 
+  app.get('/sign_up_list', function(req, res) {
+    res.render('sign_up_list', {});
+   });
+
+ 
   app.get('/tony', function(req, res) {
     res.render('tony', {});
   });
@@ -59,43 +78,106 @@ module.exports = function(app) {
   app.post('/interface', function(req, res) {
   });
 
+
+  app.post('/delete_data', function(req, res) {
+    var nickname = req.body.nickname;
+    mongoose.deleteUserCar(nickname);
+    res.send(nickname);
+  });
+
   app.post('/insert_data', function(req, res) {
     var nickname = req.body.nickname;
     var imageurl = req.body.imageurl;
     var num = req.body.seatnum;
     console.log(nickname + " " + imageurl + " " + num);
-    mongoose.countUserByName(nickname, function (err, count) {
-          if (err)
-          return console.log(err);
-          if(count == 0) {
-             mongoose.insertSignupData(nickname, imageurl, num);
-          }
-        });
+    mongoose.countUserByName(nickname, function(err, count) {
+      if (err)
+        return console.log(err);
+      if (count == 0) {
+        mongoose.insertSignupData(nickname, imageurl, num);
+      }
+    });
     res.send(nickname + ' ' + imageurl + ' ' + num);
   });
-  
-  app.get('/publish_game', function(req, res) {
-    console.log('publish a game');
-  //  res.render('select_sign_up_date', {});
-    res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2Fpublish_game&response_type=code&scope=snsapi_base&state=home#wechat_redirect");
+
+  app.get('/publish_game',function(req, res) {
+     console.log('publish a game');
+     var get_publish_access_token = 'get_publish_access_token';
+     res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'
+          + get_publish_access_token + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
+  });
+
+  app.get('/get_publish_access_token', function(req, res, next) {
+    var code = req.query.code;
+    request.get({
+      url : 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + context.appid + '&secret='
+          + context.secret + '&code=' + code + '&grant_type=authorization_code',
+    }, function(error, response, body) {
+      if (response.statusCode == 200) {
+        res.render('select_sign_up_date', {});
+      } else {
+        console.log(response.statusCode);
+      }
+    });
+  });
+
+  app.get('/close_out_game',function(req, res) {
+      console.log('close out a game');
+      var game = getStartedGame();
+      if(isGameStarted(game)){
+        var startedGame = JSON.stringify(game);
+        res.render('close_out_game',{});
+        console.log(startedGame);
+        var startedTime = game.startTime;
+        var endTime = game.endTime;
+        alert("startedTime:" + data);
+        $("#datetimeStart").val(startedTime);
+        $("#datetimeEnd").val(endTime);
+      }else{
+         var show_sign_result = 'show_sign_result';
+         res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'+ show_sign_result + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
+      }
   });
   
-  app.get('/close_out_game', function(req, res) {
-    console.log('close out a game');
-  //  res.render('cancel_sign_up', {});
+  app.get('/close_out_game_confirm',function(req, res) {
+    var startTime = req.body.startTime;
+    var endTime = req.body.endTime;
+    console.log("close_out_game which Start time is :" + startTime + " , end time is :" + endTime);
+    closeOutGame(startTime, endTime);
   });
   
+  app.get('/close_out_game_cancel', function(req,res){
+    var show_sign_result = 'show_sign_result';
+    res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'+ show_sign_result + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
+  });
+  
+
+  app.get('/show_sign_result', function(req, res) {
+    // 第二步：通过code换取网页授权access_token
+    var code = req.query.code;
+    request.get({
+      url : 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + context.appid + '&secret='
+          + context.secret + '&code=' + code + '&grant_type=authorization_code',
+    }, function(error, response, body) {
+      if (response.statusCode == 200) {
+        var allUsers = getAllUsers();
+        var allUsersStr = JSON.stringify(allUsers);
+        console.log(allUsersStr);
+        res.render('sign_up_list', {allUsersStr});
+      } else {
+        console.log(response.statusCode);
+      }
+    });
+  });
+
   app.post('/add_publish_game', function(req, res, next) {
     var startTime = req.body.startTime;
     var endTime = req.body.endTime;
     console.log("Start time is :" + startTime + " , end time is :" + endTime);
     addPublishGame(startTime, endTime);
-    res.send(startTime + ' ' + endTime);
   });
 
   app.get('/wx_login', function(req, res, next) {
-    // console.log("oauth - login")
-
     // 第一步：用户同意授权，获取code
     var get_code = 'get_wx_access_token';
     // 这是编码后的地址
@@ -104,18 +186,15 @@ module.exports = function(app) {
     console.log('https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + context.appid
         + '&redirect_uri=' + return_uri + '&response_type=code&scope=' + scope
         + '&state=STATE#wechat_redirect');
+
     var scope = 'snsapi_userinfo';
 
     res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + context.appid
         + '&redirect_uri=' + return_uri + '&response_type=code&scope=' + scope
         + '&state=STATE#wechat_redirect');
-
   });
 
   app.get('/get_wx_access_token', function(req, res, next) {
-    // console.log("get_wx_access_token")
-    // console.log("code_return: "+req.query.code)
-
     // 第二步：通过code换取网页授权access_token
     var code = req.query.code;
     request.get({
@@ -141,15 +220,20 @@ module.exports = function(app) {
             // console.log(JSON.parse(body));
             console.log('获取微信信息成功！');
 
-            // 小测试，实际应用中，可以由此创建一个帐户
-            /*
-             * res.send("\ <h1>"+userinfo.nickname+" 的个人信息</h1>\ <p><img
-             * src='"+userinfo.headimgurl+"' /></p>\ <p>"+userinfo.city+"，"+userinfo.province+"，"+userinfo.country+"</p>\
-             * ");
-             */
-            // console.log(openid);
-            res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/?nickname='
-                + userinfo.nickname + '&headimgurl=' + userinfo.headimgurl);
+            if(isGameStarted()) {
+                if(hasSignedup(userinfo.nickname)) {
+                    res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/cancel_sign_up?nickname=' + userinfo.nickname);
+                 } else {
+                    res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/?nickname='
+                    + userinfo.nickname + '&headimgurl=' + userinfo.headimgurl);
+                 }
+            }
+            else if(isGameEnded()) {
+               res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/show_sign_result');
+            }
+            else {
+               res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/no_action');
+            }
           } else {
             console.log(response.statusCode);
           }
@@ -159,46 +243,44 @@ module.exports = function(app) {
       }
     });
   });
+  
 }
+
 function addPublishGame(startTime, endTime) {
-  var MongoClient = require('mongodb').MongoClient;
-  var DB_CONN_STR = 'mongodb://localhost:27017/wechatdb';
-  MongoClient.connect(DB_CONN_STR, function(err, db) {
-    console.log("连接成功！");
-    var collection = db.collection('site');
-    var data = [ {
-      "startTime" : startTime,
-      "endTime" : endTime
-    } ];
-    collection.insert(data, function(err, result) {
-      if (err) {
-        console.log('Error:' + err);
-        return;
-      }
-    });
-    db.close();
-  });
+  mongoose.insertPublishGame(startTime, endTime);
 };
 
-function insertSignUpData(name, url, num) {
-  var MongoClient = require('mongodb').MongoClient;
-  var DB_CONN_STR = 'mongodb://localhost:27017/wechatdb';
-  MongoClient.connect(DB_CONN_STR, function(err, db) {
-    console.log("连接成功！");
-    var collection = db.collection('site');
+function getAllUsers() {
+  mongoose.findAllUsers()
+};
 
-    var data = [ {
-      "nickname" : name,
-      "imageurl" : url,
-      "seatnum" : num
-    } ];
+function isGameStarted(game){
+  var isStarted = false;
+  console.log(game);
+  if("Started" == game.gameStatus.replace(/(^\s*)|(\s*$)/g, "")){
+    isStarted = true;
+  }
+  return isStarted;
+}
 
-    collection.insert(data, function(err, result) {
-      if (err) {
-        console.log('Error:' + err);
-        return;
-      }
-    });
-    db.close();
-  });
+function getStartedGame(){
+  mongoose.findCurrentSignupGame();
+}
+
+function closeOutGame(startTime, endTime){
+  mongoose.closeOutGame(startTime, endTime);
+}
+
+function isGameStarted() {
+  console.log("call isGameStarted()" );
+  var result = true;
+  return result;
+}
+
+function isGameEnded() {
+  return false;
+}
+
+function hasSignedup() {
+  return true;
 }
