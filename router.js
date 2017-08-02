@@ -273,6 +273,7 @@ function closeOutGame(startTime, endTime){
 }
 
 function isGameStarted() {
+  console.log("call isGameStarted()" );
   var result = true;
   return result;
 }
