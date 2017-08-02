@@ -336,3 +336,16 @@ function isGameEnded() {
 function hasSignedup() {
   return true;
 }
+
+function isGameStarted() {
+  var result = true;
+  return result;
+}
+
+function isGameEnded() {
+  return false;
+}
+
+function hasSignedup() {
+  return true;
+}
