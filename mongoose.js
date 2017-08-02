@@ -55,7 +55,8 @@ var GameSchema = new Schema({
 	gameType:[{type:Schema.Types.ObjectId, ref:'GameType'}],
 	startTime:{type:Date},
 	endTime:{type:Date},
-	status:{type:String, default: "Started"},
+	signupStatus:{type:String, default: "Started"},
+	gameStatus:{type:String, default: "Started"},
 	compition:[{type:Schema.Types.ObjectId, ref:'User'}],
 	winner:[{type:Schema.Types.ObjectId, ref:'User'}],
 });
@@ -214,10 +215,11 @@ exports.insertPublishGame = function(startTime,endTime) {
 	  });
 }
 
-exports.findCurrentGame = function(){
-	Game.find({status:"Ended"}).sort({"startTime":-1}).limit(1).exec(function(err,reusult){
+
+exports.findCurrentSignupGame = function(){
+	Game.find({signupStatus:"Ended",gameStatus:"Started"}).sort({"startTime":-1}).limit(1).exec(function(err,reusult){
 		if(err){
-			console.log("Get current game fail:" + err);
+			console.log("Get current signup game fail:" + err);
 			return;
 		}else{
 			callback(result);
