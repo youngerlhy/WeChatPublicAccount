@@ -126,13 +126,11 @@ module.exports = function(app) {
       var game = getStartedGame();
       if(isGameStarted(game)){
         var startedGame = JSON.stringify(game);
-        res.render('close_out_game',{});
-        console.log(startedGame);
         var startedTime = game.startTime;
         var endTime = game.endTime;
-        alert("startedTime:" + data);
         $("#datetimeStart").val(startedTime);
         $("#datetimeEnd").val(endTime);
+        res.render('close_out_game',{});
       }else{
          var show_sign_result = 'show_sign_result';
          res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'+ show_sign_result + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');

@@ -223,12 +223,15 @@ exports.findCurrentSignupGame = function(){
 		if(err){
 			console.log("Get current signup game fail:" + err);
 			return;
+		}else{
+		  console.log("Get current signup game :" + result);
+		  return result;
 		}
 	});
 }
 
 exports.closeOutGame=function(startTime, endTime,callback){
-  var updateGameStatus = {$set: {gameStatus: "Ended" }};
+  var updateGameStatus = {$set: {signupStatus: "Ended" }};
   Game.update({
     startTime:startTime,
     endTime:endTime
@@ -240,12 +243,12 @@ exports.closeOutGame=function(startTime, endTime,callback){
       Game.find({
         startTime:startTime,
         endTime:endTime,
-        gameStatus: "Ended"
+        signupStatus: "Ended"
       }, function(err, docs){
         if (err) {
           console.log('查询出错：' + err);
         } else {
-          callback(result);
+          callback(docs);
         }
       });
     }
