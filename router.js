@@ -90,13 +90,7 @@ module.exports = function(app) {
     var imageurl = req.body.imageurl;
     var num = req.body.seatnum;
     console.log(nickname + " " + imageurl + " " + num);
-    mongoose.countUserByName(nickname, function(err, count) {
-      if (err)
-        return console.log(err);
-      if (count == 0) {
-        mongoose.insertSignupData(nickname, imageurl, num);
-      }
-    });
+    mongoose.insertSignupAndGame(nickname,imageurl,num);
     res.send(nickname + ' ' + imageurl + ' ' + num);
   });
 
@@ -126,6 +120,7 @@ module.exports = function(app) {
       var game = getStartedGame();
       if(isGameStarted(game)){
         var startedGame = JSON.stringify(game);
+        res.render('close_out_game',{startedGame});
         res.render('close_out_game',{});
         console.log(startedGame);
         var startedTime = game.startTime;
@@ -282,5 +277,5 @@ function isGameEnded() {
 }
 
 function hasSignedup() {
-  return true;
+  return false;
 }
