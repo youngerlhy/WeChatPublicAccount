@@ -122,14 +122,14 @@ exports.findAllUsers = function(callback){
 
 
 exports.findUserByName = function(name, callback){
-	User.findOne({name:name}, function(err, obj){
-		callback(err, obj);
+	User.findOne({name:name}, function(err, result){
+		callback(err, result);
 	});
 }
 
 exports.findCarByName = function(name,callback){
-	User.findOne({name:name}).populate({path:'Car'}).exec(function(err, obj){
-		callback(err, obj);
+	User.findOne({name:name}).populate({path:'Car'}).exec(function(err, result){
+		callback(err, result);
 	});
 }
 
@@ -178,14 +178,14 @@ exports.allotUserCar = function(callback){
 					if(err)  return console.log(err);					
 				});				
 			}
-			// 若是座位数大于人数
+			// seatnum > allotusers.length
 		}
 		seatnum += item.seatavailablenum;
 	});
 }
 
 /**
- * 再次发起报名时删除已有user和car
+ * When starting to sign up again, clean all users and cars.
  */
 exports.deleteAllUsersCars = function(){
 	Car.remove({}, function(err){

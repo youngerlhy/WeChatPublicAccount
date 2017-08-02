@@ -10,6 +10,32 @@
 	<link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
+<script type = "text/javascript">
+	window.onload = function(){
+		var htmlContent= "";
+		$.ajax({
+			async:true,
+			url:"/show_sign_result"
+			type:"get",
+			dataType:"json",
+			
+			beforeSend:function(){
+			},
+			error:function(err){
+				alert("fail:"+err.status);
+			},
+			success:function(result){
+				$.each(result.user, fucntion(index,item){
+					var name = item.nickname;
+					var image = item.imageurl;
+					var carname  = item.car.owner.nickname;
+					htmlContent = "<tr><td>"+image+"</td><td>"+name+"</td><td>"+carname+"</td></tr>";
+				});
+				$("#sign_up_list_table").html(htmlContent);
+			}
+		});
+	}
+</script>
 
 
 
@@ -27,7 +53,7 @@
 				<th>车</th>
 			</tr>
 		</thead>
-		<tbody>
+		<tbody id="sign_up_list_table">
 			<tr>
 				<td background="url">photo</td>
 				<td>Name</td>
