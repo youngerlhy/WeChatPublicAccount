@@ -78,8 +78,8 @@ $(document).ready(function() {
   });
 
   $("close_out_game_confirm").click(function() {
-    var startTime = $("#datetimeStart").val();
-    var endTime = $("#datetimeEnd").val();
+    var startTime = $("#close_out_timeStart").val();
+    var endTime = $("#close_out_timeEnd").val();
     $.post("/close_out_game_confirm", {
       startTime : startTime,
       endTime : endTime

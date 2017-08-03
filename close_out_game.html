@@ -16,8 +16,9 @@
 	<script src="/js/main.js"></script>
 	<script src="/js/bootstrap-datetimepicker.min.js"></script>
 	<script src="/js/bootstrap-datetimepicker.zh-CN.js"></script>
-	<!-- <script>
+	<script>
     $(document).ready(function() {
+      <%= startTime %> - <%= startTime %>
       showGameInfo();
     });
     showGameInfo = function() {
@@ -30,7 +31,7 @@
         $("#datetimeEnd").val(endTime);
       });
     }
-  </script> -->
+  </script>
 	<div class="div-img">
 		<img src="/resource/badminton.png" class="img-responsive"
 			alt="badminton" />
@@ -41,8 +42,18 @@
 				<b>活动详情：</b>
 			</p>
 			<p>
-			<b>起止时间：	<%= startTime %> - <%= startTime %> </b>
+				开始时间：<input size="16" type="text" id="close_out_timeStart" disabled 
+					class="form_datetime">
 			</p>
+			<p>
+				结束时间：<input size="16" type="text" id="close_out_timeEnd" disabled
+					class="form_datetime">
+			</p>
+			
+			<!-- <p>
+			
+			<b>起止时间：	<%= startTime %> - <%= startTime %> </b>
+			</p> -->
 			<p>
 				<button id="close_out_game_confirm" type="button"
 					class="btn btn-primary btn-lg">确认</button>
@@ -61,6 +72,6 @@
 		<p>BID CBC 羽毛球俱乐部</p>
 		<p class="powered-by">Powered by Falcon Team</p>
 	</footer>
-
+	<script>public/js/close.js</script>
 </body>
 </html>
