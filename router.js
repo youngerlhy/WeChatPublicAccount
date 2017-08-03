@@ -36,6 +36,23 @@ module.exports = function(app) {
    });
 
    app.get('/game_history', function(req, res) {
+	    // 第二步：通过code换取网页授权access_token
+	    var code = req.query.code;
+	    request.get({
+	      url : 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + context.appid + '&secret='
+	          + context.secret + '&code=' + code + '&grant_type=authorization_code',
+	    }, function(error, response, body) {
+	      if (response.statusCode == 200) {
+	    	  var nickname = req.body.nickname;
+	    	  mongoose.getCountGames(function(count){
+	    		  mongoose.findOneUserGame(nickname,function(usergames){
+	    			  historyFun(count,usergames.length);
+	    		  });
+	    	  });
+	      } else {
+	        console.log(response.statusCode);
+	      }
+	    });	  
     res.render('history', {});
    });  
  
@@ -306,3 +323,14 @@ function closeOutGame(startTime, endTime){
   mongoose.closeOutGame(startTime, endTime);
 }
 
+var historyFun = function(arg1, arg2){
+	
+	var total_game_num = arg1;
+	var your_game_num = arg2;
+	if(total_game_num==0){
+		total_game_num=1;
+	}
+    $("#total_game_num").text(total_game_num+"次");
+	$("#your_game_num").text(your_game_num+"次");
+    $("#your_game_progress").attr('style',"width:"+(your_game_num/total_game_num*100)+"%");
+};
