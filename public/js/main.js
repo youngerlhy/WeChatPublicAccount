@@ -34,6 +34,7 @@ $(document).ready(function() {
     $("#sign_up_successful").attr('style', "display:block;");
     var num = $("#seat").val();
     $.post("/insert_data", {
+      openid : getQueryString("openid"),
       nickname : getQueryString("nickname"),
       imageurl : getQueryString("headimgurl"),
       seatnum : num
@@ -48,6 +49,7 @@ $(document).ready(function() {
     $("#car_seat").attr('style', "display:none;");
     $("#sign_up_successful").attr('style', "display:block;");
     $.post("/insert_data", {
+      openid : getQueryString("openid"),
       nickname : getQueryString("nickname"),
       imageurl : getQueryString("headimgurl"),
       seatnum : 0
@@ -59,7 +61,7 @@ $(document).ready(function() {
    $("#cancel_sign_up_successful").attr('style', "display:block;");
    $("#cancel_sign_up").attr('style',"display:none;"); 
    $.post("/delete_data", {
-      nickname : getQueryString("nickname"),
+      openid : getQueryString("openid"),
     }, function(data, status) {
     });
   });
@@ -77,15 +79,15 @@ $(document).ready(function() {
     $("#publish_success").attr('style', "display:block;");
   });
 
-  $("close_out_game_confirm").click(function() {
-    $.post("/close_out_game_confirm", {}, function(data, status) {
+  $("close_out_game_confirm_btn").click(function() {
+    $.post("/close_out_game_confirm", function(data, status) {
     });
     $("#close_out_game_div").attr('style', "display:none;");
     $("#close_out_game").attr('style', "display:block;");
   });
 
-  $("close_out_game_cancel").click(function() {
-    $.post("/close_out_game_cancel", {}, function(data, status) {
+  $("close_out_game_cancel_btn").click(function() {
+    $.post("/close_out_game_cancel", function(data, status) {
     });
   });
 });

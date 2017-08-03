@@ -35,7 +35,11 @@ module.exports = function(app) {
     res.render('sign_up_list', {});
    });
 
-   app.get('/history', function(req, res) {
+  app.get('/history', function(req, res) {
+	    res.render('history', {});
+	   });
+  
+  app.get('/game_history', function(req, res) {
 	    // 第二步：通过code换取网页授权access_token
 	    var code = req.query.code;
 	    request.get({
@@ -50,7 +54,7 @@ module.exports = function(app) {
 	    			  var gameCount = {"count":count,"userGamesNum":userGamesNum};
 	    			  var gameCountJson = JSON.stringify(gameCount);
 	    			  console.log("gameCountJson:"+gameCountJson);
-	    			  res.render('history',{gameCountJson});
+	    			  res.send({"count":count, "userGamesNum":userGamesNum});
 	    		  });
 	    	  });
 	      } else {
@@ -111,17 +115,18 @@ module.exports = function(app) {
 
 
   app.post('/delete_data', function(req, res) {
-    var nickname = req.body.nickname;
-    mongoose.deleteUserCar(nickname);
-    res.send(nickname);
+    var openid  = req.body.openid;
+    mongoose.deleteUserCar(openid);
+    res.send(openid);
   });
 
   app.post('/insert_data', function(req, res) {
+    var openid = req.body.openid;
     var nickname = req.body.nickname;
     var imageurl = req.body.imageurl;
     var num = req.body.seatnum;
     console.log(nickname + " " + imageurl + " " + num);
-    mongoose.insertSignupAndGame(nickname,imageurl,num);
+    mongoose.insertSignupAndGame(openid, nickname,imageurl,num);
     res.send(nickname + ' ' + imageurl + ' ' + num);
   });
 
@@ -170,16 +175,23 @@ module.exports = function(app) {
       });
   });
   
-  app.get('/close_out_game_confirm',function(req, res) {
+  app.post('/close_out_game_confirm',function(req, res) {
+   console.log("confirm close out");
     var game = mongoose.findStartedGame();
     game.then(function(result){
+    if(gameStarted(result)){
+      console.log("close game!!!!");
       closeOutGame(result.startTime, result.endTime);
+    }else{
+       console.log("there is no game to close out, no action ");
+       res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/no_action');
+    }
     },function(err) {
       console.log(err); // Error: "It broke"
     });
   });
   
-  app.get('/close_out_game_cancel', function(req,res){
+  app.post('/close_out_game_cancel', function(req,res){
     var show_sign_result = 'show_sign_result';
     res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'+ show_sign_result + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
   });
@@ -262,13 +274,13 @@ module.exports = function(app) {
  
              promise.then(function(result) {
                if(result != null) {
-                  var promise3 = mongoose.findUserByName(nickname, result);
+                  var promise3 = mongoose.findUserByOpenId(openid, result);
                   promise3.then(function(result2) {
                     if(result2 != null) {
-                       res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/cancel_sign_up?nickname=' + nickname);
+                       res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/cancel_sign_up?openid=' + openid);
                     } else {
                        console.log(imgurl);
-                       res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/?nickname=' + nickname + '&headimgurl=' + imgurl);
+                       res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/?openid=' + openid + '&nickname=' + nickname + '&headimgurl=' + imgurl);
                     }
                   });
                } else {
