@@ -263,4 +263,17 @@ exports.findEndedGame = function() {
         return promise;
 }
 
+exports.setGameStatusEnded = function(){
+	Game.find({signupStatus:'Ended', gameStatus:'Started'},function(err,result){
+		result.forEach(function(item,index){
+			var now = new Date();
+			if(item.endTime > now){
+				item.gameStatus = 'Ended';
+			}
+			item.save(function(err){
+				if(err)  return console.log(err);					
+			});	
+		});
+	});
+}
 
