@@ -178,56 +178,101 @@ function allotUserCar(){
 	});
 }
 
-exports.findAllUsers = function(callback){
+exports.findAllUsers = function(){
 	var seatnum = 0;
-	Game.findOne({signupStatus: 'Ended', gameStatus: 'Started'}, function(error, gameResult) {
-		var owners = [];
-		var allotusers = [];
-		
-		User.find({game:gameResult._id, car:{$exists:true}}).then(function(users){
+	var owners = [];
+	var allotusers = [];
+	
+	var promise = Game.findOne({signupStatus: 'Ended', gameStatus: 'Started'}).exec();
+	var promise2 = User.find({game:gameResult._id, car:{$exists:true}}).exec();
+	var promise3 = User.find({game:gameResult._id, car:{$exists:false}}).exec();
+	var promise4 = User.find({game:gameResult._id}).exec();
+	
+	promise.then(function(gameResult){
+		promise2.then(function(users){
 			users.forEach(function(user, index){
-					owners.push(user);			
-					console.log("OWNERS:"+owners);
-				});
-			
-			User.find({game:gameResult._id, car:{$exists:false}}).then(function(users){
-				users.forEach(function(user, index){
-						allotusers.push(user);	
-						console.log("ALLOTUSERS:"+allotusers);
-					});
-				
-				for(var i=0; i<owners.length; i++){
-					var owner= owners[i]
-					Car.find({available:true,owner:owner._id}).then(function(car){
-						console.log("CARS:"+car);
-						console.log("=====2=====");
-						for(var i=0; i<car.seatavailablenum; i++){
-							console.log("=====3=====");
-							car.passenger.push(allotusers[seatnum+i]);
-							console.log("PASSENGERS:"+car.passenger);
-							car.save(function(err){
-								if(err)  return console.log(err);					
-							});	
-						}
-						seatnum += car.seatavailablenum;
-					});	
-				}
-				
-				 User.find({game:gameResult._id}, function(err, result){
-					 if(err){
-						 console.log("Find all users fail:" + err);
-						 return;
-					 }else{
-						 callback(result);
-					 }
-				 });
-				
+				owners.push(user);			
+				console.log("OWNERS:"+owners);
+			});
+		});
+		promise3.then(function(users){
+			users.forEach(function(user, index){
+				owners.push(user);			
+				console.log("OWNERS:"+owners);
 			});
 		});
 		
+		for(var i=0; i<owners.length; i++){
+			var owner= owners[i]
+			Car.find({available:true,owner:owner._id}).then(function(car){
+				console.log("CARS:"+car);
+				console.log("=====2=====");
+				for(var i=0; i<car.seatavailablenum; i++){
+					console.log("=====3=====");
+					car.passenger.push(allotusers[seatnum+i]);
+					console.log("PASSENGERS:"+car.passenger);
+					car.save(function(err){
+						if(err)  return console.log(err);					
+					});	
+				}
+				seatnum += car.seatavailablenum;
+			});	
+		}
 		
-});
-			
+		promise4.then(function(result){
+			return result;
+		});
+		
+	});
+	
+	
+//	Game.findOne({signupStatus: 'Ended', gameStatus: 'Started'}, function(error, gameResult) {
+//		
+//		
+//		User.find({game:gameResult._id, car:{$exists:true}}).then(function(users){
+//			users.forEach(function(user, index){
+//					owners.push(user);			
+//					console.log("OWNERS:"+owners);
+//				});
+//			
+//			User.find({game:gameResult._id, car:{$exists:false}}).then(function(users){
+//				users.forEach(function(user, index){
+//						allotusers.push(user);	
+//						console.log("ALLOTUSERS:"+allotusers);
+//					});
+//				
+//				for(var i=0; i<owners.length; i++){
+//					var owner= owners[i]
+//					Car.find({available:true,owner:owner._id}).then(function(car){
+//						console.log("CARS:"+car);
+//						console.log("=====2=====");
+//						for(var i=0; i<car.seatavailablenum; i++){
+//							console.log("=====3=====");
+//							car.passenger.push(allotusers[seatnum+i]);
+//							console.log("PASSENGERS:"+car.passenger);
+//							car.save(function(err){
+//								if(err)  return console.log(err);					
+//							});	
+//						}
+//						seatnum += car.seatavailablenum;
+//					});	
+//				}
+//				
+//				 User.find({game:gameResult._id}, function(err, result){
+//					 if(err){
+//						 console.log("Find all users fail:" + err);
+//						 return;
+//					 }else{
+//						 callback(result);
+//					 }
+//				 });
+//				
+//			});
+//		});
+//		
+//		
+//});
+//			
 	
 		
 	
