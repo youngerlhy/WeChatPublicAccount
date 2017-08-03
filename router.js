@@ -199,12 +199,14 @@ module.exports = function(app) {
 
   app.get('/show_sign_result', function(req, res) {
     // 第二步：通过code换取网页授权access_token
+	console.log("=====show_sign_result=====");
     var code = req.query.code;
     request.get({
       url : 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + context.appid + '&secret='
           + context.secret + '&code=' + code + '&grant_type=authorization_code',
     }, function(error, response, body) {
       if (response.statusCode == 200) {
+    	  console.log("=====success=====");
     	  mongoose.findAllUsers(function(result){
     		  var allUsersJson = JSON.stringify(result);
     		  console.log("JSON:==="+allUsersJson);
