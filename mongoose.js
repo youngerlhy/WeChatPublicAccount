@@ -192,7 +192,7 @@ exports.insertPublishGame = function(startTime,endTime) {
 	  });
 }
 
-exports.closeOutGame=function(startTime, endTime,callback){
+exports.closeOutGame = function(startTime, endTime){
   var updateGameStatus = {$set: {signupStatus: "Ended" }};
   Game.update({
     startTime:startTime,
@@ -209,9 +209,9 @@ exports.closeOutGame=function(startTime, endTime,callback){
       }, function(err, docs){
         if (err) {
           console.log('查询出错：' + err);
-        } else {
-          callback(docs);
-        }
+          return;
+        } 
+        console.log('关闭报名成功！');
       });
     }
   });
@@ -268,7 +268,7 @@ exports.getCountGames = function(callback){
 
 exports.findOneUserGame = function(name,callback){
 	User.find({nickname:name},function(err,result){
-		callback(result); //user--games
+		callback(result); // user--games
 	});
 }
 
