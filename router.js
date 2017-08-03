@@ -48,21 +48,22 @@ module.exports = function(app) {
 	    }, function(error, response, body) {
 	      if (response.statusCode == 200) {
 	    	  var nickname = req.body.nickname;
-	    	  mongoose.getCountGames(function(count){
-	    		  
-	    		  mongoose.findOneUserGame(nickname,function(usergames){
-	    			  var userGamesNum = usergames.length;
+	    	  
+	    	  var promise =mongoose.getCountGames();
+	    	  promise.then(function (count){
+	    		  var promise2 =  mongoose.findOneUserGame(nickname);
+	    		  promise2.then(function(result){
+	    			  var userGamesNum = result.length;
 	    			  var gameCount = {"count":count,"userGamesNum":userGamesNum};
 	    			  var gameCountJson = JSON.stringify(gameCount);
 	    			  console.log("gameCountJson:"+gameCountJson);
 	    			  res.send({"count":count, "userGamesNum":userGamesNum});
+	    			  
 	    		  });
 	    	  });
-	      } else {
-	        console.log(response.statusCode);
 	      }
-	    });	  
-   });  
+	    });
+  });  
  
   app.get('/tony', function(req, res) {
     res.render('tony', {});
