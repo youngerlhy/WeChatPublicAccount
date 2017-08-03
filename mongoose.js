@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Promise = require("bluebird");
 Promise.promisifyAll(mongoose);
-var db = mongoose.connect('mongodb://localhost/testdb', {
+var db = mongoose.connect('mongodb://localhost/testdb2', {
 	useMongoClient : true,
 });
 
@@ -80,6 +80,7 @@ var LogSchema = new Schema({
 var Log = mongoose.model('Log', LogSchema);
 
 insertSignupData = function(nickName, imageUrl, seatnum, game) {
+   console.log("insertSignupData " +  nickName);
 	var person = new User({
 		nickname : nickName,
 		imageurl : imageUrl
@@ -91,15 +92,17 @@ insertSignupData = function(nickName, imageUrl, seatnum, game) {
              seatnum : seatnum,
              seatavailablenum : seatnum - 1 
          });
-	person.car = car;
-	car.save(function(err) {
-	if (err) {
-	    return console.log(err);
-	}
-        });
         }	
-        person.game = game;
         game.competitors.push(person);
+        person.game=game;
+        person.car=car;
+
+        
+        car.save(function(err) {
+        if (err) {
+                console.log(err);}
+        });
+
         game.save();
         person.save(function(err) {
         if (err) {
