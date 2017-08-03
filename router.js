@@ -122,16 +122,21 @@ module.exports = function(app) {
   app.get('/close_out_game',function(req, res) {
       console.log('close out a game');
       var game = getStartedGame();
-      if(gameStarted(game)){
-        var startedTime = game.startTime;
-        var endTime = game.endTime;
-        $("#datetimeStart").val(startedTime);
-        $("#datetimeEnd").val(endTime);
-        res.render('close_out_game',{});
-      }else{
-         var show_sign_result = 'show_sign_result';
-         res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'+ show_sign_result + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
-      }
+      game.then(function(result){
+        console.log('result is :'+result);
+        if(gameStarted(result)){
+          var startedTime = game.startTime;
+          var endTime = game.endTime;
+          $("#datetimeStart").val(startedTime);
+          $("#datetimeEnd").val(endTime);
+          res.render('close_out_game',{});
+        }else{
+          var show_sign_result = 'show_sign_result';
+          res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'+ show_sign_result + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
+        }
+      },function(err) {
+        console.log(err); // Error: "It broke"
+      })
   });
   
   app.get('/close_out_game_confirm',function(req, res) {
@@ -219,7 +224,6 @@ module.exports = function(app) {
            
             var promise = mongoose.findStartedGame();
             var promise2 = mongoose.findEndedGame();
-
  
              promise.then(function(result) {
                if(result != null) {
