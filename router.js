@@ -53,6 +53,7 @@ module.exports = function(app) {
 	    	  promise.then(function (count){
 	    		  var promise2 =  mongoose.findOneUserGame(nickname);
 	    		  promise2.then(function(result){
+	    			  
 	    			  var userGamesNum = result.length;
 	    			  var gameCount = {"count":count,"userGamesNum":userGamesNum};
 	    			  var gameCountJson = JSON.stringify(gameCount);
