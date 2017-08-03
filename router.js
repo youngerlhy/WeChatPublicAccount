@@ -49,6 +49,7 @@ module.exports = function(app) {
 	      if (response.statusCode == 200) {
 	    	  var nickname = req.body.nickname;
 	    	  mongoose.getCountGames(function(count){
+	    		  
 	    		  mongoose.findOneUserGame(nickname,function(usergames){
 	    			  var userGamesNum = usergames.length;
 	    			  var gameCount = {"count":count,"userGamesNum":userGamesNum};
@@ -326,6 +327,6 @@ function gameStarted(game){
 }
 
 function Format(dateTime){
-  var dateFormat = require("./formatDate");
-  return dateFormat.DateFormat("yyyy-MM-dd HH:mm:ss",dateTime);
+  var date = dateTime.replace('T',' ').substring(0,19);
+  return date;
 }

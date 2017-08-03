@@ -1,11 +1,13 @@
 $(document).ready(function() {
+	alert("ready");
 	$.ajax({
             url: 'http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/game_history',
             type: 'get',
             dataType: 'jsonp',
             jsonp: 'callback',
             success: function(data) {
-	            var data = $.parseJSON(data);  
+	            var data = $.parseJSON(data);
+		alert("data"+data); 
 	            console.log(data);
 				var total_game_num = data.count;
 				var your_game_num = data.userGamesNum;
