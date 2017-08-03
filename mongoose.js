@@ -31,7 +31,7 @@ db.on('close', ()=>{
 var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
-        openid:{type:String},
+    openid:{type:String},
 	nickname:{type:String},
 	imageurl:{type:String},
 	car:{type:Schema.Types.ObjectId, ref:'Car'},
@@ -139,13 +139,15 @@ function allotUserCar(){
 		
 		User.find({game:gameResult._id, car:{$exists:true}}).then(function(users){
 			users.forEach(function(user, index){
-					owners.push();					
+					owners.push(user);			
+					console.log("OWNERS:"+owners);
 				});
 		});
 		
 		User.find({game:gameResult._id, car:{$exists:false}}).then(function(users){
 			users.forEach(function(user, index){
-					allotusers.push();					
+					allotusers.push(user);	
+					console.log("ALLOTUSERS:"+allotusers);
 				});
 		});
 			
@@ -155,6 +157,7 @@ function allotUserCar(){
 					for(var i=0; i<car.seatavailablenum; i++){
 						if(seatnum+i+1 <= allotusers.length){
 							car.passenger.push(allotusers[seatnum+i]);
+							console.log("PASSENGERS:"+car.passenger);
 						}
 						car.save(function(err){
 							if(err)  return console.log(err);					
