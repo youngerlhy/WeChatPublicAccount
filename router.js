@@ -35,7 +35,7 @@ module.exports = function(app) {
     res.render('sign_up_list', {});
    });
 
-   app.get('/game_history', function(req, res) {
+   app.get('/history', function(req, res) {
 	    // 第二步：通过code换取网页授权access_token
 	    var code = req.query.code;
 	    request.get({
