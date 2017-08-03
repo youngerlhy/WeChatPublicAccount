@@ -132,6 +132,40 @@ Game.findOne({signupStatus: 'Started'}, function(error, gameResult) {
 
 }
 
+exports.findAllUsersCars = function(callback){
+	var join = Promise.join;
+//	var seatnum = 0;
+	Game.findOne({signupStatus: 'Ended', gameStatus: 'Started'}, function(error, gameResult) {
+		var promise2 = User.find({game:gameResult._id, car:{$exists:true}}).exec();
+		var promise3 = User.find({game:gameResult._id, car:{$exists:false}}).exec();
+		var promise4 = User.find({game:gameResult._id}).exec();
+		
+		join(promise2,promise3,function(owners,passengers){
+			console.log("OWNERS:"+owners);
+			console.log("PASSENGERS:"+passengers);
+			owners.forEach(function(owner, index){
+				Car.find({available:true,owner:owner._id}).then(function(car){
+					console.log("CARS:"+car);
+					for(var i=0; len=car.seatavailablenum, i<len; i++){
+						if(index*len+i+1 <= passengers.length){
+							car.passenger.push(passengers[index*len+i]);
+							console.log("CARS-PASSENGERS:"+car.passenger);
+						}
+						car.save(function(err){
+							if(err)  return console.log(err);					
+						});	
+					}
+//					seatnum += car.seatavailablenum;
+				});		
+			});
+		}).then(function(){
+			promise4.then(function(result){
+				callback(result);
+			});
+		});	
+	});
+}
+
 function allotUserCar(){
 	Game.findOne({signupStatus: 'Ended', gameStatus: 'Started'}, function(error, gameResult) {
 		var owners = [];
