@@ -164,8 +164,8 @@ module.exports = function(app) {
       game.then(function(result){
         console.log('result is :'+result);
         if(gameStarted(result)){
-          console.log('close_out_game info :'+result);
-          res.render('close_out_game',{startTime:result.startTime,endTime:result.endTime});
+//          console.log('close_out_game info :'+result);
+          res.render('close_out_game',{startTime:result.startTime.Format("yyyy-MM-dd HH:mm:ss"),endTime:result.endTime.Format("yyyy-MM-dd HH:mm:ss")});
         }else{
           var show_sign_result = 'show_sign_result';
           res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'+ show_sign_result + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
@@ -181,7 +181,7 @@ module.exports = function(app) {
     game.then(function(result){
     if(gameStarted(result)){
       console.log("close game!!!!");
-      closeOutGame(result.startTime, result.endTime);
+      mongoose.closeOutGame(result.startTime, result.endTime);
     }else{
        console.log("there is no game to close out, no action ");
        res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/no_action');
@@ -233,9 +233,9 @@ module.exports = function(app) {
     // 这是编码后的地址
     var return_uri = 'http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'
         + get_code;
-    console.log('https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + context.appid
-        + '&redirect_uri=' + return_uri + '&response_type=code&scope=' + scope
-        + '&state=STATE#wechat_redirect');
+//    console.log('https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + context.appid
+//        + '&redirect_uri=' + return_uri + '&response_type=code&scope=' + scope
+//        + '&state=STATE#wechat_redirect');
 
     var scope = 'snsapi_userinfo';
 
@@ -314,9 +314,10 @@ function addPublishGame(startTime, endTime) {
   mongoose.insertPublishGame(startTime, endTime);
 };
 
-
-
 function gameStarted(game){
+  if(game == null){
+    return false;
+  }
   var isStarted = false;
   if("Started" == game.gameStatus.replace(/(^\s*)|(\s*$)/g, "")){
     isStarted = true;
@@ -324,6 +325,18 @@ function gameStarted(game){
   return isStarted;
 }
 
-function closeOutGame(startTime, endTime){
-  mongoose.closeOutGame(startTime, endTime);
+Date.prototype.Format = function (fmt) { 
+  var o = {
+      "M+": this.getMonth() + 1, //月份 
+      "d+": this.getDate(), //日 
+      "h+": this.getHours(), //小时 
+      "m+": this.getMinutes(), //分 
+      "s+": this.getSeconds(), //秒 
+      "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+      "S": this.getMilliseconds() //毫秒 
+  };
+  if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+  for (var k in o)
+  if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+  return fmt;
 }
