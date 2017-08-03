@@ -22,12 +22,15 @@ module.exports = function(app) {
    app.get('/no_action', function(req, res) {
     res.render('no_action', {});
    });
- 
+
   app.get('/sign_up_list', function(req, res) {
     res.render('sign_up_list', {});
    });
-
  
+  app.get('/game_history', function(req, res) {
+    res.render('history', {});
+   });
+  
   app.get('/tony', function(req, res) {
     res.render('tony', {});
   });

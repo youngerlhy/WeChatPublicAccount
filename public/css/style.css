@@ -89,14 +89,13 @@ body{
 .progress-bar{
     height: 20px;
     width: 60%;
-	float:left;
-    border-radius: 8px;  
+    border-radius: 8px;
     background:#f8c301;
     padding:2px;
 }
 .progress-bar-core{
 	border:2px solid #fff;
-    background: #00f;
+    background:#00f;
     height: 90%;
     border-radius: 10px;
 }

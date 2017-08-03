@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-<title>报名历史</title>
+<title>比赛战报</title>
 	<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
@@ -15,21 +15,21 @@
 	</div>
 	<div id="game_info_txt" class="div-center">		
 		<div class="div-center-txt">
-		<p>请查阅您的比赛情况：</p>
+		<p>请查阅您的比赛战绩：</p>
 			<div class="game_info">
 				<div class="game_info_block">
 					<label>总次数：</label>
 					<div class="progress-bar">
-						<div class="progress-bar-core" id="total_game_num"></div>
+						<div class="progress-bar-core" id="total_game_progress"></div>
 					</div>
-					<label>3次</label>
+					<label id="total_game_num">3次</label>
 				</div>
 				<div class="game_info_block">
 					<label>您的次数：</label>
 					<div class="progress-bar">
-						<div class="progress-bar-core" id="your_game_num"></div>
+						<div class="progress-bar-core" id="your_game_progress"></div>
 					</div>
-					<label>2次</label>
+					<label id="your_game_num">2次</label>
 				</div>
 			</div>
 		</div>
@@ -45,5 +45,5 @@
 	</p>
 </footer>
 <script src="/js/jquery.js"></script>
-<script src="/js/index.js"></script>
+<script src="/js/history.js"></script>
 </html>
