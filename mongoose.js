@@ -222,10 +222,6 @@ exports.findAllUsers = function(callback){
 			});	
 		}
 		
-	});
-	
-//	 allotUserCar();
-	 Game.findOne({signupStatus: 'Ended', gameStatus: 'Started'}, function(error, gameResult) {		 
 		 User.find({game:gameResult._id}, function(err, result){
 			 if(err){
 				 console.log("Find all users fail:" + err);
@@ -234,7 +230,20 @@ exports.findAllUsers = function(callback){
 				 callback(result);
 			 }
 		 });
-	 });
+		
+	});
+	
+//	 allotUserCar();
+//	 Game.findOne({signupStatus: 'Ended', gameStatus: 'Started'}, function(error, gameResult) {		 
+//		 User.find({game:gameResult._id}, function(err, result){
+//			 if(err){
+//				 console.log("Find all users fail:" + err);
+//				 return;
+//			 }else{
+//				 callback(result);
+//			 }
+//		 });
+//	 });
 }
 
 exports.insertPublishGame = function(startTime,endTime) {
