@@ -125,10 +125,11 @@ module.exports = function(app) {
       game.then(function(result){
         console.log('result is :'+result);
         if(gameStarted(result)){
-          var startedTime = game.startTime;
-          var endTime = game.endTime;
-          $("#datetimeStart").val(startedTime);
-          $("#datetimeEnd").val(endTime);
+          var startedTime = result.startTime;
+          var endTime = result.endTime;
+          $("#close_out_game_timeStart").val(startedTime);
+          $("#close_out_game_timeEnd").val(endTime);
+          console.log('close_out_game :');
           res.render('close_out_game',{});
         }else{
           var show_sign_result = 'show_sign_result';
