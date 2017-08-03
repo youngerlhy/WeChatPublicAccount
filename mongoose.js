@@ -111,16 +111,6 @@ exports.countUserByName = function(name, callback) {
 	User.count({nickname:name}, callback);
 }
 
-exports.findAllUsers = function(callback){
-	 User.find({}, function(err, result){
-			if(err){
-				console.log("Find all users fail:" + err);
-				return;
-			}else{
-				callback(result);
-			}
-		});
-}
 
 exports.deleteUserCar = function(name){
 Game.findOne({signupStatus: 'Started'}, function(error, gameResult) {
@@ -136,47 +126,43 @@ Game.findOne({signupStatus: 'Started'}, function(error, gameResult) {
 
 }
 
-exports.allotUserCar = function(callback){
-   var users = [];
-   User.find({}, function(err, users){
-		if(err){
-			console.log("Error:" + err);
-			return;
-		}else{
-			console.log("All users:"+users);
-		}
-	});
-	
-	var allotusers = [];
-	users.forEach(function(user, index){
-		if(!user.car){ 
-			allotusers.push(user);
-		}
-	});
-	
-	var cars = [];
-	Car.find({}, function(err, cars){
-		if(err){
-			console.log("Error:" + err);
-			return;
-		}else{
-			console.log("All cars:"+cars);
-		}
-	});
-	
-	var seatnum = 0;
-	cars.forEach(function(item, index){
-		for(var i=0; i<item.seatavailablenum; i++){
-			if(seatnum+i+1 <= allotusers.length){
-				item.passengers = allotusers[seatnum+i];
-				item.save(function(err){
-					if(err)  return console.log(err);					
-				});				
+function allotUserCar(){
+	User.find({}).then(function(users){
+		var allotusers = [];
+		users.forEach(function(user, index){
+			if(!user.car){ 
+				allotusers.push(user);
 			}
-			// seatnum > allotusers.length
-		}
-		seatnum += item.seatavailablenum;
+		});
+		Car.find({available:true}).then(function(cars){
+			var seatnum = 0;
+			cars.forEach(function(item, index){
+				for(var i=0; i<item.seatavailablenum; i++){
+					if(seatnum+i+1 <= allotusers.length){
+						item.passengers = allotusers[seatnum+i];
+						item.save(function(err){
+							if(err)  return console.log(err);					
+						});				
+					}
+					// seatnum > allotusers.length
+				}
+				seatnum += item.seatavailablenum;
+			});
+			
+		});
 	});
+}
+
+exports.findAllUsers = function(callback){
+	 allotUserCar();
+	 User.find({}, function(err, result){
+			if(err){
+				console.log("Find all users fail:" + err);
+				return;
+			}else{
+				callback(result);
+			}
+		});
 }
 
 exports.insertPublishGame = function(startTime,endTime) {

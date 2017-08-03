@@ -160,10 +160,12 @@ module.exports = function(app) {
           + context.secret + '&code=' + code + '&grant_type=authorization_code',
     }, function(error, response, body) {
       if (response.statusCode == 200) {
-        var allUsers = getAllUsers();
-        var allUsersStr = JSON.stringify(allUsers);
-        console.log(allUsersStr);
-        res.render('sign_up_list', {allUsersStr});
+    	  mongoose.findAllUsers(function(result){
+    		  var allUsersStr = JSON.stringify(result);
+    		  console.log(allUsersStr);
+    		  res.render('sign_up_list', {allUsersStr});    		  
+    	  });
+    
       } else {
         console.log(response.statusCode);
       }
@@ -262,9 +264,7 @@ function addPublishGame(startTime, endTime) {
   mongoose.insertPublishGame(startTime, endTime);
 };
 
-function getAllUsers() {
-  mongoose.findAllUsers()
-};
+
 
 function gameStarted(game){
   var isStarted = false;
