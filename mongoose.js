@@ -152,9 +152,10 @@ function allotUserCar(){
 		});
 			
 		var seatnum = 0;
-		var owner;
-		for(owner in owners){
+		
+		for(var i=0; i<owners.length; i++){
 			console.log("=====1=====");
+			var owner= owners[i]
 			Car.find({available:true,owner:owner._id}).then(function(car){
 				console.log("CARS:"+car);
 				console.log("=====2=====");
