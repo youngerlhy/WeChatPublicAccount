@@ -18,6 +18,10 @@ module.exports = function(app) {
    app.get('/newsletter', function(req, res) {
     res.render('newsletter', {});
   });
+  
+   app.get('/newshistory', function(req, res) {
+    res.render('newshistory', {});
+  });
 
    app.get('/no_action', function(req, res) {
     res.render('no_action', {});
