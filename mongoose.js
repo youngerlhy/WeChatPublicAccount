@@ -53,7 +53,7 @@ var GameTypeSchema = new Schema({
 var GameType = mongoose.model('GameType', GameTypeSchema);
 
 var GameSchema = new Schema({
-	gameType:[{type:Schema.Types.ObjectId, ref:'GameType'}],
+	gameType:{type:Schema.Types.ObjectId, ref:'GameType'},
 	startTime:{type:Date},
 	endTime:{type:Date},
 	signupStatus:{type:String, default: "Started"},
@@ -64,7 +64,7 @@ var GameSchema = new Schema({
 var Game = mongoose.model('Game',GameSchema);
 
 var ScoreSchema = new Schema({
-	game:[{type:Schema.Types.ObjectId, ref:'Game'}],
+	game:{type:Schema.Types.ObjectId, ref:'Game'},
 	firstset:{type:String},
 	secondset:{type:String},
 	thirdset:{type:String},
@@ -121,20 +121,6 @@ exports.findAllUsers = function(callback){
 		});
 }
 
-
-exports.findUserByName = function(name, callback){
-	User.findOne({name:name}, function(err, result){
-		callback(err, result);
-	});
-}
-
-exports.findCarByName = function(name,callback){
-	User.findOne({name:name}).populate({path:'Car'}).exec(function(err, result){
-		callback(err, result);
-	});
-}
-
-
 exports.deleteUserCar = function(name){
     User.findOne({nickname: name}).then(function(user){
 	    Car.findOne({owner: user._id}).then(function(car){car.remove()});
@@ -182,28 +168,6 @@ exports.allotUserCar = function(callback){
 			// seatnum > allotusers.length
 		}
 		seatnum += item.seatavailablenum;
-	});
-}
-
-/**
- * When starting to sign up again, clean all users and cars.
- */
-exports.deleteAllUsersCars = function(){
-	Car.remove({}, function(err){
-		console.log("--------- Clean All Cars ---------");
-		if(err){
-			console.log("Clean all cars fail:"+err);
-		}else{
-			console.log("Clean all cars success.")
-		}
-	});
-	User.remove({}, function(err){
-		console.log("--------- Clean All Users ---------");
-		if(err){
-			console.log("Clean all users fail:"+err);
-		}else{
-			console.log("Clean all users success.")
-		}
 	});
 }
 
