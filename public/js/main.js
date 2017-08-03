@@ -77,15 +77,15 @@ $(document).ready(function() {
     $("#publish_success").attr('style', "display:block;");
   });
 
-  $("close_out_game_confirm").click(function() {
-    $.post("/close_out_game_confirm", {}, function(data, status) {
+  $("close_out_game_confirm_btn").click(function() {
+    $.post("/close_out_game_confirm", function(data, status) {
     });
     $("#close_out_game_div").attr('style', "display:none;");
     $("#close_out_game").attr('style', "display:block;");
   });
 
-  $("close_out_game_cancel").click(function() {
-    $.post("/close_out_game_cancel", {}, function(data, status) {
+  $("close_out_game_cancel_btn").click(function() {
+    $.post("/close_out_game_cancel", function(data, status) {
     });
   });
 });
