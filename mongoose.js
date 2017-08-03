@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
-mongoose.Promise = global.Promise;   
+var Promise = require("bluebird");
+Promise.promisifyAll(mongoose);
 var db = mongoose.connect('mongodb://localhost/testdb', {
 	useMongoClient : true,
 });
@@ -191,14 +192,14 @@ exports.insertPublishGame = function(startTime,endTime) {
 }
 
 exports.findCurrentSignupGame = function(callback){
-	Game.find({signupStatus:"Started",gameStatus:"Started"}).sort({"startTime":-1}).limit(1).exec(function(err,result){
-		if(err){
-			console.log("Get current signup game fail:" + err);
-			return;
-		}else{
-    		console.log("Get sign game:"+result);
-    		callback(result);
-		}
+	return Game.find({signupStatus:"Started",gameStatus:"Started"}).sort({"startTime":-1}).limit(1).execAsync()
+	.then(function(result){
+	  console.log(result);
+	}).catch(function(err){
+	  if(err){
+	    console.log("Get current signup game fail:" + err);
+	    return;
+	  }
 	});
 }
 
@@ -248,12 +249,12 @@ exports.queryAllStatus = function(nickname,imgurl, callback) {
         User.count({name: nickname, game: gameResult._id}, function(err, count) {
                 if(err) return console.log(err);
                 if(count == 0) {
-                    ///insert data page
+                    // /insert data page
                    callback('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/?nickname='
                     + nickname + '&headimgurl=' + imgurl);
 
                 } else {
-                   ///cancel data page
+                   // /cancel data page
                   callback('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/cancel_sign_up?nickname=' + nickname);
                 }
         });
@@ -261,11 +262,11 @@ exports.queryAllStatus = function(nickname,imgurl, callback) {
     Game.findOne({signupStatus: 'Ended', gameStatus: 'Started'}, function(error, gameResult) {
         if(error) return console.log(error);
         if(gameResult !=null) {
-          //show result
+          // show result
             callback('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/show_sign_result');
 
          } else {
-          //no action
+          // no action
            callback('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/no_action');
          }
     });
