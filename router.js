@@ -165,7 +165,7 @@ module.exports = function(app) {
         console.log('result is :'+result);
         if(gameStarted(result)){
 //          console.log('close_out_game info :'+result);
-          res.render('close_out_game',{startTime:result.startTime.Format("yyyy-MM-dd HH:mm:ss"),endTime:result.endTime.Format("yyyy-MM-dd HH:mm:ss")});
+          res.render('close_out_game',{startTime:Format(result.startTime),endTime:Format(result.endTime)});
         }else{
           var show_sign_result = 'show_sign_result';
           res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'+ show_sign_result + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
@@ -325,18 +325,7 @@ function gameStarted(game){
   return isStarted;
 }
 
-Date.prototype.Format = function (fmt) { 
-  var o = {
-      "M+": this.getMonth() + 1, //月份 
-      "d+": this.getDate(), //日 
-      "h+": this.getHours(), //小时 
-      "m+": this.getMinutes(), //分 
-      "s+": this.getSeconds(), //秒 
-      "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
-      "S": this.getMilliseconds() //毫秒 
-  };
-  if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-  for (var k in o)
-  if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-  return fmt;
+function Format(dateTime){
+  var dateFormat = require("./formatDate");
+  return dateFormat.DateFormat("yyyy-MM-dd HH:mm:ss",dateTime);
 }
