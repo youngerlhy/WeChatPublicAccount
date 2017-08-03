@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
-mongoose.Promise = global.Promise;   
+var Promise = require("bluebird");
+Promise.promisifyAll(mongoose);
 var db = mongoose.connect('mongodb://localhost/testdb', {
 	useMongoClient : true,
 });
@@ -53,7 +54,7 @@ var GameTypeSchema = new Schema({
 var GameType = mongoose.model('GameType', GameTypeSchema);
 
 var GameSchema = new Schema({
-	gameType:[{type:Schema.Types.ObjectId, ref:'GameType'}],
+	gameType:{type:Schema.Types.ObjectId, ref:'GameType'},
 	startTime:{type:Date},
 	endTime:{type:Date},
 	signupStatus:{type:String, default: "Started"},
@@ -64,7 +65,7 @@ var GameSchema = new Schema({
 var Game = mongoose.model('Game',GameSchema);
 
 var ScoreSchema = new Schema({
-	game:[{type:Schema.Types.ObjectId, ref:'Game'}],
+	game:{type:Schema.Types.ObjectId, ref:'Game'},
 	firstset:{type:String},
 	secondset:{type:String},
 	thirdset:{type:String},
@@ -78,7 +79,7 @@ var LogSchema = new Schema({
 });
 var Log = mongoose.model('Log', LogSchema);
 
-exports.insertSignupData = function(nickName, imageUrl, seatnum, game) {
+insertSignupData = function(nickName, imageUrl, seatnum, game) {
 	var person = new User({
 		nickname : nickName,
 		imageurl : imageUrl
@@ -99,6 +100,7 @@ exports.insertSignupData = function(nickName, imageUrl, seatnum, game) {
         }	
         person.game = game;
         game.competitors.push(person);
+        game.save();
         person.save(function(err) {
         if (err) {
         	console.log(err);}
@@ -109,7 +111,50 @@ exports.countUserByName = function(name, callback) {
 	User.count({nickname:name}, callback);
 }
 
+
+exports.deleteUserCar = function(name){
+Game.findOne({signupStatus: 'Started'}, function(error, gameResult) {
+        if(error) return console.log(error);
+        User.findOne({nickname: name, game: gameResult._id}, function(err, user) {
+               if(err) return console.log(err);
+                Car.findOne({owner: user._id}).then(function(car){car.remove()});
+            gameResult.competitors.pull(user);
+            gameResult.save();
+	    user.remove();
+        });
+});
+
+}
+
+function allotUserCar(){
+	User.find({}).then(function(users){
+		var allotusers = [];
+		users.forEach(function(user, index){
+			if(!user.car){ 
+				allotusers.push(user);
+			}
+		});
+		Car.find({available:true}).then(function(cars){
+			var seatnum = 0;
+			cars.forEach(function(item, index){
+				for(var i=0; i<item.seatavailablenum; i++){
+					if(seatnum+i+1 <= allotusers.length){
+						item.passengers = allotusers[seatnum+i];
+						item.save(function(err){
+							if(err)  return console.log(err);					
+						});				
+					}
+					// seatnum > allotusers.length
+				}
+				seatnum += item.seatavailablenum;
+			});
+			
+		});
+	});
+}
+
 exports.findAllUsers = function(callback){
+	 allotUserCar();
 	 User.find({}, function(err, result){
 			if(err){
 				console.log("Find all users fail:" + err);
@@ -118,92 +163,6 @@ exports.findAllUsers = function(callback){
 				callback(result);
 			}
 		});
-}
-
-
-exports.findUserByName = function(name, callback){
-	User.findOne({name:name}, function(err, result){
-		callback(err, result);
-	});
-}
-
-exports.findCarByName = function(name,callback){
-	User.findOne({name:name}).populate({path:'Car'}).exec(function(err, result){
-		callback(err, result);
-	});
-}
-
-
-exports.deleteUserCar = function(name){
-    User.findOne({nickname: name}).then(function(user){
-	    Car.findOne({owner: user._id}).then(function(car){car.remove()});
-	    user.remove();
-    });
-}
-
-exports.allotUserCar = function(callback){
-   var users = [];
-   User.find({}, function(err, users){
-		if(err){
-			console.log("Error:" + err);
-			return;
-		}else{
-			console.log("All users:"+users);
-		}
-	});
-	
-	var allotusers = [];
-	users.forEach(function(user, index){
-		if(!user.car){ 
-			allotusers.push(user);
-		}
-	});
-	
-	var cars = [];
-	Car.find({}, function(err, cars){
-		if(err){
-			console.log("Error:" + err);
-			return;
-		}else{
-			console.log("All cars:"+cars);
-		}
-	});
-	
-	var seatnum = 0;
-	cars.forEach(function(item, index){
-		for(var i=0; i<item.seatavailablenum; i++){
-			if(seatnum+i+1 <= allotusers.length){
-				item.passengers = allotusers[seatnum+i];
-				item.save(function(err){
-					if(err)  return console.log(err);					
-				});				
-			}
-			// seatnum > allotusers.length
-		}
-		seatnum += item.seatavailablenum;
-	});
-}
-
-/**
- * When starting to sign up again, clean all users and cars.
- */
-exports.deleteAllUsersCars = function(){
-	Car.remove({}, function(err){
-		console.log("--------- Clean All Cars ---------");
-		if(err){
-			console.log("Clean all cars fail:"+err);
-		}else{
-			console.log("Clean all cars success.")
-		}
-	});
-	User.remove({}, function(err){
-		console.log("--------- Clean All Users ---------");
-		if(err){
-			console.log("Clean all users fail:"+err);
-		}else{
-			console.log("Clean all users success.")
-		}
-	});
 }
 
 exports.insertPublishGame = function(startTime,endTime) {
@@ -218,17 +177,8 @@ exports.insertPublishGame = function(startTime,endTime) {
 	  });
 }
 
-exports.findCurrentSignupGame = function(){
-	Game.find({signupStatus:"Started",gameStatus:"Started"}).sort({"startTime":-1}).limit(1).exec(function(err,result){
-		if(err){
-			console.log("Get current signup game fail:" + err);
-			return;
-		}
-	});
-}
-
 exports.closeOutGame=function(startTime, endTime,callback){
-  var updateGameStatus = {$set: {gameStatus: "Ended" }};
+  var updateGameStatus = {$set: {signupStatus: "Ended" }};
   Game.update({
     startTime:startTime,
     endTime:endTime
@@ -240,17 +190,90 @@ exports.closeOutGame=function(startTime, endTime,callback){
       Game.find({
         startTime:startTime,
         endTime:endTime,
-        gameStatus: "Ended"
+        signupStatus: "Ended"
       }, function(err, docs){
         if (err) {
           console.log('查询出错：' + err);
         } else {
-          callback(result);
+          callback(docs);
         }
       });
     }
   });
 }
 
+exports.insertSignupAndGame = function(nickname, imageurl, num) {
+    Game.findOne({signupStatus: 'Started'}, function(error, gameResult) {
+        if(error) return console.log(error);
+        User.count({name: nickname, game: gameResult._id}, function(err, count) {
+                if(err) return console.log(err);
+                if(count == 0) {
+                        insertSignupData(nickname, imageurl, num, gameResult);
+                }
+        });
+});
 
+}
+
+
+exports.queryAllStatus = function(nickname,imgurl, callback) {
+      Game.findOne({signupStatus: 'Started'}, function(error, gameResult) {
+        if(error) return console.log(error);
+        if(gameResult != null) {
+        User.count({name: nickname, game: gameResult._id}, function(err, count) {
+                if(err) return console.log(err);
+                if(count == 0) {
+                    // /insert data page
+                   callback('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/?nickname='
+                    + nickname + '&headimgurl=' + imgurl);
+
+                } else {
+                   // /cancel data page
+                  callback('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/cancel_sign_up?nickname=' + nickname);
+                }
+        });
+} 
+    Game.findOne({signupStatus: 'Ended', gameStatus: 'Started'}, function(error, gameResult) {
+        if(error) return console.log(error);
+        if(gameResult !=null) {
+          // show result
+            callback('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/show_sign_result');
+
+         } else {
+          // no action
+           callback('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/no_action');
+         }
+    });
+});
+
+}
+
+exports.findUserByName = function(name, game){
+	var promise = User.findOne({nickname:name, game: game._id}).exec();
+	return promise;
+}
+
+exports.findStartedGame = function() {
+        var promise = Game.findOne({signupStatus: 'Started'}).exec();
+        return promise;
+}
+
+exports.findEndedGame = function() {
+        var promise = Game.findOne({signupStatus: 'Ended', gameStatus: 'Started'}).exec();
+        return promise;
+}
+
+exports.setGameStatusEnded = function(){
+	Game.find({signupStatus:'Ended', gameStatus:'Started'},function(err,result){
+		result.forEach(function(item,index){
+			var now = new Date();
+			if(item.endTime > now){
+				item.gameStatus = 'Ended';
+			}
+			item.save(function(err){
+				if(err)  return console.log(err);					
+			});	
+		});
+	});
+}
 

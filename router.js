@@ -18,19 +18,27 @@ module.exports = function(app) {
    app.get('/newsletter', function(req, res) {
     res.render('newsletter', {});
   });
+  
+   app.get('/newshistory', function(req, res) {
+    res.render('newshistory', {});
+  });
 
    app.get('/no_action', function(req, res) {
     res.render('no_action', {});
+   });
+ 
+  app.get('/no_publish', function(req, res) {
+    res.render('no_publish', {});
    });
 
   app.get('/sign_up_list', function(req, res) {
     res.render('sign_up_list', {});
    });
- 
-  app.get('/game_history', function(req, res) {
+
+   app.get('/game_history', function(req, res) {
     res.render('history', {});
-   });
-  
+   });  
+ 
   app.get('/tony', function(req, res) {
     res.render('tony', {});
   });
@@ -93,21 +101,27 @@ module.exports = function(app) {
     var imageurl = req.body.imageurl;
     var num = req.body.seatnum;
     console.log(nickname + " " + imageurl + " " + num);
-    mongoose.countUserByName(nickname, function(err, count) {
-      if (err)
-        return console.log(err);
-      if (count == 0) {
-        mongoose.insertSignupData(nickname, imageurl, num);
-      }
-    });
+    mongoose.insertSignupAndGame(nickname,imageurl,num);
     res.send(nickname + ' ' + imageurl + ' ' + num);
   });
 
   app.get('/publish_game',function(req, res) {
+     
      console.log('publish a game');
-     var get_publish_access_token = 'get_publish_access_token';
+
+       var promise = mongoose.findStartedGame();
+promise.then(function(result) {
+               if(result == null) {
+         
+            var get_publish_access_token = 'get_publish_access_token';
      res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'
           + get_publish_access_token + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
+
+                } else {
+            res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/no_publish');    
+                  
+               }
+      });
   });
 
   app.get('/get_publish_access_token', function(req, res, next) {
@@ -126,20 +140,25 @@ module.exports = function(app) {
 
   app.get('/close_out_game',function(req, res) {
       console.log('close out a game');
-      var game = getStartedGame();
-      if(isGameStarted(game)){
-        var startedGame = JSON.stringify(game);
-        res.render('close_out_game',{});
-        console.log(startedGame);
-        var startedTime = game.startTime;
-        var endTime = game.endTime;
-        alert("startedTime:" + data);
-        $("#datetimeStart").val(startedTime);
-        $("#datetimeEnd").val(endTime);
-      }else{
-         var show_sign_result = 'show_sign_result';
-         res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'+ show_sign_result + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
-      }
+      var game = mongoose.findStartedGame();
+      game.then(function(result){
+        console.log('result is :'+result);
+        if(gameStarted(result)){
+          console.log(result.startTime);
+          var startedTime = result.startTime;
+          var endTime = result.endTime;
+         // $("#close_out_game_timeStart").val(startedTime);
+         // $("#close_out_game_timeEnd").val(endTime);
+          var gameInfo =JSON.stringify(result);
+          console.log('close_out_game :'+gameInfo);
+          res.render('close_out_game',{gameInfo});
+        }else{
+          var show_sign_result = 'show_sign_result';
+          res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'+ show_sign_result + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
+        }
+      },function(err) {
+        console.log(err); // Error: "It broke"
+      })
   });
   
   app.get('/close_out_game_confirm',function(req, res) {
@@ -163,10 +182,12 @@ module.exports = function(app) {
           + context.secret + '&code=' + code + '&grant_type=authorization_code',
     }, function(error, response, body) {
       if (response.statusCode == 200) {
-        var allUsers = getAllUsers();
-        var allUsersStr = JSON.stringify(allUsers);
-        console.log(allUsersStr);
-        res.render('sign_up_list', {allUsersStr});
+    	  mongoose.findAllUsers(function(result){
+    		  var allUsersStr = JSON.stringify(result);
+    		  console.log(allUsersStr);
+    		  res.render('sign_up_list', {allUsersStr});    		  
+    	  });
+    
       } else {
         console.log(response.statusCode);
       }
@@ -222,21 +243,33 @@ module.exports = function(app) {
             var userinfo = JSON.parse(body);
             // console.log(JSON.parse(body));
             console.log('获取微信信息成功！');
-
-            if(isGameStarted()) {
-                if(hasSignedup(userinfo.nickname)) {
-                    res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/cancel_sign_up?nickname=' + userinfo.nickname);
-                 } else {
-                    res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/?nickname='
-                    + userinfo.nickname + '&headimgurl=' + userinfo.headimgurl);
-                 }
-            }
-            else if(isGameEnded()) {
-               res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/show_sign_result');
-            }
-            else {
-               res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/no_action');
-            }
+            var nickname = userinfo.nickname;
+            var imgurl = userinfo.headimgurl;
+           
+            var promise = mongoose.findStartedGame();
+            var promise2 = mongoose.findEndedGame();
+ 
+             promise.then(function(result) {
+               if(result != null) {
+                  var promise3 = mongoose.findUserByName(nickname, result);
+                  promise3.then(function(result2) {
+                    if(result2 != null) {
+                       res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/cancel_sign_up?nickname=' + nickname);
+                    } else {
+                       console.log(imgurl);
+                       res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/?nickname=' + nickname + '&headimgurl=' + imgurl);
+                    }
+                  });
+               } else {
+                 promise2.then(function(result3){
+                   if(result3 != null) {
+                      res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/show_sign_result');
+                   } else {
+                      res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/no_action');
+                   }
+                 });
+               }
+             });
           } else {
             console.log(response.statusCode);
           }
@@ -249,17 +282,16 @@ module.exports = function(app) {
   
 }
 
+setInterval(mongoose.setGameStatusEnded,6*1000);
+
 function addPublishGame(startTime, endTime) {
   mongoose.insertPublishGame(startTime, endTime);
 };
 
-function getAllUsers() {
-  mongoose.findAllUsers()
-};
 
-function isGameStarted(game){
+
+function gameStarted(game){
   var isStarted = false;
-  console.log(game);
   if("Started" == game.gameStatus.replace(/(^\s*)|(\s*$)/g, "")){
     isStarted = true;
   }
@@ -267,23 +299,10 @@ function isGameStarted(game){
 }
 
 function getStartedGame(){
-  mongoose.findCurrentSignupGame();
+  mongoose.findStartedGame().then(console.log);
 }
 
 function closeOutGame(startTime, endTime){
   mongoose.closeOutGame(startTime, endTime);
 }
 
-function isGameStarted() {
-  console.log("call isGameStarted()" );
-  var result = true;
-  return result;
-}
-
-function isGameEnded() {
-  return false;
-}
-
-function hasSignedup() {
-  return true;
-}
