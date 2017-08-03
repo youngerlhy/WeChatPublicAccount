@@ -255,7 +255,7 @@ module.exports = function(app) {
       if (response.statusCode == 200) {
 
         // 第三步：拉取用户信息(需scope为 snsapi_userinfo)
-        // console.log(JSON.parse(body));
+          body = body.toString("utf-8");
         var data = JSON.parse(body);
         var access_token = data.access_token;
         var openid = data.openid;
@@ -266,13 +266,13 @@ module.exports = function(app) {
         }, function(error, response, body) {
           if (response.statusCode == 200) {
 
+             body = body.toString("utf-8");
             // 第四步：根据获取的用户信息进行对应操作
             var userinfo = JSON.parse(body);
-            // console.log(JSON.parse(body));
+          //   console.log(JSON.parse(body));
             console.log('获取微信信息成功！');
             var nickname = userinfo.nickname;
             var imgurl = userinfo.headimgurl;
-           
             var promise = mongoose.findStartedGame();
             var promise2 = mongoose.findEndedGame();
  
@@ -284,7 +284,7 @@ module.exports = function(app) {
                        res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/cancel_sign_up?openid=' + openid);
                     } else {
                        console.log(imgurl);
-                       res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/?openid=' + openid + '&nickname=' + nickname + '&headimgurl=' + imgurl);
+                       res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/?openid=' + openid + '&nickname=' + escape(nickname) + '&headimgurl=' + imgurl);
                     }
                   });
                } else {
