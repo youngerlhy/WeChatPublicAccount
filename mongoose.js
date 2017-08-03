@@ -169,7 +169,7 @@ function allotUserCar(){
 	});
 }
 
-exports.findAllUsers = function(){
+exports.findAllUsers = function(callback){
 
 	 allotUserCar();
 	 Game.findOne({signupStatus: 'Ended', gameStatus: 'Started'}, function(error, gameResult) {		 
