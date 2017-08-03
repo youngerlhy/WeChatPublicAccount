@@ -4,6 +4,10 @@ $(document).ready(function() {
             url: 'http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/game_history',
             type: 'get',
             dataType: 'json',
+
+			error:function(err){
+				alert("fail:"+err.status);
+			},
             success: function(data) {
 	            var data = $.parseJSON(data);
 		alert("data"+data); 
