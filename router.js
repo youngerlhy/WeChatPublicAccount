@@ -31,9 +31,9 @@ module.exports = function(app) {
     res.render('no_publish', {});
    });
 
-  app.get('/sign_up_list', function(req, res) {
-    res.render('sign_up_list', {});
-   });
+//  app.get('/sign_up_list', function(req, res) {
+//    res.render('sign_up_list', {});
+//   });
 
   app.get('/history', function(req, res) {
 	    res.render('history', {});
