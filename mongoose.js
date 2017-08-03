@@ -153,8 +153,11 @@ function allotUserCar(){
 			
 		var seatnum = 0;
 		owners.forEach(function(owner, index){
+			console.log("=====1=====");
 				Car.find({available:true,owner:owner._id}).then(function(car){
+					console.log("=====2=====");
 					for(var i=0; i<car.seatavailablenum; i++){
+						console.log("=====3=====");
 						car.passenger.push(allotusers[seatnum+i]);
 						console.log("PASSENGERS:"+car.passenger);
 						car.save(function(err){
