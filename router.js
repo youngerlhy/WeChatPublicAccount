@@ -214,7 +214,23 @@ module.exports = function(app) {
             var userinfo = JSON.parse(body);
             // console.log(JSON.parse(body));
             console.log('获取微信信息成功！');
-            mongoose.queryAllStatus(userinfo.nickname, userinfo.headimgurl, function(str) {res.redirect(str);});
+            var promise = mongoose.findUserByName('test333', function() {console.log("hello")});
+var promise2 = mongoose.findGameByName(5);
+promise.then(function(result){
+        if(result != null) {
+                promise2.then(function(result2) {
+                        console.log(result2);
+                         res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/no_action');
+                });
+        }
+        else {
+                console.log("result null");
+                res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/no_action');
+        }
+
+});
+
+//            mongoose.queryAllStatus(userinfo.nickname, userinfo.headimgurl, function(str) {res.redirect(str);});
           } else {
             console.log(response.statusCode);
           }
@@ -267,3 +283,6 @@ function hasSignedup() {
   
   return true;
 }
+
+
+
