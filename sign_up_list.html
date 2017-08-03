@@ -17,12 +17,17 @@
 	<script src="/js/main.js"></script>
 	<script type="text/javascript">
 		window.onload = function(){
+			alert("ready");
 			var htmlContent= "";
 			$.ajax({
 				async:true,
-				url:"/show_sign_result"
+				url:"/show_sign_result",
 				type:"get",
 				dataType:"json",
+				
+				beforeSend：function(){
+					alert("before");
+				},
 				
 				error:function(err){
 					alert("fail:"+err.status);
