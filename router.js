@@ -168,22 +168,23 @@ module.exports = function(app) {
       });
   });
   
-  app.get('/close_out_game_confirm',function(req, res) {
+  app.post('/close_out_game_confirm',function(req, res) {
    console.log("confirm close out");
     var game = mongoose.findStartedGame();
     game.then(function(result){
-        if(gameStarted(result)){
-        closeOutGame(result.startTime, result.endTime);
-      }else{
-        console.log("there is no game to close out, no action ");
-         res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/no_action');
-      }
+    if(gameStarted(result)){
+      console.log("close game!!!!");
+      closeOutGame(result.startTime, result.endTime);
+    }else{
+       console.log("there is no game to close out, no action ");
+       res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/no_action');
+    }
     },function(err) {
       console.log(err); // Error: "It broke"
     });
   });
   
-  app.get('/close_out_game_cancel', function(req,res){
+  app.post('/close_out_game_cancel', function(req,res){
     var show_sign_result = 'show_sign_result';
     res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'+ show_sign_result + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
   });
