@@ -152,6 +152,10 @@ function allotUserCar(){
 		});
 			
 		var seatnum = 0;
+		console.log(owners.length);
+		owners.forEach(function(car,index){
+			console.log("=====0=====");
+		});
 		
 		for(var i=0; i<owners.length; i++){
 			console.log("=====1=====");
