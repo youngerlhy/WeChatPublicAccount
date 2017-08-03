@@ -277,6 +277,7 @@ exports.setGameStatusEnded = function(){
 	});
 }
 
+
 exports.getCountGames = function(callback){
 	Game.count({},callback);	
 }
@@ -286,4 +287,5 @@ exports.findOneUserGame = function(name,callback){
 		callback(result); //user--games
 	});
 }
+
 
