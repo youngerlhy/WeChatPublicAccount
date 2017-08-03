@@ -49,6 +49,7 @@ module.exports = function(app) {
 	      if (response.statusCode == 200) {
 	    	  var nickname = req.body.nickname;
 	    	  mongoose.getCountGames(function(count){
+	    		  
 	    		  mongoose.findOneUserGame(nickname,function(usergames){
 	    			  var userGamesNum = usergames.length;
 	    			  var gameCount = {"count":count,"userGamesNum":userGamesNum};
