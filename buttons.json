@@ -17,9 +17,9 @@
 				"key" : "Daily English"
 			},{
 				"type" : "view",
-				"name" : "News In BID",
+				"name" : "News in BID",
 				"url" : "http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/newsletter",
-				"key" : "News In BID"
+				"key" : "News in BID"
 			}, {
 				"type" : "view",
 				"name" : "News History",
