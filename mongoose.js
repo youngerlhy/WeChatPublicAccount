@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Promise = require("bluebird");
-mongoose = Promise.promisifyAll(mongoose);
+Promise.promisifyAll(mongoose);
 var db = mongoose.connect('mongodb://localhost/testdb', {
 	useMongoClient : true,
 });
@@ -273,14 +273,20 @@ exports.queryAllStatus = function(nickname,imgurl, callback) {
 });
 
 }
-////delete
 
-exports.findUserByName = function(name, callback){
-	var promise = User.findOne({nickname:name}).exec(callback);
+exports.findUserByName = function(name, game){
+	var promise = User.findOne({nickname:name, game: game._id}).exec();
 	return promise;
 }
 
-exports.findGameByName = function(num) {
-	var promise = Car.findOne({seatnum: num}).exec();
-	return promise;
+exports.findStartedGame = function() {
+        var promise = Game.findOne({signupStatus: 'Started'}).exec();
+        return promise;
 }
+
+exports.findEndedGame = function() {
+        var promise = Game.findOne({signupStatus: 'Ended', gameStatus: 'Started'}).exec();
+        return promise;
+}
+
+

@@ -214,23 +214,34 @@ module.exports = function(app) {
             var userinfo = JSON.parse(body);
             // console.log(JSON.parse(body));
             console.log('获取微信信息成功！');
-            var promise = mongoose.findUserByName('test333', function() {console.log("hello")});
-var promise2 = mongoose.findGameByName(5);
-promise.then(function(result){
-        if(result != null) {
-                promise2.then(function(result2) {
-                        console.log(result2);
-                         res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/no_action');
-                });
-        }
-        else {
-                console.log("result null");
-                res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/no_action');
-        }
+            var nickname = userinfo.nickname;
+            var imgurl = userinfo.headimgurl;
+           
+            var promise = mongoose.findStartedGame();
+            var promise2 = mongoose.findEndedGame();
 
-});
-
-//            mongoose.queryAllStatus(userinfo.nickname, userinfo.headimgurl, function(str) {res.redirect(str);});
+ 
+             promise.then(function(result) {
+               if(result != null) {
+                  var promise3 = mongoose.findUserByName(nickname, result);
+                  promise3.then(function(result2) {
+                    if(result2 != null) {
+                       res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/cancel_sign_up?nickname=' + nickname);
+                    } else {
+                       console.log(imgurl);
+                       res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/?nickname=' + nickname + '&headimgurl=' + imgurl);
+                    }
+                  });
+               } else {
+                 promise2.then(function(result3){
+                   if(result3 != null) {
+                      res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/show_sign_result');
+                   } else {
+                      res.redirect('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/no_action');
+                   }
+                 });
+               }
+             });
           } else {
             console.log(response.statusCode);
           }
@@ -260,29 +271,11 @@ function gameStarted(game){
 }
 
 function getStartedGame(){
-  mongoose.findCurrentSignupGame();
+  mongoose.findCurrentSignupGame().then(console.log);
 }
 
 function closeOutGame(startTime, endTime){
   mongoose.closeOutGame(startTime, endTime);
 }
-
-function isGameStarted() {
-  console.log("call isGameStarted()" );
-  var result = false;
- mongoose.findCurrentSignupGame(function(game) {});
-  
-  return true;
-}
-
-function isGameEnded() {
-  return false;
-}
-
-function hasSignedup() {
-  
-  return true;
-}
-
 
 
