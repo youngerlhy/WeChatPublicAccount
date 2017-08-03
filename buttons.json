@@ -7,6 +7,11 @@
 				"name" : "羽毛球报名",
 				"url" : "http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/wx_login",
 				"key" : "sign up"
+			}, {
+				"type" : "view",
+				"name" : "历史战报",
+				"url" : "http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com:80/history",
+				"key" : "history"
 			} ]
 		}, {
 			"name" : "新闻",

@@ -78,19 +78,14 @@ $(document).ready(function() {
   });
 
   $("close_out_game_confirm").click(function() {
-    var startTime = $("#close_out_timeStart").val();
-    var endTime = $("#close_out_timeEnd").val();
-    $.post("/close_out_game_confirm", {
-      startTime : startTime,
-      endTime : endTime
-    }, function(data, status) {
+    $.post("/close_out_game_confirm", {}, function(data, status) {
     });
     $("#close_out_game_div").attr('style', "display:none;");
     $("#close_out_game").attr('style', "display:block;");
   });
 
   $("close_out_game_cancel").click(function() {
-    $.post("/close_out_game_confirm", {}, function(data, status) {
+    $.post("/close_out_game_cancel", {}, function(data, status) {
     });
   });
 });
