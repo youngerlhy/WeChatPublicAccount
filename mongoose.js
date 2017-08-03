@@ -189,55 +189,44 @@ exports.findAllUsers = function(callback){
 					owners.push(user);			
 					console.log("OWNERS:"+owners);
 				});
+			
+			User.find({game:gameResult._id, car:{$exists:false}}).then(function(users){
+				users.forEach(function(user, index){
+						allotusers.push(user);	
+						console.log("ALLOTUSERS:"+allotusers);
+					});
+				
+				for(var i=0; i<owners.length; i++){
+					var owner= owners[i]
+					Car.find({available:true,owner:owner._id}).then(function(car){
+						console.log("CARS:"+car);
+						console.log("=====2=====");
+						for(var i=0; i<car.seatavailablenum; i++){
+							console.log("=====3=====");
+							car.passenger.push(allotusers[seatnum+i]);
+							console.log("PASSENGERS:"+car.passenger);
+							car.save(function(err){
+								if(err)  return console.log(err);					
+							});	
+						}
+						seatnum += car.seatavailablenum;
+					});	
+				}
+				
+				 User.find({game:gameResult._id}, function(err, result){
+					 if(err){
+						 console.log("Find all users fail:" + err);
+						 return;
+					 }else{
+						 callback(result);
+					 }
+				 });
+				
+			});
 		});
 		
-		User.find({game:gameResult._id, car:{$exists:false}}).then(function(users){
-			users.forEach(function(user, index){
-					allotusers.push(user);	
-					console.log("ALLOTUSERS:"+allotusers);
-				});
-			
-			
-			
-			console.log(owners.length);
-			owners.forEach(function(car,index){
-				console.log("=====0=====");
-			});
-			
-			for(var i=0; i<owners.length; i++){
-				console.log("=====1=====");
-				var owner= owners[i]
-				Car.find({available:true,owner:owner._id}).then(function(car){
-					console.log("CARS:"+car);
-					console.log("=====2=====");
-					for(var i=0; i<car.seatavailablenum; i++){
-						console.log("=====3=====");
-						car.passenger.push(allotusers[seatnum+i]);
-						console.log("PASSENGERS:"+car.passenger);
-						car.save(function(err){
-							if(err)  return console.log(err);					
-						});	
-					}
-					seatnum += car.seatavailablenum;
-				});	
-			}
-			
-			 User.find({game:gameResult._id}, function(err, result){
-				 if(err){
-					 console.log("Find all users fail:" + err);
-					 return;
-				 }else{
-					 callback(result);
-				 }
-			 });
-			
-		});
-			
-			
-			
-			
-			
-		});
+		
+});
 			
 	
 		
