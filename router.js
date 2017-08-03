@@ -159,7 +159,8 @@ module.exports = function(app) {
         if(gameStarted(result)){
           console.log('close_out_game info :'+result);
           res.render('close_out_game',{startTime:result.startTime,endTime:result.endTime});
-        }else{
+        }else {
+          console.log('There is no game started, just show the last time result ');
           var show_sign_result = 'show_sign_result';
           res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'+ show_sign_result + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
         }
@@ -307,6 +308,9 @@ function addPublishGame(startTime, endTime) {
 
 
 function gameStarted(game){
+  if(game ==null ){
+    return false;
+  }
   var isStarted = false;
   if("Started" == game.gameStatus.replace(/(^\s*)|(\s*$)/g, "")){
     isStarted = true;
