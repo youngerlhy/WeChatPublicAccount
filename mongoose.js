@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Promise = require("bluebird");
 Promise.promisifyAll(mongoose);
-var db = mongoose.connect('mongodb://localhost/testdb2', {
+var db = mongoose.connect('mongodb://localhost/testdb3', {
 	useMongoClient : true,
 });
 
@@ -31,6 +31,7 @@ db.on('close', ()=>{
 var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
+        openid:{type:String},
 	nickname:{type:String},
 	imageurl:{type:String},
 	car:{type:Schema.Types.ObjectId, ref:'Car'},
@@ -79,9 +80,10 @@ var LogSchema = new Schema({
 });
 var Log = mongoose.model('Log', LogSchema);
 
-insertSignupData = function(nickName, imageUrl, seatnum, game) {
+insertSignupData = function(openid, nickName, imageUrl, seatnum, game) {
    console.log("insertSignupData " +  nickName);
 	var person = new User({
+                openid : openid,
 		nickname : nickName,
 		imageurl : imageUrl
 	});
@@ -92,16 +94,17 @@ insertSignupData = function(nickName, imageUrl, seatnum, game) {
              seatnum : seatnum,
              seatavailablenum : seatnum - 1 
          });
-        }	
-        game.competitors.push(person);
-        person.game=game;
-        person.car=car;
-
-        
+         person.car=car;
         car.save(function(err) {
         if (err) {
                 console.log(err);}
         });
+
+        }	
+        game.competitors.push(person);
+        person.game = game;
+
+        
 
         game.save();
         person.save(function(err) {
@@ -115,10 +118,10 @@ exports.countUserByName = function(name, callback) {
 }
 
 
-exports.deleteUserCar = function(name){
+exports.deleteUserCar = function(openid){
 Game.findOne({signupStatus: 'Started'}, function(error, gameResult) {
         if(error) return console.log(error);
-        User.findOne({nickname: name, game: gameResult._id}, function(err, user) {
+        User.findOne({openid: openid, game: gameResult._id}, function(err, user) {
                if(err) return console.log(err);
                 Car.findOne({owner: user._id}).then(function(car){car.remove()});
             gameResult.competitors.pull(user);
@@ -205,13 +208,13 @@ exports.closeOutGame=function(startTime, endTime,callback){
   });
 }
 
-exports.insertSignupAndGame = function(nickname, imageurl, num) {
+exports.insertSignupAndGame = function(openid, nickname, imageurl, num) {
     Game.findOne({signupStatus: 'Started'}, function(error, gameResult) {
         if(error) return console.log(error);
-        User.count({name: nickname, game: gameResult._id}, function(err, count) {
+        User.count({openid: openid, game: gameResult._id}, function(err, count) {
                 if(err) return console.log(err);
                 if(count == 0) {
-                        insertSignupData(nickname, imageurl, num, gameResult);
+                        insertSignupData(openid, nickname, imageurl, num, gameResult);
                 }
         });
 });
@@ -219,40 +222,9 @@ exports.insertSignupAndGame = function(nickname, imageurl, num) {
 }
 
 
-exports.queryAllStatus = function(nickname,imgurl, callback) {
-      Game.findOne({signupStatus: 'Started'}, function(error, gameResult) {
-        if(error) return console.log(error);
-        if(gameResult != null) {
-        User.count({name: nickname, game: gameResult._id}, function(err, count) {
-                if(err) return console.log(err);
-                if(count == 0) {
-                    // /insert data page
-                   callback('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/?nickname='
-                    + nickname + '&headimgurl=' + imgurl);
 
-                } else {
-                   // /cancel data page
-                  callback('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/cancel_sign_up?nickname=' + nickname);
-                }
-        });
-} 
-    Game.findOne({signupStatus: 'Ended', gameStatus: 'Started'}, function(error, gameResult) {
-        if(error) return console.log(error);
-        if(gameResult !=null) {
-          // show result
-            callback('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/show_sign_result');
-
-         } else {
-          // no action
-           callback('http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/no_action');
-         }
-    });
-});
-
-}
-
-exports.findUserByName = function(name, game){
-	var promise = User.findOne({nickname:name, game: game._id}).exec();
+exports.findUserByOpenId = function(openid, game){
+	var promise = User.findOne({openid:openid, game: game._id}).exec();
 	return promise;
 }
 

@@ -34,6 +34,7 @@ $(document).ready(function() {
     $("#sign_up_successful").attr('style', "display:block;");
     var num = $("#seat").val();
     $.post("/insert_data", {
+      openid : getQueryString("openid"),
       nickname : getQueryString("nickname"),
       imageurl : getQueryString("headimgurl"),
       seatnum : num
@@ -48,6 +49,7 @@ $(document).ready(function() {
     $("#car_seat").attr('style', "display:none;");
     $("#sign_up_successful").attr('style', "display:block;");
     $.post("/insert_data", {
+      openid : getQueryString("openid"),
       nickname : getQueryString("nickname"),
       imageurl : getQueryString("headimgurl"),
       seatnum : 0
@@ -59,7 +61,7 @@ $(document).ready(function() {
    $("#cancel_sign_up_successful").attr('style', "display:block;");
    $("#cancel_sign_up").attr('style',"display:none;"); 
    $.post("/delete_data", {
-      nickname : getQueryString("nickname"),
+      openid : getQueryString("openid"),
     }, function(data, status) {
     });
   });
