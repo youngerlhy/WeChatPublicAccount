@@ -116,56 +116,62 @@ exports.countUserByName = function(name, callback) {
 
 
 exports.deleteUserCar = function(name){
-Game.findOne({signupStatus: 'Started'}, function(error, gameResult) {
-        if(error) return console.log(error);
-        User.findOne({nickname: name, game: gameResult._id}, function(err, user) {
-               if(err) return console.log(err);
-                Car.findOne({owner: user._id}).then(function(car){car.remove()});
-            gameResult.competitors.pull(user);
-            gameResult.save();
-	    user.remove();
-        });
-});
+	Game.findOne({signupStatus: 'Started'}, function(error, gameResult) {
+	        if(error) return console.log(error);
+	        User.findOne({nickname: name, game: gameResult._id}, function(err, user) {
+	               if(err) return console.log(err);
+	                Car.findOne({owner: user._id}).then(function(car){car.remove()});
+	            gameResult.competitors.pull(user);
+	            gameResult.save();
+		    user.remove();
+	        });
+	});
 
 }
 
 function allotUserCar(){
-	User.find({}).then(function(users){
-		var allotusers = [];
-		users.forEach(function(user, index){
-			if(!user.car){ 
-				allotusers.push(user);
-			}
-		});
-		Car.find({available:true}).then(function(cars){
-			var seatnum = 0;
-			cars.forEach(function(item, index){
-				for(var i=0; i<item.seatavailablenum; i++){
-					if(seatnum+i+1 <= allotusers.length){
-						item.passengers = allotusers[seatnum+i];
-						item.save(function(err){
-							if(err)  return console.log(err);					
-						});				
-					}
-					// seatnum > allotusers.length
+	Game.findOne({signupStatus: 'Ended', gameStatus: 'Started'}, function(error, gameResult) {
+		User.find({game:gameResult._id}).then(function(users){
+			var owners = [];
+			var allotusers = [];
+			users.forEach(function(user, index){
+				if(!user.car){ 
+					allotusers.push(user);
+				}else{
+					owners.push();					
 				}
-				seatnum += item.seatavailablenum;
 			});
 			
+			var seatnum = 0;
+			owners.forEach(function(owner, index){
+				Car.findOne({available:true,owner:owner._id}).then(function(car){
+					for(var i=0; i<car.seatavailablenum; i++){
+						if(seatnum+i+1 <= allotusers.length){
+							car.passenger.push(allotusers[seatnum+i]);
+						}
+						car.save(function(err){
+							if(err)  return console.log(err);					
+						});	
+					}
+					seatnum += car.seatavailablenum;
+				});
+			});
 		});
 	});
 }
 
 exports.findAllUsers = function(callback){
 	 allotUserCar();
-	 User.find({}, function(err, result){
-			if(err){
-				console.log("Find all users fail:" + err);
-				return;
-			}else{
-				callback(result);
-			}
-		});
+	 Game.findOne({signupStatus: 'Ended', gameStatus: 'Started'}, function(error, gameResult) {		 
+		 User.find({game:gameResult._id}, function(err, result){
+			 if(err){
+				 console.log("Find all users fail:" + err);
+				 return;
+			 }else{
+				 callback(result);
+			 }
+		 });
+	 });
 }
 
 exports.insertPublishGame = function(startTime,endTime) {

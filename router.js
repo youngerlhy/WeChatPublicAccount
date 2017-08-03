@@ -46,14 +46,17 @@ module.exports = function(app) {
 	    	  var nickname = req.body.nickname;
 	    	  mongoose.getCountGames(function(count){
 	    		  mongoose.findOneUserGame(nickname,function(usergames){
-	    			  historyFun(count,usergames.length);
+	    			  var userGamesNum = usergames.length;
+	    			  var gameCount = {"count":count,"userGamesNum":userGamesNum};
+	    			  var gameCountJson = JSON.stringify(gameCount);
+	    			  console.log("gameCountJson:"+gameCountJson);
+	    			  res.render('history',{gameCountJson});
 	    		  });
 	    	  });
 	      } else {
 	        console.log(response.statusCode);
 	      }
 	    });	  
-    res.render('history', {});
    });  
  
   app.get('/tony', function(req, res) {
@@ -191,9 +194,9 @@ module.exports = function(app) {
     }, function(error, response, body) {
       if (response.statusCode == 200) {
     	  mongoose.findAllUsers(function(result){
-    		  var allUsersStr = JSON.stringify(result);
-    		  console.log(allUsersStr);
-    		  res.render('sign_up_list', {allUsersStr});    		  
+    		  var allUsersJson = JSON.stringify(result);
+    		  console.log("JSON:==="+allUsersJson);
+    		  res.render('sign_up_list', {allUsersJson});    		  
     	  });
     
       } else {
@@ -309,15 +312,3 @@ function gameStarted(game){
 function closeOutGame(startTime, endTime){
   mongoose.closeOutGame(startTime, endTime);
 }
-
-var historyFun = function(arg1, arg2){
-	
-	var total_game_num = arg1;
-	var your_game_num = arg2;
-	if(total_game_num==0){
-		total_game_num=1;
-	}
-    $("#total_game_num").text(total_game_num+"次");
-	$("#your_game_num").text(your_game_num+"次");
-    $("#your_game_progress").attr('style',"width:"+(your_game_num/total_game_num*100)+"%");
-};

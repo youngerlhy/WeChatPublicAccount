@@ -1,5 +1,4 @@
-var historyFun = function(arg1, arg2){
-	
+
 	var total_game_num = arg1;
 	var your_game_num = arg2;
 	if(total_game_num==0){

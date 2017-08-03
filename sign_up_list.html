@@ -28,6 +28,8 @@
 					alert("fail:"+err.status);
 				},
 				success:function(result){
+					alert("Result===:"+result);
+					alert("UserResult:"+result.user);
 					$.each(result.user, fucntion(index,item){
 						var name = item.nickname;
 						var image = item.imageurl;
