@@ -9,9 +9,9 @@ $(document).ready(function() {
 				alert("fail:"+err.status);
 			},
             success: function(data) {
+			alert("data"+data);
+			console.log("Data in history****"+data);
 	            var data = $.parseJSON(data);
-		alert("data"+data); 
-	            console.log(""+data);
 				var total_game_num = data.count;
 				var your_game_num = data.userGamesNum;
 				if(total_game_num==0){
