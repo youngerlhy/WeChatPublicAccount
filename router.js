@@ -276,7 +276,7 @@ function gameStarted(game){
 }
 
 function getStartedGame(){
-  mongoose.findCurrentSignupGame().then(console.log);
+  mongoose.findStartedGame().then(console.log);
 }
 
 function closeOutGame(startTime, endTime){

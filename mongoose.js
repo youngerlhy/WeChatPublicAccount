@@ -177,18 +177,6 @@ exports.insertPublishGame = function(startTime,endTime) {
 	  });
 }
 
-exports.findCurrentSignupGame = function(callback){
-	return Game.find({signupStatus:"Started",gameStatus:"Started"}).sort({"startTime":-1}).limit(1).execAsync()
-	.then(function(result){
-	  console.log(result);
-	}).catch(function(err){
-	  if(err){
-	    console.log("Get current signup game fail:" + err);
-	    return;
-	  }
-	});
-}
-
 exports.closeOutGame=function(startTime, endTime,callback){
   var updateGameStatus = {$set: {signupStatus: "Ended" }};
   Game.update({
