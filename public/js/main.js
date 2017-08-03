@@ -35,7 +35,7 @@ $(document).ready(function() {
     var num = $("#seat").val();
     $.post("/insert_data", {
       openid : getQueryString("openid"),
-      nickname : getQueryString("nickname"),
+      nickname : unescape(getQueryString("nickname")),
       imageurl : getQueryString("headimgurl"),
       seatnum : num
     }, function(data, status) {
@@ -50,7 +50,7 @@ $(document).ready(function() {
     $("#sign_up_successful").attr('style', "display:block;");
     $.post("/insert_data", {
       openid : getQueryString("openid"),
-      nickname : getQueryString("nickname"),
+      nickname : unescape(getQueryString("nickname")),
       imageurl : getQueryString("headimgurl"),
       seatnum : 0
     }, function(data, status) {

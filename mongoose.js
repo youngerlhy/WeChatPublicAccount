@@ -265,29 +265,14 @@ exports.setGameStatusEnded = function(){
 }
 
 
-exports.getCountGames = function(callback){
-	Game.count({},function(err, result){
-        if(err){
-            console.log("Find game count fail:" + err);
-            return;
-      }else{
-            console.log(result);
-            callback(result);
-      }
-});	
-
+exports.getCountGames = function(){
+	var promise = Game.count({}).exec();
+    return promise;
 }
 
-exports.findOneUserGame = function(name,callback){
-	User.find({nickname:name},function(err,result){
-		if(err){
-            console.log("Find one user games fail:" + err);
-            return;
-      }else{
-            console.log(result);
-            callback(result);
-      }
-	});
+exports.findOneUserGame = function(name){
+	var promise = User.find({nickname:name}).exec();
+	return promise;
 }
 
 
