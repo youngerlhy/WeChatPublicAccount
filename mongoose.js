@@ -192,7 +192,7 @@ function allotUserCar(){
 	}
 }
 
-exports.findAllUsers = function(){
+exports.findAllUsers = function(callback){
 
 		
 	
