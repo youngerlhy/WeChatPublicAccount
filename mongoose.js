@@ -273,3 +273,14 @@ exports.queryAllStatus = function(nickname,imgurl, callback) {
 });
 
 }
+////delete
+
+exports.findUserByName = function(name, callback){
+	var promise = User.findOne({nickname:name}).exec(callback);
+	return promise;
+}
+
+exports.findGameByName = function(num) {
+	var promise = Car.findOne({seatnum: num}).exec();
+	return promise;
+}
