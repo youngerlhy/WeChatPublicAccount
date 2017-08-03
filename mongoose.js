@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Promise = require("bluebird");
-Promise.promisifyAll(mongoose);
+mongoose = Promise.promisifyAll(mongoose);
 var db = mongoose.connect('mongodb://localhost/testdb', {
 	useMongoClient : true,
 });
