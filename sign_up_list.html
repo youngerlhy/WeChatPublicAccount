@@ -28,15 +28,17 @@
 				error:function(err){
 					alert("fail:"+err.status);
 				},
-				success:function(result){
-					$.each(result.user, fucntion(index,item){
+				success:function(data){
+					var result = $.parseJSON(data);
+					console.log(result.user);		
+					$.each(result.user, function(index,item){
 						var name = item.nickname;
+						console.log(name);
 						var image = item.imageurl;
-						//var carname  = item.car.owner.nickname;
-						var carname  = "陈兆杰*";
-						var addRow = "<tr><td style='width:60px;height:60px;'">"+image+"</td><td>"+name+"</td><td>"+carname+"</td></tr>";
+						var carname = item.carname;
+						var addRow = "<tr><td style='width:60px;height:60px;'>"+image+"</td><td>"+name+"</td><td>"+carname+"</td></tr>";
 						$("#sign_up_list_table").append(addRow);
-					});
+					}); 
 				}
 			});
 		});

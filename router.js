@@ -210,25 +210,35 @@ module.exports = function(app) {
     }, function(error, response, body) {
       if (response.statusCode == 200) {
     	  console.log("=====success=====");
-    	  var json = "[";
+    	  var json = '{"user":[';
     	  var promise = mongoose.findAllUsersCars();
     	  promise.then(function(game){
-    		  var promise2 = mongoose.findGameUser(game);
-    		  promiese2.then(function(users){
-    			  users.forEach(function(user,index){
-    				  var promise3 = mongoose.findUserCar(user);
-    				  promise3.then(function(car){
-    					  var promise4 = mongoose.fineCarOwner(car);
-    					  promise4.then(function(owner){
-    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"'+owner.nickname+'"},';
-    					  });
-    				  });
-    			  });
-    			  json = json.substring(0, json.length-1);
-    			  json +="]";
-    			  console.log("JSON:==="+json);
-    			  res.render('sign_up_list', {json}); 
-    		  });
+    		  console.log("=====1=====");
+    		  if(game != null){
+    			  console.log("=====2=====");
+	    		  var promise2 = mongoose.findGameUser(game);
+	    		  promiese2.then(function(users){
+	    			  console.log("=====3=====");
+	    			  if(users != null){
+		    			  users.forEach(function(user,index){
+		    				  console.log("=====4=====");
+		    				  var promise3 = mongoose.findUserCar(user);
+		    				  promise3.then(function(car){
+		    					  console.log("=====5=====");
+		    					  var promise4 = mongoose.fineCarOwner(car);
+		    					  promise4.then(function(owner){
+		    						  console.log("=====6=====");
+		    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"'+owner.nickname+'"},';
+		    					  });
+		    				  });
+		    			  });
+		    			  json = json.substring(0, json.length-1);
+		    			  json +=']}';
+		    			  console.log("JSON:==="+json);
+		    			  res.render('sign_up_list', {json}); 
+	    			  }
+	    		  });
+    		  }
     	  });    
       } else {
         console.log(response.statusCode);
