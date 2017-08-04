@@ -175,12 +175,12 @@ exports.findAllUsersCars = function(){
 					if(passengers != null) console.log("There is no passengers.");
 				}
 			}).then(function(){
-				promise4.then(function(users){
-					if(users == null){
-						console.log("There is no users.");
-					}else{
-						console.log("USERS:"+users);
-					}
+				promise4.then(function(){
+//					if(users == null){
+//						console.log("There is no users.");
+//					}else{
+//						console.log("USERS:"+users);
+//					}
 				});
 			});	
 		}else{
