@@ -213,21 +213,19 @@ module.exports = function(app) {
     	  var json = '{"user":[';
     	  var promise = mongoose.findAllUsersCars();
     	  promise.then(function(game){
-    		  console.log("=====1=====");
     		  if(game != null){
-    			  console.log("=====2=====");
+    			  console.log("=====1=====");
 	    		  var promise2 = mongoose.findGameUser(game);
 	    		  promiese2.then(function(users){
-	    			  console.log("=====3=====");
 	    			  if(users != null){
+	    				  console.log("=====2=====");
 		    			  users.forEach(function(user,index){
-		    				  console.log("=====4=====");
 		    				  var promise3 = mongoose.findUserCar(user);
 		    				  promise3.then(function(car){
-		    					  console.log("=====5=====");
+		    					  console.log("=====3=====");
 		    					  var promise4 = mongoose.fineCarOwner(car);
 		    					  promise4.then(function(owner){
-		    						  console.log("=====6=====");
+		    						  console.log("=====4=====");
 		    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"'+owner.nickname+'"},';
 		    					  });
 		    				  });
@@ -335,6 +333,7 @@ module.exports = function(app) {
 }
 
 setInterval(mongoose.setGameStatusEnded,24*60*60*1000);
+//setInterval(mongoose.setGameStatusEnded,60*1000);
 
 function addPublishGame(startTime, endTime) {
   mongoose.insertPublishGame(startTime, endTime);

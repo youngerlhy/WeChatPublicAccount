@@ -120,8 +120,10 @@ exports.countUserByName = function(name, callback) {
 
 exports.deleteUserCar = function(openid){
 Game.findOne({signupStatus: 'Started'}, function(error, gameResult) {
+        if(gameResult == null) return;
         if(error) return console.log(error);
         User.findOne({openid: openid, game: gameResult._id}, function(err, user) {
+               if(user==null) return;
                if(err) return console.log(err);
                 Car.findOne({owner: user._id}).then(function(car){car.remove()});
             gameResult.competitors.pull(user);
@@ -244,6 +246,7 @@ exports.closeOutGame = function(startTime, endTime){
 
 exports.insertSignupAndGame = function(openid, nickname, imageurl, num) {
     Game.findOne({signupStatus: 'Started'}, function(error, gameResult) {
+        if(gameResult == null) return;
         if(error) return console.log(error);
         User.count({openid: openid, game: gameResult._id}, function(err, count) {
                 if(err) return console.log(err);
@@ -274,9 +277,12 @@ exports.findEndedGame = function() {
 
 exports.setGameStatusEnded = function(){
 	Game.find({signupStatus:'Ended', gameStatus:'Started'},function(err,result){
+                if(result == null) return;
 		result.forEach(function(item,index){
 			var now = new Date();
-			if(item.endTime > now){
+                        console.log("endTime: " + item.endTime);
+                        console.log("now: " + now);
+			if(item.endTime < now){
 				item.gameStatus = 'Ended';
 			}
 			item.save(function(err){
