@@ -58,7 +58,7 @@ module.exports = function(app) {
 	    			  var gameCount = {"count":count,"userGamesNum":userGamesNum};
 	    			  var gameCountJson = JSON.stringify(gameCount);
 	    			  console.log("gameCountJson:"+gameCountJson);
-	    			  res.send({"count":count, "userGamesNum":userGamesNum});
+	    			  res.send(gameCountJson);
 	    			  
 	    		  });
 	    	  });
@@ -202,8 +202,6 @@ module.exports = function(app) {
 
   app.get('/show_sign_result', function(req, res) {
     // 第二步：通过code换取网页授权access_token
-	console.log("=====show_sign_result=====");
-	
     var code = req.query.code;
     request.get({
       url : 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + context.appid + '&secret='
@@ -211,12 +209,26 @@ module.exports = function(app) {
     }, function(error, response, body) {
       if (response.statusCode == 200) {
     	  console.log("=====success=====");
-    	  mongoose.findAllUsersCars(function(result){
-    		  var allUsersJson = JSON.stringify(result);
-    		  console.log("JSON:==="+allUsersJson);
-    		  res.render('sign_up_list', {allUsersJson});    		  
-    	  });
-    
+    	  var json = "[";
+    	  var promise = mongoose.findAllUsersCars();
+    	  promise.then(function(game){
+    		  var promise2 = mongoose.findGameUser(game);
+    		  promiese2.then(function(users){
+    			  users.forEach(function(user,index){
+    				  var promise3 = mongoose.findUserCar(user);
+    				  promise3.then(function(car){
+    					  var promise4 = mongoose.fineCarOwner(car);
+    					  promise4.then(function(owner){
+    						  json += "{nickname:"+user.nickname+",imageurl:"+user.imageurl+",carname:"+owner.nickname+"},";
+    					  });
+    				  });
+    			  });
+    			  json = json.substring(0, json.length-1);
+    			  json +="]";
+    			  console.log("JSON:==="+json);
+    			  res.render('sign_up_list', {json}); 
+    		  });
+    	  });    
       } else {
         console.log(response.statusCode);
       }
