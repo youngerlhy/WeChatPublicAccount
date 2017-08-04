@@ -240,10 +240,6 @@ module.exports = function(app) {
 	    		  });
     		  }
     	  });    
-    	  
-    	  res.render('sign_up_list',{}); 
-    	  
-    	  
       } else {
         console.log(response.statusCode);
       }
