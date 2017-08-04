@@ -325,6 +325,7 @@ module.exports = function(app) {
 }
 
 setInterval(mongoose.setGameStatusEnded,24*60*60*1000);
+//setInterval(mongoose.setGameStatusEnded,60*1000);
 
 function addPublishGame(startTime, endTime) {
   mongoose.insertPublishGame(startTime, endTime);
