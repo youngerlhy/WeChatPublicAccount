@@ -161,6 +161,7 @@ exports.findAllUsersCars = function(){
 											}
 										}
 									}
+									console.log("CARS2:"+car);
 									car.save(function(err){
 										if(err)  return console.log(err);	
 										console.log("CARS3:"+car);
@@ -173,8 +174,6 @@ exports.findAllUsersCars = function(){
 					if(owners != null) console.log("There is no cars.");
 					if(passengers != null) console.log("There is no passengers.");
 				}
-			}).then(function(){
-				
 			});	
 		}else{
 			console.log("There is no available game.");
