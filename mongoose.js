@@ -144,7 +144,7 @@ exports.findAllUsersCars = function(callback){
 			console.log("OWNERS:"+owners);
 			console.log("PASSENGERS:"+passengers);
 			owners.forEach(function(owner, index){
-				Car.find({available:true,owner:owner._id}).then(function(car){
+				Car.findOne({available:true,owner:owner._id}).then(function(car){
 					console.log("CARS:"+car);
 					console.log("car.seatavailablenum:"+car.seatavailablenum);
 					
@@ -152,12 +152,13 @@ exports.findAllUsersCars = function(callback){
 					var len=car.seatavailablenum;
 					console.log("Len:"+len);
 					len=4;
+					console.log("Len:"+len);
 					for(var i=0; i<4; i++){
 						console.log("CARS2:"+car);
-						console.log("passengers:"+passengers[index*len+i]);
+						console.log("passengers:"+passengers[index*len+i]._id);
 						
 //						if(index*len+i+1 <= passengers.length){
-							car.passenger.push(passengers[index*len+i]);
+							car.passenger.push(passengers[index*len+i]._id);
 							console.log("CARS-PASSENGERS:"+car.passenger);
 //						}
 						car.save(function(err){
