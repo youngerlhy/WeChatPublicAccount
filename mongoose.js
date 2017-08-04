@@ -164,12 +164,18 @@ exports.findAllUsersCars = function(){
 	return promise;
 }
 
+
+exports.findGameUser = function(game){
+	var promise = User.find({game:game._id}).exec();
+	return promise;
+}
+
 exports.findUserCar = function(user){
 	var promise = Car.findOne({_id:user.car}).exec();
 	return promise;
 }
 
-exports.fineCarUser = function(car){
+exports.fineCarOwner = function(car){
 	var promise = User.findOne({_id:car.owner}).exec();
 	return promise;
 }
