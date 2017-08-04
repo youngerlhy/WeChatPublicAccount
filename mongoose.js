@@ -149,10 +149,9 @@ exports.findAllUsersCars = function(callback){
 					for(var i=0; i<len; i++){
 						console.log("CARS2:"+car);
 						console.log("passengers:"+passengers[index*len+i].get("_id"));
-						
 //						if(index*len+i+1 <= passengers.length){
-							car.passenger.push(passengers[index*len+i].get("_id"));
-							console.log("CARS-PASSENGERS:"+car.passenger);
+							car.passengers.push(passengers[index*len+i].get("_id"));
+							console.log("CARS-PASSENGERS:"+car.passengers);
 //						}
 						car.save(function(err){
 							if(err)  return console.log(err);	
