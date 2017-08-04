@@ -202,8 +202,6 @@ module.exports = function(app) {
 
   app.get('/show_sign_result', function(req, res) {
     // 第二步：通过code换取网页授权access_token
-	console.log("=====show_sign_result=====");
-	
     var code = req.query.code;
     request.get({
       url : 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + context.appid + '&secret='
@@ -211,11 +209,25 @@ module.exports = function(app) {
     }, function(error, response, body) {
       if (response.statusCode == 200) {
     	  console.log("=====success=====");
-    	  mongoose.findAllUsersCars(function(result){
-    		  var allUsersJson = JSON.stringify(result);
-    		  console.log("JSON:==="+allUsersJson);
-    		  res.render('sign_up_list', {allUsersJson});    		  
-    	  });
+    	  var promise = mongoose.findAllUsersCars();
+//    	  var promise2 = mongoose.findUserCar();
+//    	  var promise3 = mongoose.findCarUser();
+//    	  var json;
+    	  promise.then(function(users){
+//    		  promise2.then(function(car){
+//    			  promise3.then(function());
+//    			  
+//    			  users.forEach(function(user,index){
+//    				  json = "{nickname:"+user.nickname+",imageurl:"+user.imageurl+",car:"+car.owner.nick+""}"    				  
+//    			  });
+//    			  
+    			  
+    			  
+        		  var allUsersJson = JSON.stringify(users);
+        		  console.log("JSON:==="+allUsersJson);
+        		  res.render('sign_up_list', {allUsersJson}); 
+    		  });    		  
+//    	  });
     
       } else {
         console.log(response.statusCode);
