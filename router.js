@@ -167,7 +167,8 @@ module.exports = function(app) {
       game.then(function(result){
         console.log('result is :'+result);
         if(gameStarted(result)){
-//          console.log('close_out_game info :'+result);
+          console.log(result.startTime + ' ' + result.endTime);
+          console.log('close_out_game info :'+result);
           res.render('close_out_game',{startTime:Format(result.startTime),endTime:Format(result.endTime)});
         }else{
           var show_sign_result = 'show_sign_result';
