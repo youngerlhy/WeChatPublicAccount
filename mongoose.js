@@ -151,8 +151,10 @@ exports.findAllUsersCars = function(callback){
 					
 					var len=car.seatavailablenum;
 					console.log("Len:"+len);
+					len=4;
 					for(var i=0; i<4; i++){
 						console.log("CARS2:"+car);
+						console.log("passengers:"+car);
 						
 //						if(index*len+i+1 <= passengers.length){
 							car.passenger.push(passengers[index*len+i]);
