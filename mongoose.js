@@ -147,10 +147,10 @@ exports.findAllUsersCars = function(callback){
 				Car.find({available:true,owner:owner._id}).then(function(car){
 					console.log("CARS:"+car);
 					for(var i=0; len=car.seatavailablenum, i<len; i++){
-						if(index*len+i+1 <= passengers.length){
+//						if(index*len+i+1 <= passengers.length){
 							car.passenger.push(passengers[index*len+i]);
 							console.log("CARS-PASSENGERS:"+car.passenger);
-						}
+//						}
 						car.save(function(err){
 							if(err)  return console.log(err);					
 						});	
