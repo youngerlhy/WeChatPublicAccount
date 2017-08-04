@@ -20,7 +20,7 @@ module.exports = function(app) {
   });
   
    app.get('/newshistory', function(req, res) {
-    res.render('newshistory', {});
+    res.render('daily_english_history', {});
   });
 
    app.get('/no_action', function(req, res) {
