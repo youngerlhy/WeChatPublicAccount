@@ -158,6 +158,7 @@ exports.findAllUsersCars = function(){
 											if(car.passenger[i] != passengers[index*len+i].get("_id")){
 												car.passengers.push(passengers[index*len+i].get("_id"));
 												car.seatavailablenum -=1;
+												passengers[index*len+i].car = car._id;
 											}
 										}
 									}
@@ -166,6 +167,11 @@ exports.findAllUsersCars = function(){
 										if(err)  return console.log(err);	
 										console.log("CARS3:"+car);
 									});
+									passengers[index*len+i].save(function(err){
+										if(err)  return console.log(err);	
+										console.log("passengers:"+passengers);
+									});
+									
 								}
 							}
 						});		
@@ -174,6 +180,7 @@ exports.findAllUsersCars = function(){
 					if(owners != null) console.log("There is no cars.");
 					if(passengers != null) console.log("There is no passengers.");
 				}
+			
 			});	
 		}else{
 			console.log("There is no available game.");

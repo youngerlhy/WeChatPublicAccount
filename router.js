@@ -58,7 +58,7 @@ module.exports = function(app) {
 	    			  var gameCount = {"count":count,"userGamesNum":userGamesNum};
 	    			  var gameCountJson = JSON.stringify(gameCount);
 	    			  console.log('{'+gameCountJson+'}');
-	    			  res.send('{'+gameCountJson+'}');
+	    			  res.json('{'+gameCountJson+'}');
 	    			  
 	    		  });
 	    	  });
@@ -218,6 +218,7 @@ module.exports = function(app) {
     			  console.log("=====1=====");
 	    		  var promise2 = mongoose.findGameUser(game);
 	    		  promiese2.then(function(users){
+	    			  console.log("=====22=====");
 	    			  if(users != null){
 	    				  console.log("=====2=====");
 		    			  users.forEach(function(user,index){
