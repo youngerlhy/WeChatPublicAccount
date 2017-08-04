@@ -57,8 +57,8 @@ module.exports = function(app) {
 	    			  var userGamesNum = result.length;
 	    			  var gameCount = {"count":count,"userGamesNum":userGamesNum};
 	    			  var gameCountJson = JSON.stringify(gameCount);
-	    			  console.log("gameCountJson:"+gameCountJson);
-	    			  res.send({gameCountJson});
+	    			  console.log('{'+gameCountJson+'}');
+	    			  res.send('{'+gameCountJson+'}');
 	    			  
 	    		  });
 	    	  });
@@ -210,25 +210,29 @@ module.exports = function(app) {
     }, function(error, response, body) {
       if (response.statusCode == 200) {
     	  console.log("=====success=====");
-    	  var json = "[";
+    	  var json = '{"user":[';
     	  var promise = mongoose.findAllUsersCars();
     	  promise.then(function(game){
-    		  var promise2 = mongoose.findGameUser(game);
-    		  promiese2.then(function(users){
-    			  users.forEach(function(user,index){
-    				  var promise3 = mongoose.findUserCar(user);
-    				  promise3.then(function(car){
-    					  var promise4 = mongoose.fineCarOwner(car);
-    					  promise4.then(function(owner){
-    						  json += "{nickname:"+user.nickname+",imageurl:"+user.imageurl+",carname:"+owner.nickname+"},";
-    					  });
-    				  });
-    			  });
-    			  json = json.substring(0, json.length-1);
-    			  json +="]";
-    			  console.log("JSON:==="+json);
-    			  res.render('sign_up_list', {json}); 
-    		  });
+    		  if(game != null){
+	    		  var promise2 = mongoose.findGameUser(game);
+	    		  promiese2.then(function(users){
+	    			  if(users != null){
+		    			  users.forEach(function(user,index){
+		    				  var promise3 = mongoose.findUserCar(user);
+		    				  promise3.then(function(car){
+		    					  var promise4 = mongoose.fineCarOwner(car);
+		    					  promise4.then(function(owner){
+		    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"'+owner.nickname+'"},';
+		    					  });
+		    				  });
+		    			  });
+		    			  json = json.substring(0, json.length-1);
+		    			  json +=']}';
+		    			  console.log("JSON:==="+json);
+		    			  res.render('sign_up_list', {json}); 
+	    			  }
+	    		  });
+    		  }
     	  });    
       } else {
         console.log(response.statusCode);

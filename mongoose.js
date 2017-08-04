@@ -137,34 +137,49 @@ Game.findOne({signupStatus: 'Started'}, function(error, gameResult) {
 exports.findAllUsersCars = function(){
 	var join = Promise.join;
 	var promise = Game.findOne({signupStatus: 'Ended', gameStatus: 'Started'}, function(error, gameResult) {
-                 if(gameResult == null) return;
-		var promise2 = User.find({game:gameResult._id, car:{$exists:true}}).exec();
-		var promise3 = User.find({game:gameResult._id, car:{$exists:false}}).exec();
-		var promise4 = User.find({game:gameResult._id}).exec();
-		
-		join(promise2,promise3,function(owners,passengers){
-			console.log("OWNERS:"+owners);
-			console.log("PASSENGERS:"+passengers);
-                        
-			owners.forEach(function(owner, index){
-				Car.findOne({available:true,owner:owner._id}).then(function(car){
-					var len=car.seatavailablenum;
-					for(var i=0; i<len; i++){
-						if(car.passengers.indexOf(passengers[index*len+i].get("_id")) == -1){
-							car.passengers.push(passengers[index*len+i].get("_id"));							
-						}
-						car.save(function(err){
-							if(err)  return console.log(err);	
-							console.log("CARS3:"+car);
-						});
+		if(gameResult != null){
+			var promise2 = User.find({game:gameResult._id, car:{$exists:true}}).exec();
+			var promise3 = User.find({game:gameResult._id, car:{$exists:false}}).exec();
+			var promise4 = User.find({game:gameResult._id}).exec();
+			
+			join(promise2,promise3,function(owners,passengers){
+				if(owners!=null && passengers!=null){
+					console.log("OWNERS:"+owners);
+					console.log("PASSENGERS:"+passengers);
+					owners.forEach(function(owner, index){
+						Car.findOne({available:true,owner:owner._id}).then(function(car){
+							if(car != null){
+								var len=car.seatavailablenum;
+								for(var i=0; i<len; i++){
+									for(var j=0; j<car.passengers.length;j++){
+										if(car.passenger[i] != passengers[index*len+i].get("_id")){
+											car.passengers.push(passengers[index*len+i].get("_id"));															
+										}
+									}
+									car.save(function(err){
+										if(err)  return console.log(err);	
+										console.log("CARS3:"+car);
+									});
+								}
+							}
+						});		
+					});
+				}else{
+					if(owners != null) console.log("There is no cars.");
+					if(passengers != null) console.log("There is no passengers.");
+				}
+			}).then(function(){
+				promise4.then(function(users){
+					if(users == null){
+						console.log("There is no users.");
+					}else{
+						console.log("USERS:"+users);
 					}
-				});		
-			});
-		}).then(function(){
-			promise4.then(function(){
-				//
-			});
-		});	
+				});
+			});	
+		}else{
+			console.log("There is no available game.");
+		}
 	}).exec();
 	
 	return promise;
