@@ -1,18 +1,17 @@
 $(document).ready(function() {
-	alert("ready");
 	$.ajax({
             url: 'http://ec2-34-210-237-255.us-west-2.compute.amazonaws.com/game_history',
             type: 'get',
             dataType: 'json',
 
 			error:function(err){
-				alert("fail:"+err.status);
+				console.log("fail:"+err.status);
 			},
             success: function(result) {
 				console.log("Data in history****"+result);
 		        var data = $.parseJSON(result);
-				alert("parsed data:"+data);
-				alert("data.count"+data.count);
+				console.log("parsed data:"+data);
+				console.log("data.count"+data.count);
 				var total_game_num = data.count;
 				var your_game_num = data.userGamesNum;
 				if(total_game_num==0){
