@@ -8,15 +8,10 @@
 <meta name="author" content="Kuanghui Ding">
 <link href="/css/bootstrap.css" rel="stylesheet">
 <link href="/css/style.css" rel="stylesheet">
-<script type='text/javascript'>
-  
-</script>
-</head>
-<body>
 	<script src="/js/jquery.js"></script>
 	<script src="/js/main.js"></script>
 	<script type="text/javascript">
-		window.onload = function(){
+		$(function(){
 			alert("ready");
 			var htmlContent= "";
 			$.ajax({
@@ -34,20 +29,20 @@
 					alert("fail:"+err.status);
 				},
 				success:function(result){
-					alert("Result===:"+result);
-					alert("UserResult:"+result.user);
 					$.each(result.user, fucntion(index,item){
 						var name = item.nickname;
 						var image = item.imageurl;
-						var carname  = item.car.owner.nickname;
-						htmlContent = "<tr><td>"+image+"</td><td>"+name+"</td><td>"+carname+"</td></tr>";
+						//var carname  = item.car.owner.nickname;
+						var carname  = "陈兆杰*";
+						var addRow = "<tr><td style='width:60px;height:60px;'">"+image+"</td><td>"+name+"</td><td>"+carname+"</td></tr>";
+						$("#sign_up_list_table").append(addRow);
 					});
-					$("#sign_up_list_table").html(htmlContent);
 				}
 			});
-		}
+		});
 	</script>
-
+</head>
+<body>
 	<div class="div-img">
 		<img src="/resource/badminton.png" class="img-responsive"
 			alt="badminton" />
