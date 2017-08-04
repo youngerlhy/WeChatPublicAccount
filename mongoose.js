@@ -145,17 +145,10 @@ exports.findAllUsersCars = function(callback){
 			console.log("PASSENGERS:"+passengers);
 			owners.forEach(function(owner, index){
 				Car.findOne({available:true,owner:owner._id}).then(function(car){
-					console.log("CARS:"+car);
-					console.log("car.seatavailablenum:"+car.seatavailablenum);
-					
-					
 					var len=car.seatavailablenum;
-					console.log("Len:"+len);
-					len=4;
-					console.log("Len:"+len);
-					for(var i=0; i<4; i++){
+					for(var i=0; i<len; i++){
 						console.log("CARS2:"+car);
-						console.log("passengers:"+passengers[index*len+i]._id);
+						console.log("passengers:"+passengers[index*len+i].get("_id"));
 						
 //						if(index*len+i+1 <= passengers.length){
 							car.passenger.push(passengers[index*len+i]._id);
