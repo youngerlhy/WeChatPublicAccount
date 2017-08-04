@@ -151,12 +151,15 @@ exports.findAllUsersCars = function(callback){
 						console.log("passengers:"+passengers[index*len+i].get("_id"));
 						
 //						if(index*len+i+1 <= passengers.length){
-							car.passenger.push(passengers[index*len+i]._id);
+							car.passenger.push(passengers[index*len+i].get("_id"));
 							console.log("CARS-PASSENGERS:"+car.passenger);
 //						}
 						car.save(function(err){
-							if(err)  return console.log(err);					
+							if(err)  return console.log(err);	
+							console.log("CARS3:"+car);
 						});	
+						console.log("CARS4:"+car);
+						
 					}
 //					seatnum += car.seatavailablenum;
 				});		
