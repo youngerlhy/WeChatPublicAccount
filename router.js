@@ -217,7 +217,7 @@ module.exports = function(app) {
 //    		  if(game != null){
 //    			  console.log("=====1=====");
 //	    		  var promise2 = mongoose.findGameUser(game);
-//	    		  promiese2.then(function(users){
+//	    		  promise2.then(function(users){
 //	    			  console.log("=====22=====");
 //	    			  if(users != null){
 //	    				  console.log("=====2=====");
