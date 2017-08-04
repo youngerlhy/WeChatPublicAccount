@@ -146,6 +146,9 @@ exports.findAllUsersCars = function(callback){
 			owners.forEach(function(owner, index){
 				Car.find({available:true,owner:owner._id}).then(function(car){
 					console.log("CARS:"+car);
+					console.log("car.seatavailablenum:"+car.seatavailablenum);
+					
+					
 					var len=car.seatavailablenum;
 					console.log("Len:"+len);
 					for(var i=0; i<len; i++){
