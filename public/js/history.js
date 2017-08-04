@@ -8,10 +8,10 @@ $(document).ready(function() {
 			error:function(err){
 				alert("fail:"+err.status);
 			},
-            success: function(data) {
-			alert("data"+data);
+            success: function(data) {		
 			console.log("Data in history****"+data);
 	            var data = $.parseJSON(data);
+	alert("data"+data);
 				var total_game_num = data.count;
 				var your_game_num = data.userGamesNum;
 				if(total_game_num==0){
