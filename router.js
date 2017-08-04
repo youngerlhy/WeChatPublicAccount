@@ -211,7 +211,7 @@ module.exports = function(app) {
     }, function(error, response, body) {
       if (response.statusCode == 200) {
     	  console.log("=====success=====");
-    	  mongoose.findAllUsers(function(result){
+    	  mongoose.findAllUsersCars(function(result){
     		  var allUsersJson = JSON.stringify(result);
     		  console.log("JSON:==="+allUsersJson);
     		  res.render('sign_up_list', {allUsersJson});    		  
