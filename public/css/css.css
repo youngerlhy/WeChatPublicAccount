@@ -1,0 +1,349 @@
+html, body {
+	background: #884b73;
+}
+
+body {
+	font: 14px/145% Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	color: #fff;
+	padding: 50px 0;
+}
+
+.clear {
+	clear: both;
+}
+
+.wrapper {
+	width: 990px;
+	margin: 0 auto;
+}
+
+a:focus, a:hover, a:active { outline:none }
+
+.sharebar {
+	margin: -2em 0 2em 0;
+	height: 20px;
+	text-align: right;
+}
+	.sharebar .fb-like  {
+		margin-right: 20px;
+		vertical-align: top;
+	}
+
+.header {
+	margin-bottom: 25px;
+}
+	.header h1 a {
+		background: url(images/logo.png) no-repeat;
+		width: 362px;
+		height: 45px;
+		display: block;
+		text-indent: -9999px;
+		font-size: 0;
+	}
+	
+	.header h2 {
+		display: none;
+	}
+	
+ul.month {
+	list-style: none;
+	padding: 0;
+	margin: 15px 0 10px;
+	width: 100%;
+	height: 28px;
+	position: relative;
+}
+
+ul.month li.month_prev {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+ul.month li.month_next {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+	ul.month li.month_prev a {
+		background: url(images/prevnext.png) no-repeat;
+		background-position: 0 0;
+		width: 28px;
+		height: 28px;
+		display: block;
+		text-indent: -99999px;
+		font-size: 0;
+	}
+		ul.month li.month_prev a:hover {
+			background-position: 0 -28px;
+		}
+
+	ul.month li.month_next a {
+		background: url(images/prevnext.png) no-repeat;
+		background-position: -28px 0;
+		width: 28px;
+		height: 28px;
+		display: block;
+		text-indent: -99999px;
+		font-size: 0;
+	}
+		ul.month li.month_next a:hover {
+			background-position: -28px -28px;
+		}
+		
+	ul.month li.month_current {
+		text-align: center;
+		width: 100%;
+	}
+	
+	ul.month li.month_current h3 {
+		font-weight: normal;
+		font-size: 20px;
+	}
+ul.countries {
+	float: right;
+	margin-top: -70px;
+	width: 430px;
+}
+	ul.countries li {
+		width: 44px;
+		margin-left: 40px;
+		float: left;
+	}
+	ul.countries li input {
+		margin-right: 2px;
+	}
+	ul.countries li label img {
+	}
+	ul.countries li label span {
+		display: none;
+		color:#fff;
+	}
+	table{
+		color:#fff;
+		border:1;
+		border-color:#fff;
+	}
+table.calendar {
+	width: 100%;
+	align:center;
+}
+	table.calendar thead th {
+		text-align: center;
+		padding: 8px 0;
+	}
+	
+	table.calendar td {
+		width: 50px;
+		height: 50px;
+		text-align: center;
+	
+		padding: 5px;
+		border:1px solid #fff;
+	}
+	table.calendar td.dated {
+		background: url(images/date-back.png) no-repeat top right;
+	}
+		table.calendar td span {
+			display: block;
+			float: right;
+			font-size: 20px;
+			line-height: 1;
+		}
+		table.calendar td img {
+			display: block;
+			margin: 0;
+		}
+		table.calendar td img.flag-overlay {
+			margin: 0;
+			position: relative;
+			top: -9px;
+			left: 88px;
+		}
+footer{
+	width:100%;
+	height:10%;
+	display:block;
+	text-align:center;
+	padding-bottom:20px;
+}
+
+div.footer .wrapper {
+	margin-top: 30px;
+	border-top: 1px solid #222;
+	padding-top: 20px;
+}
+div.footer p, div.footer p a {
+	font-size: 11px;
+	color: #444;
+	line-height: 1;
+	margin: 0 0 6px;
+}
+		
+div#imageview {
+	display: none;
+}
+	div.buttons {
+		margin-top: 20px;
+		clear: both;
+		text-align: center;
+		position: relative;
+	}
+		div.buttons a.close {
+			color: #333;
+			background: url(images/prevnext.png) no-repeat;
+			background-position: -56px 0;
+			width: 28px;
+			height: 28px;
+			display: block;
+			text-indent: -99999px;
+			font-size: 0;
+			float: right;
+			position: absolute;
+			top: -4px;
+			right: 0;
+		}
+			div.buttons a.close:hover {
+				background-position: -56px -28px;
+			}
+	div.loading {
+		padding: 300px 0 0 0;
+		width: 958px;
+		margin: 0 auto;
+		text-align: center;
+	}
+	div.viewer {
+		padding: 0;
+		width: 958px;
+		margin: 0 auto;
+		position: relative;
+		color: #666;
+	}
+		div.viewer p.desc {
+			margin: 10px;
+			text-align: center;
+		}
+		div.viewer p.image {
+			width: 958px;
+			height: 512px;
+			z-index: 2000;
+		}
+			div.viewer p.image img {
+				width: 958px;
+				height: 512px;
+				background: #222;
+			}
+			div.viewer div.video {
+				width: 958px;
+				height: 512px;
+				z-index: 3000;
+				position: absolute;
+				top: 0;
+				left: 0;
+				display: none;
+				background: black;
+			}
+				div.viewer div.video video {
+					width: 100%;
+					height: 100%;
+				}
+		div.viewer div.hotspots {
+			position: relative;
+			margin-top: -512px;
+			z-index: 4000;
+			width: 958px;
+			height: 512px;
+			text-align: left;
+		}
+			div.hotspots div.tip {
+				width: 39px;
+				height: 39px;
+				display: none;;
+				position: absolute;
+				background: url(images/hotspot.png) no-repeat;
+			}
+		div.facts ul {
+			list-style: none;
+			padding: 0;
+			margin: 0 auto;
+		}
+			div.facts ul li {
+				float: left;
+				width: 218px;
+				margin: 0 10px;
+				text-align: left;
+				color: #444;
+				font-size: 12px;
+				line-height: 135%;
+			}
+		div.viewer div.buttons div.videobuttons {
+			display: none;
+		}
+			div.viewer div.buttons div.videobuttons a.showvideo {
+				background: url(images/video.png) no-repeat left;
+				padding-left: 24px;
+			}
+			div.viewer div.buttons div.videobuttons a.hidevideo {
+				display: none;
+				background: url(images/camera.png) no-repeat left;
+				padding-left: 24px;
+			}
+		div.viewer a {
+				color: #444;
+			}
+			div.viewer a:hover {
+				color: #ccc;
+			}
+
+div.ad {
+	margin: 30px auto;
+	text-align: center;
+	width: 728px;
+}
+
+div.ad_small {
+	text-align: center;
+	padding: 5px 0;
+}
+
+div.addthis_page {
+	float: right;
+	text-align: center;
+	width: 200px;
+}
+
+div.donate {
+	width:200px;
+	margin:30px 0 30px 780px;
+	text-align:center;
+	font-size:12px;
+}
+	div.donate form {
+		margin-top: 8px;
+	}
+
+div.blockMsg {
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+
+div.blockOverlay {
+    background: url(images/black-95.png);
+}
+
+
+body.smallheight {
+}
+		body.smallheight div.viewer p.desc {
+			margin-top: 3px;
+			font-size: 12px;
+		}
+		body.smallheight div.viewer p.close {
+			margin-top: 3px;
+		}
+	body.smallheight div.facts {
+		display: none !important;
+	}
