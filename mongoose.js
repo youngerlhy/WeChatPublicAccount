@@ -146,8 +146,10 @@ exports.findAllUsersCars = function(){
 				Car.findOne({available:true,owner:owner._id}).then(function(car){
 					var len=car.seatavailablenum;
 					for(var i=0; i<len; i++){
-						if(car.passengers.indexOf(passengers[index*len+i].get("_id")) == -1){
-							car.passengers.push(passengers[index*len+i].get("_id"));							
+						for(var j=0; j<car.passengers.length;j++){
+							if(car.passenger[i] != passengers[index*len+i].get("_id")){
+								car.passengers.push(passengers[index*len+i].get("_id"));															
+							}
 						}
 						car.save(function(err){
 							if(err)  return console.log(err);	
@@ -157,8 +159,12 @@ exports.findAllUsersCars = function(){
 				});		
 			});
 		}).then(function(){
-			promise4.then(function(){
-				//
+			promise4.then(function(err,users){
+				if(users == null){
+					console.log("Find all user fail:"+err);
+				}else{
+					console.log("USERS:"+users);
+				}
 			});
 		});	
 	}).exec();

@@ -57,8 +57,8 @@ module.exports = function(app) {
 	    			  var userGamesNum = result.length;
 	    			  var gameCount = {"count":count,"userGamesNum":userGamesNum};
 	    			  var gameCountJson = JSON.stringify(gameCount);
-	    			  console.log("gameCountJson:"+gameCountJson);
-	    			  res.send({gameCountJson});
+	    			  console.log('{'+gameCountJson+'}');
+	    			  res.send('{'+gameCountJson+'}');
 	    			  
 	    		  });
 	    	  });
@@ -220,7 +220,7 @@ module.exports = function(app) {
     				  promise3.then(function(car){
     					  var promise4 = mongoose.fineCarOwner(car);
     					  promise4.then(function(owner){
-    						  json += "{nickname:"+user.nickname+",imageurl:"+user.imageurl+",carname:"+owner.nickname+"},";
+    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"'+owner.nickname+'"},';
     					  });
     				  });
     			  });
