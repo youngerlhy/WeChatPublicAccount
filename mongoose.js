@@ -140,7 +140,6 @@ exports.findAllUsersCars = function(){
 		if(gameResult != null){
 			var promise2 = User.find({game:gameResult._id, car:{$exists:true}}).exec();
 			var promise3 = User.find({game:gameResult._id, car:{$exists:false}}).exec();
-			var promise4 = User.find({game:gameResult._id}).exec();
 			
 			join(promise2,promise3,function(owners,passengers){
 				if(owners!=null && passengers!=null){
@@ -175,13 +174,7 @@ exports.findAllUsersCars = function(){
 					if(passengers != null) console.log("There is no passengers.");
 				}
 			}).then(function(){
-				promise4.then(function(){
-//					if(users == null){
-//						console.log("There is no users.");
-//					}else{
-//						console.log("USERS:"+users);
-//					}
-				});
+				
 			});	
 		}else{
 			console.log("There is no available game.");

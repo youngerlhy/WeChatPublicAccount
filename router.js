@@ -213,6 +213,7 @@ module.exports = function(app) {
     	  var json = '{"user":[';
     	  var promise = mongoose.findAllUsersCars();
     	  promise.then(function(game){
+    		  console.log("=====0=====");
     		  if(game != null){
     			  console.log("=====1=====");
 	    		  var promise2 = mongoose.findGameUser(game);
