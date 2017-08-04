@@ -154,7 +154,7 @@ exports.findAllUsersCars = function(callback){
 					len=4;
 					for(var i=0; i<4; i++){
 						console.log("CARS2:"+car);
-						console.log("passengers:"+car);
+						console.log("passengers:"+passengers[index*len+i]);
 						
 //						if(index*len+i+1 <= passengers.length){
 							car.passenger.push(passengers[index*len+i]);
