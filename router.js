@@ -58,7 +58,7 @@ module.exports = function(app) {
 	    			  var gameCount = {"count":count,"userGamesNum":userGamesNum};
 	    			  var gameCountJson = JSON.stringify(gameCount);
 	    			  console.log("gameCountJson:"+gameCountJson);
-	    			  res.send(gameCountJson);
+	    			  res.send({gameCountJson});
 	    			  
 	    		  });
 	    	  });

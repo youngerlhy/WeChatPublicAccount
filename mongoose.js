@@ -146,7 +146,9 @@ exports.findAllUsersCars = function(){
 				Car.findOne({available:true,owner:owner._id}).then(function(car){
 					var len=car.seatavailablenum;
 					for(var i=0; i<len; i++){
-						car.passengers.push(passengers[index*len+i].get("_id"));
+						if(car.passengers.indexOf(passengers[index*len+i].get("_id")) == -1){
+							car.passengers.push(passengers[index*len+i].get("_id"));							
+						}
 						car.save(function(err){
 							if(err)  return console.log(err);	
 							console.log("CARS3:"+car);
