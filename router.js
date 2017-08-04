@@ -20,7 +20,7 @@ module.exports = function(app) {
   });
   
    app.get('/newshistory', function(req, res) {
-    res.render('newshistory', {});
+    res.render('daily_english_history', {});
   });
 
    app.get('/no_action', function(req, res) {
@@ -169,7 +169,7 @@ module.exports = function(app) {
         if(gameStarted(result)){
           console.log(result.startTime.toISOString() + ' ' + result.endTime.toISOString());
           console.log('close_out_game info :'+result);
-          res.render('close_out_game',{startTime:Format(result.startTime.toISOString()),endTime:Format(result.endTime.toISOString())});
+          res.render('close_out_game',{startTime:result.startTime.toLocaleString(),endTime:result.endTime.toLocaleString()});
         }else{
           var show_sign_result = 'show_sign_result';
           res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'+ show_sign_result + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
