@@ -134,7 +134,7 @@ Game.findOne({signupStatus: 'Started'}, function(error, gameResult) {
 
 }
 
-exports.findAllUsersCars = function(){
+exports.findGameUsersCars = function(){
 	var join = Promise.join;
 	var promise = Game.findOne({signupStatus: 'Ended', gameStatus: 'Started'}, function(error, gameResult) {
 		if(gameResult != null){
@@ -155,7 +155,8 @@ exports.findAllUsersCars = function(){
 										car.seatavailablenum -=1;
 									}else{
 										for(var j=0; j<car.passengers.length;j++){
-											if(car.passenger[i] != passengers[index*len+i].get("_id")){
+											if(car.passenger[i] != passengers[index*len+i].get("_id") 
+											   && (index*len+i)<passengers.length){
 												car.passengers.push(passengers[index*len+i].get("_id"));
 												car.seatavailablenum -=1;
 												passengers[index*len+i].car = car._id;
