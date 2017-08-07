@@ -31,9 +31,9 @@ module.exports = function(app) {
     res.render('no_publish', {});
    });
 
-//  app.get('/sign_up_list', function(req, res) {
-//    res.render('sign_up_list', {});
-//   });
+  app.get('/sign_up_list', function(req, res) {
+    res.render('sign_up_list', {});
+   });
 
   app.get('/history', function(req, res) {
 	    res.render('history', {});
@@ -239,7 +239,7 @@ module.exports = function(app) {
 		    						  if(index == users.length-1){
 		    							  json = json.substring(0, json.length-1)+']}';
 		    			    			  console.log("JSON2:==="+json);
-		    			    			  res.render('sign_up_list2', {json});
+		    			    			  res.render('sign_up_list', {json});
 		    						  }
 		    					  }
 		    				  });
