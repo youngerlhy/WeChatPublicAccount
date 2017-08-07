@@ -210,7 +210,7 @@ module.exports = function(app) {
     }, function(error, response, body) {
       if (response.statusCode == 200) {
     	  var json = '{"user":[';
-    	  var promise = mongoose.findAllUsersCars();
+    	  var promise = mongoose.findGameUsersCars();
     	  promise.then(function(game){
     		  if(game != null){
 	    		  var promise2 = mongoose.findGameUser(game);
@@ -219,15 +219,24 @@ module.exports = function(app) {
 		    			  users.forEach(function(user,index){
 		    				  var promise3 = mongoose.findUserCar(user);
 		    				  promise3.then(function(car){
-		    					  var promise4 = mongoose.fineCarOwner(car);
-		    					  promise4.then(function(owner){
-		    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"'+owner.nickname+'"},';
+		    					  if(car != null){
+			    					  var promise4 = mongoose.fineCarOwner(car);
+			    					  promise4.then(function(owner){
+			    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"'+owner.nickname+'"},';
+			    						  if(index == users.length -1){
+			    							  json += json.substring(0, json.length-1)+']}';
+			    			    			  console.log("JSON:==="+json);
+			    			    			  res.render('sign_up_list', {json}); 
+			    						  }
+			    					  });
+		    					  }else{
+		    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"出租车"},';
 		    						  if(index == users.length -1){
 		    							  json += json.substring(0, json.length-1)+']}';
 		    			    			  console.log("JSON:==="+json);
-		    			    			  res.render('sign_up_list', {json}); 
+		    			    			  res.render('sign_up_list', {json});
 		    						  }
-		    					  });
+		    					  }
 		    				  });
 		    			  });	  
 	    			  }
