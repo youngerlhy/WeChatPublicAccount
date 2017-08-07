@@ -17,20 +17,12 @@
 			$.ajax({
 				async:false,
 				url:"/show_sign_result",
-				type:"get",
+				type:"GET",
 				dataType:"json",
-				data:result;
 				
-				beforeSend：function(){
-					alert("before");
-				},
-				
-				error:function(err){
-					alert("fail:"+err.status);
-				},
 				success:function(data){
 					var result = $.parseJSON(data);
-					console.log(result.user);		
+					console.log("user:"+result.user);		
 					$.each(result.user, function(index,item){
 						var name = item.nickname;
 						console.log(name);
