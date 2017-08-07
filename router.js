@@ -218,19 +218,19 @@ module.exports = function(app) {
 	    			  if(users != null){
 	    				  len = users.length;
 	    				  for(var i=0; i<len; i++){
-		    				  console.log("USER:"+user[i]);
-		    				  console.log("USER.nickname:"+user[i].nickname);
-		    				  console.log("USER.get(nickname):"+user[i].get("nickname"));
-		    				  var promise3 = mongoose.findUserCar(user[i]);
+		    				  console.log("USER:"+users[i]);
+		    				  console.log("USER.nickname:"+users[i].nickname);
+		    				  console.log("USER.get(nickname):"+users[i].get("nickname"));
+		    				  var promise3 = mongoose.findUserCar(users[i]);
 		    				  promise3.then(function(car){
 		    					  if(car != null){
 			    					  var promise4 = mongoose.fineCarOwner(car);
 			    					  promise4.then(function(owner){
 			    						  console.log("owner5:"+owner);
-			    						  console.log("USER2:"+user[i]);
-					    				  console.log("USER.nickname2:"+user[i].nickname);
+			    						  console.log("USER2:"+users[i]);
+					    				  console.log("USER.nickname2:"+users[i].nickname);
 			    						  
-			    						  json += '{"nickname":"'+user[i].nickname+'","imageurl":"'+user[i].imageurl+'","carname":"'+owner.nickname+'"},';
+			    						  json += '{"nickname":"'+users[i].nickname+'","imageurl":"'+users[i].imageurl+'","carname":"'+owner.nickname+'"},';
 			    						  console.log("index:"+i);
 			    						  console.log("users.length:"+users.length);
 			    						  if(index == users.length-1){
@@ -240,7 +240,7 @@ module.exports = function(app) {
 			    						  }
 			    					  });
 		    					  }else{
-		    						  json += '{"nickname":"'+user[i].nickname+'","imageurl":"'+user[i].imageurl+'","carname":"出租车"},';
+		    						  json += '{"nickname":"'+users[i].nickname+'","imageurl":"'+users[i].imageurl+'","carname":"出租车"},';
 		    						  if(index == users.length-1){
 		    							  json = json.substring(0, json.length-1)+']}';
 		    			    			  console.log("JSON2:==="+json);
