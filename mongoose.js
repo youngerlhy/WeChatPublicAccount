@@ -152,7 +152,9 @@ exports.findGameUsersCars = function(){
 								var len=car.seatavailablenum;
 								console.log("len:"+len);
 								for(var i=0; i<len; i++){
+									console.log("car.passengers.length:"+car.passengers.length);
 									if(car.passengers.length ==0){
+										console.log("passengers[index*len+i].get(id):"+passengers[index*len+i].get("_id"));
 										car.passengers.push(passengers[index*len+i].get("_id"));
 										car.seatavailablenum -=1;
 										passengers[index*len+i].get("car").push(car._id);
