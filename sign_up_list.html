@@ -21,11 +21,6 @@
 				dataType:"json",
 				
 				beforeSend:function(){
-					alert("before");
-				},
-				
-				error:function(err){
-					alert("fail:"+err.status);
 				},
 				
 				success:function(result){
@@ -40,7 +35,13 @@
 						var addRow = "<tr><td style='width:60px;height:60px;'>"+image+"</td><td>"+name+"</td><td>"+carname+"</td></tr>";
 						$("#sign_up_list_table").append(addRow);
 					}); 
-				}
+				},
+				
+				error: function (XMLHttpRequest, textStatus, errorThrown) {
+					                alert(XMLHttpRequest.status);
+					                alert(XMLHttpRequest.readyState);
+					                alert(textStatus);
+				} 
 			});
 		});
 	</script>
