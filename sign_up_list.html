@@ -15,20 +15,21 @@
 			alert("ready");
 			var htmlContent= "";
 			$.ajax({
-				async:false,
+				async:true,
 				url:"/show_sign_result",
 				type:"GET",
 				dataType:"json",
 				
 				beforeSend:function(){
 					alert("before");
-				}
+				},
 				
 				error:function(err){
 					alert("fail:"+err.status);
-				}
+				},
 				
 				success:function(result){
+					alert("success");
 					
 					console.log("user:"+result.user);		
 					$.each(result.user, function(index,item){
