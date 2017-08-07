@@ -158,7 +158,8 @@ exports.findAllUsersCars = function(){
 											if(car.passenger[i] != passengers[index*len+i].get("_id")){
 												car.passengers.push(passengers[index*len+i].get("_id"));
 												car.seatavailablenum -=1;
-												passengers[index*len+i].car = car._id;
+												passengers[index*len+i].get("car").push(car._id);
+												console.log("passengers[index*len+i]:"+passengers[index*len+i]);
 											}
 										}
 									}
