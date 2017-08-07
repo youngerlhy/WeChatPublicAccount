@@ -229,14 +229,10 @@ module.exports = function(app) {
 			    			    			  res.render('sign_up_list', {json}); 
 			    						  }
 			    					  });
-		    					  }else{
-		    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"出租车"},';
-		    						  if(index == users.length -1){
-		    							  json += json.substring(0, json.length-1)+']}';
-		    			    			  console.log("JSON:==="+json);
-		    			    			  res.render('sign_up_list', {json});
-		    						  }
 		    					  }
+		    					  
+		    					  
+		    					  
 		    				  });
 		    			  });	  
 	    			  }

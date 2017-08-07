@@ -153,6 +153,8 @@ exports.findGameUsersCars = function(){
 									if(car.passengers.length ==0){
 										car.passengers.push(passengers[index*len+i].get("_id"));
 										car.seatavailablenum -=1;
+										passengers[index*len+i].get("car").push(car._id);
+										console.log("passengers[index*len+i]1:"+passengers[index*len+i]);
 									}else{
 										for(var j=0; j<car.passengers.length;j++){
 											if(car.passenger[i] != passengers[index*len+i].get("_id") 
@@ -168,11 +170,12 @@ exports.findGameUsersCars = function(){
 									car.save(function(err){
 										if(err)  return console.log(err);	
 										console.log("CARS3:"+car);
+										passengers[index*len+i].save(function(err){
+											if(err)  return console.log(err);	
+											console.log("passengers:"+passengers);
+										});
 									});
-									passengers[index*len+i].save(function(err){
-										if(err)  return console.log(err);	
-										console.log("passengers:"+passengers);
-									});
+									
 									
 								}
 							}
