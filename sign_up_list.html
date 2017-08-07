@@ -18,7 +18,7 @@
 				async:true,
 				url:"/show_sign_result",
 				type:"GET",
-				
+				dataType:"json",
 				
 				beforeSend:function(){
 				},
@@ -28,9 +28,8 @@
 					 var result = $.parseJSON(data);
 					alert("success");
 					
-					console.log("user:"+result.user);		
-					$.each(result.user, function(index,item){
-						
+					console.log("user:"+result[0]);		
+					$.each(result, function(index,item){
 						var name = item.nickname;
 						console.log(name);
 						var image = item.imageurl;
