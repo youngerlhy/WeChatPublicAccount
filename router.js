@@ -223,7 +223,7 @@ module.exports = function(app) {
 			    					  var promise4 = mongoose.fineCarOwner(car);
 			    					  promise4.then(function(owner){
 			    						  console.log("owner5:"+owner);
-			    						  json += '{"nickname":"'+users[i].nickname+'","imageurl":"'+users[i].imageurl+'","carname":"'+owner.nickname+'"},';
+			    						  json += '{"nickname":"'+users[i].get("nickname")+'","imageurl":"'+users[i].get("imageurl")+'","carname":"'+owner.nickname+'"},';
 			    						  console.log("index:"+i);
 			    						  console.log("users.length:"+users.length);
 			    						  if(i == users.length-1){
@@ -233,7 +233,7 @@ module.exports = function(app) {
 			    						  }
 			    					  });
 		    					  }else{
-		    						  json += '{"nickname":"'+users[i].nickname+'","imageurl":"'+users[i].imageurl+'","carname":"出租车"},';
+		    						  json += '{"nickname":"'+users[i].get("nickname")+'","imageurl":"'+users[i].get("imageurl")+'","carname":"出租车"},';
 		    						  if(i == users.length-1){
 		    							  json = json.substring(0, json.length-1)+']}';
 		    			    			  console.log("JSON2:==="+json);
