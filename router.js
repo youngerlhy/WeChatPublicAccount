@@ -223,8 +223,10 @@ module.exports = function(app) {
 			    					  var promise4 = mongoose.fineCarOwner(car);
 			    					  promise4.then(function(owner){
 			    						  console.log("owner5:"+owner);
-			    						  json += '{"nickname":"'+users[i].get("nickname")+'","imageurl":"'+users[i].get("imageurl")+'","carname":"'+owner.nickname+'"},';
 			    						  console.log("index:"+i);
+			    						  console.log("users[i]:"+users[i]);
+			    						  console.log("users[i].get(nickname):"+users[i].get("nickname"));
+			    						  json += '{"nickname":"'+users[i].get("nickname")+'","imageurl":"'+users[i].get("imageurl")+'","carname":"'+owner.nickname+'"},';
 			    						  console.log("users.length:"+users.length);
 			    						  if(i == users.length-1){
 			    							  json = json.substring(0, json.length-1)+']}';
