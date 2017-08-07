@@ -209,7 +209,7 @@ module.exports = function(app) {
           + context.secret + '&code=' + code + '&grant_type=authorization_code',
     }, function(error, response, body) {
       if (response.statusCode == 200) {
-    	  var json = '{"user":[';
+    	  var json = '"user":[';
     	  var promise = mongoose.findGameUsersCars();
     	  promise.then(function(game){
     		  if(game != null){
@@ -229,7 +229,7 @@ module.exports = function(app) {
 			    						  console.log("index:"+index);
 			    						  console.log("users.length:"+users.length);
 			    						  if(index == users.length-1){
-			    							  json = json.substring(0, json.length-1)+']}';
+			    							  json = json.substring(0, json.length-1)+']';
 			    			    			  console.log("JSON:==="+json);
 			    			    			  res.render('sign_up_list', {json}); 
 			    						  }
@@ -237,7 +237,7 @@ module.exports = function(app) {
 		    					  }else{
 		    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"出租车"},';
 		    						  if(index == users.length-1){
-		    							  json = json.substring(0, json.length-1)+']}';
+		    							  json = json.substring(0, json.length-1)+']';
 		    			    			  console.log("JSON2:==="+json);
 		    			    			  res.render('sign_up_list', {json});
 		    						  }
