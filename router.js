@@ -209,6 +209,9 @@ module.exports = function(app) {
           + context.secret + '&code=' + code + '&grant_type=authorization_code',
     }, function(error, response, body) {
       if (response.statusCode == 200) {
+    	  var taxiseat=4;
+    	  var taxiseatnum=0;
+    	  var taxinum=0;
     	  var json = '"user":[';
     	  var promise = mongoose.findGameUsersCars();
     	  promise.then(function(game){
@@ -221,7 +224,7 @@ module.exports = function(app) {
 		    				  var promise3 = mongoose.findUserCar(user);
 		    				  promise3.then(function(car){
 		    					  if(car != null){
-			    					  var promise4 = mongoose.fineCarOwner(car);
+			    					  var promise4 = mongoose.findCarOwner(car);
 			    					  promise4.then(function(owner){
 			    						  console.log("owner5:"+owner);
 			    						  
@@ -233,12 +236,19 @@ module.exports = function(app) {
 			    			    			  console.log("JSON:==="+json);
 			    			    			  
 			    			    			  var data = '[{"nickname":"Tiny Ding","imageurl":"http://wx.qlogo.cn/mmopen/vypzhLPqWka4cdIsQHWuU1IrztYcicz1icaibBW2rAoCbDFABK5TtLreFlnwvMbepkVgQDP7LcibcBbIicZ35bUEAbU5EjsCGUmAG/0","carname":"Phoenix"},{"nickname":"Phoenix","imageurl":"http://wx.qlogo.cn/mmopen/xJhQocZic7og1LicJVqXSc21aOPOUFDH0rBc3akeQkoU5kePONwWDKjmhqXv5W39rUKkHv83Uec3iaKPeZ5YZ8H2xqW4zueShRf/0","carname":"Phoenix"}]';
-			    			    			  res.json({data}); 
+			    			    			  data = JSON.stringify(data);
+			    			    			  res.render('sign_up_list', {data}); 
 			    						  }
 			    					  });
 		    					  }else{
+		    						  taxiseatnum += 1;
 		    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"出租车"},';
 		    						  if(index == users.length-1){
+		    							  if(taxiseatnum%taxiseat == 0){
+		    								  taxinum =taxiseatnum/taxiseat;
+		    							  }else{
+		    								  taxinum =taxiseatnum/taxiseat+1
+		    							  }
 		    							  json = json.substring(0, json.length-1)+']';
 		    			    			  console.log("JSON2:==="+json);
 		    			    			  var data = '[{"nickname":"Tiny Ding","imageurl":"http://wx.qlogo.cn/mmopen/vypzhLPqWka4cdIsQHWuU1IrztYcicz1icaibBW2rAoCbDFABK5TtLreFlnwvMbepkVgQDP7LcibcBbIicZ35bUEAbU5EjsCGUmAG/0","carname":"Phoenix"},{"nickname":"Phoenix","imageurl":"http://wx.qlogo.cn/mmopen/xJhQocZic7og1LicJVqXSc21aOPOUFDH0rBc3akeQkoU5kePONwWDKjmhqXv5W39rUKkHv83Uec3iaKPeZ5YZ8H2xqW4zueShRf/0","carname":"Phoenix"}]';

@@ -13,38 +13,9 @@
 	<script type="text/javascript">
 		$(function(){
 			alert("ready");
-			var htmlContent= "";
-			$.ajax({
-				async:true,
-				url:"/show_sign_result",
-				type:"GET",
-				dataType:"json",
-				
-				beforeSend:function(){
-				},
-				
-				success:function(data){
-					//var data = '{"user":[{"nickname":"Tiny Ding","imageurl":"http://wx.qlogo.cn/mmopen/vypzhLPqWka4cdIsQHWuU1IrztYcicz1icaibBW2rAoCbDFABK5TtLreFlnwvMbepkVgQDP7LcibcBbIicZ35bUEAbU5EjsCGUmAG/0","carname":"Phoenix"},{"nickname":"Phoenix","imageurl":"http://wx.qlogo.cn/mmopen/xJhQocZic7og1LicJVqXSc21aOPOUFDH0rBc3akeQkoU5kePONwWDKjmhqXv5W39rUKkHv83Uec3iaKPeZ5YZ8H2xqW4zueShRf/0","carname":"Phoenix"}]}';
-					 var result = $.parseJSON(data);
-					alert("success");
-					
-					console.log("user:"+result[0]);		
-					$.each(result, function(index,item){
-						var name = item.nickname;
-						console.log(name);
-						var image = item.imageurl;
-						var carname = item.carname;
-						var addRow = "<tr><td style='width:60px;height:60px;'>"+image+"</td><td>"+name+"</td><td>"+carname+"</td></tr>";
-						$("#sign_up_list_table").append(addRow);
-					}); 
-				},
-				
-				error: function (XMLHttpRequest, textStatus, errorThrown) {
-					                alert(XMLHttpRequest.status);
-					                alert(XMLHttpRequest.readyState);
-					                alert(textStatus);
-				} 
-			});
+			$.get("/show_sign_result",function(data,status){
+				alert("Data: " + data + "nStatus: " + status);
+		 });
 		});
 	</script>
 </head>

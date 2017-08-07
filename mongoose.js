@@ -210,7 +210,7 @@ exports.findUserCar = function(user){
 	return promise;
 }
 
-exports.fineCarOwner = function(car){
+exports.findCarOwner = function(car){
 	var promise = User.findOne({_id:car.owner}).exec();
 	return promise;
 }
