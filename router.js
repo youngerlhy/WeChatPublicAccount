@@ -222,6 +222,8 @@ module.exports = function(app) {
 		    					  if(car != null){
 			    					  var promise4 = mongoose.fineCarOwner(car);
 			    					  promise4.then(function(owner){
+			    						  console.log("owner5:"+owner);
+			    						  
 			    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"'+owner.nickname+'"},';
 			    						  if(index == users.length -1){
 			    							  json += json.substring(0, json.length-1)+']}';
