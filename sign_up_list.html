@@ -23,11 +23,14 @@
 				beforeSend:function(){
 				},
 				
-				success:function(result){
+				success:function(data){
+					//var data = '{"user":[{"nickname":"Tiny Ding","imageurl":"http://wx.qlogo.cn/mmopen/vypzhLPqWka4cdIsQHWuU1IrztYcicz1icaibBW2rAoCbDFABK5TtLreFlnwvMbepkVgQDP7LcibcBbIicZ35bUEAbU5EjsCGUmAG/0","carname":"Phoenix"},{"nickname":"Phoenix","imageurl":"http://wx.qlogo.cn/mmopen/xJhQocZic7og1LicJVqXSc21aOPOUFDH0rBc3akeQkoU5kePONwWDKjmhqXv5W39rUKkHv83Uec3iaKPeZ5YZ8H2xqW4zueShRf/0","carname":"Phoenix"}]}';
+					 var result = $.parseJSON(data);
 					alert("success");
 					
 					console.log("user:"+result.user);		
 					$.each(result.user, function(index,item){
+						
 						var name = item.nickname;
 						console.log(name);
 						var image = item.imageurl;
@@ -63,7 +66,7 @@
 					</tr>
 				</thead>
 				<tbody id="sign_up_list_table">
-					<tr>
+					<!-- <tr>
 						<td><img src="http://wx.qlogo.cn/mmopen/xJhQocZic7og1LicJVqXSc21aOPOUFDH0rBc3akeQkoU5kePONwWDKjmhqXv5W39rUKkHv83Uec3iaKPeZ5YZ8H2xqW4zueShRf/0" style="width:60px;height:60px;"/></td>
 						<td>Phoenix</td>
 						<td>leaf</td>
@@ -72,7 +75,7 @@
 						<td><img src="http://wx.qlogo.cn/mmopen/xJhQocZic7og1LicJVqXSc23iabgtmGoBzYiaic4cfq4VfdeV9eYosQqzT5cHUPDz5Dh2uicUFmia5TCYLDJ68fuhngtNmAUv6Tf4eD/0" style="width:60px;height:60px;"/></td>
 						<td>danyang</td>
 						<td>leaf</td>
-					</tr>
+					</tr> -->
 				</tbody>
 			</table>
 		</div>

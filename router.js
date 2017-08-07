@@ -231,7 +231,9 @@ module.exports = function(app) {
 			    						  if(index == users.length-1){
 			    							  json = json.substring(0, json.length-1)+']';
 			    			    			  console.log("JSON:==="+json);
-			    			    			  res.render('sign_up_list', {json}); 
+			    			    			  
+			    			    			  var data22 = '{"user":[{"nickname":"Tiny Ding","imageurl":"http://wx.qlogo.cn/mmopen/vypzhLPqWka4cdIsQHWuU1IrztYcicz1icaibBW2rAoCbDFABK5TtLreFlnwvMbepkVgQDP7LcibcBbIicZ35bUEAbU5EjsCGUmAG/0","carname":"Phoenix"},{"nickname":"Phoenix","imageurl":"http://wx.qlogo.cn/mmopen/xJhQocZic7og1LicJVqXSc21aOPOUFDH0rBc3akeQkoU5kePONwWDKjmhqXv5W39rUKkHv83Uec3iaKPeZ5YZ8H2xqW4zueShRf/0","carname":"Phoenix"}]}';
+			    			    			  res.render('sign_up_list', data22); 
 			    						  }
 			    					  });
 		    					  }else{
@@ -239,7 +241,8 @@ module.exports = function(app) {
 		    						  if(index == users.length-1){
 		    							  json = json.substring(0, json.length-1)+']';
 		    			    			  console.log("JSON2:==="+json);
-		    			    			  res.render('sign_up_list', {json});
+		    			    			  var data22 = '{"user":[{"nickname":"Tiny Ding","imageurl":"http://wx.qlogo.cn/mmopen/vypzhLPqWka4cdIsQHWuU1IrztYcicz1icaibBW2rAoCbDFABK5TtLreFlnwvMbepkVgQDP7LcibcBbIicZ35bUEAbU5EjsCGUmAG/0","carname":"Phoenix"},{"nickname":"Phoenix","imageurl":"http://wx.qlogo.cn/mmopen/xJhQocZic7og1LicJVqXSc21aOPOUFDH0rBc3akeQkoU5kePONwWDKjmhqXv5W39rUKkHv83Uec3iaKPeZ5YZ8H2xqW4zueShRf/0","carname":"Phoenix"}]}';
+		    			    			  res.render('sign_up_list', data22);
 		    						  }
 		    					  }
 		    				  });
