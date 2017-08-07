@@ -229,10 +229,14 @@ module.exports = function(app) {
 			    			    			  res.render('sign_up_list', {json}); 
 			    						  }
 			    					  });
+		    					  }else{
+		    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"出租车"},';
+		    						  if(index == users.length -1){
+		    							  json += json.substring(0, json.length-1)+']}';
+		    			    			  console.log("JSON2:==="+json);
+		    			    			  res.render('sign_up_list2', {json});
+		    						  }
 		    					  }
-		    					  
-		    					  
-		    					  
 		    				  });
 		    			  });	  
 	    			  }
@@ -277,6 +281,8 @@ module.exports = function(app) {
           + context.secret + '&code=' + code + '&grant_type=authorization_code',
     }, function(error, response, body) {
       if (response.statusCode == 200) {
+    	  
+    	  console.log("RESPONSE1："+response);
 
         // 第三步：拉取用户信息(需scope为 snsapi_userinfo)
           body = body.toString("utf-8");
@@ -289,6 +295,8 @@ module.exports = function(app) {
               + openid + '&lang=zh_CN',
         }, function(error, response, body) {
           if (response.statusCode == 200) {
+        	  
+        	  console.log("RESPONSE2："+response);
 
              body = body.toString("utf-8");
             // 第四步：根据获取的用户信息进行对应操作
