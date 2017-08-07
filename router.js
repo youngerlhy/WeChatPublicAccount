@@ -223,17 +223,18 @@ module.exports = function(app) {
 		    					  if(car != null){
 			    					  var promise4 = mongoose.fineCarOwner(car);
 			    					  promise4.then(function(owner){
-			    						  var key = index;
 			    						  console.log("owner5:"+owner);
 			    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"'+owner.nickname+'"},';
 			    						  console.log("index:"+index);
-			    						  console.log("key:"+key);
 			    						  console.log("users.length:"+users.length);
-			    						  if(key == users.length-1){
-			    							  json = json.substring(0, json.length-1)+']}';
-			    			    			  console.log("JSON:==="+json);
-			    			    			  res.render('sign_up_list', {json}); 
-			    						  }
+			    						  res.render('sign_up_list', '{"user":[{"nickname":"Phoenix","imageurl":"http://wx.qlogo.cn/mmopen/xJhQocZic7og1LicJVqXSc21aOPOUFDH0rBc3akeQkoU5kePONwWDKjmhqXv5W39rUKkHv83Uec3iaKPeZ5YZ8H2xqW4zueShRf/0","carname":"Phoenix"}]}'); 
+			    						  
+			    						  
+//			    						  if(index == users.length-1){
+//			    							  json = json.substring(0, json.length-1)+']}';
+//			    			    			  console.log("JSON:==="+json);
+//			    			    			  res.render('sign_up_list', {json}); 
+//			    						  }
 			    					  });
 		    					  }else{
 		    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"出租车"},';
@@ -245,8 +246,6 @@ module.exports = function(app) {
 		    					  }
 		    				  });
 		    			  });	
-		    			  
-		    			  
 	    			  }
 	    		  });
     		  }
