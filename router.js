@@ -216,53 +216,20 @@ module.exports = function(app) {
 	    		  var promise2 = mongoose.findGameUser(game);
 	    		  promise2.then(function(users){
 	    			  if(users != null){
-	    				  len = users.length;
-	    				  for(var i=0; i<len; i++){
-		    				  console.log("USER:"+users[i]);
-		    				  console.log("USER.nickname:"+users[i].nickname);
-		    				  console.log("USER.get(nickname):"+users[i].get("nickname"));
-		    				  var promise3 = mongoose.findUserCar(users[i]);
-		    				  promise3.then(function(car){
-		    					  if(car != null){
-			    					  var promise4 = mongoose.fineCarOwner(car);
-			    					  promise4.then(function(owner){
-			    						  console.log("owner5:"+owner);
-			    						  console.log("USER2:"+users[i]);
-					    				  console.log("USER.nickname2:"+users[i].nickname);
-			    						  
-			    						  json += '{"nickname":"'+users[i].nickname+'","imageurl":"'+users[i].imageurl+'","carname":"'+owner.nickname+'"},';
-			    						  console.log("index:"+i);
-			    						  console.log("users.length:"+users.length);
-			    						  if(index == users.length-1){
-			    							  json = json.substring(0, json.length-1)+']}';
-			    			    			  console.log("JSON:==="+json);
-			    			    			  res.render('sign_up_list', {json}); 
-			    						  }
-			    					  });
-		    					  }else{
-		    						  json += '{"nickname":"'+users[i].nickname+'","imageurl":"'+users[i].imageurl+'","carname":"出租车"},';
-		    						  if(index == users.length-1){
-		    							  json = json.substring(0, json.length-1)+']}';
-		    			    			  console.log("JSON2:==="+json);
-		    			    			  res.render('sign_up_list2', {json});
-		    						  }
-		    					  }
-		    				  });
-	    				  }
-	    				  
-	    				  
-		    			/*  users.forEach(function(user,index){
-		    				  console.log("USER:"+user);
+		    			  users.forEach(function(user,index){
+		    				  console.log("INDEX:"+index);
 		    				  var promise3 = mongoose.findUserCar(user);
 		    				  promise3.then(function(car){
 		    					  if(car != null){
 			    					  var promise4 = mongoose.fineCarOwner(car);
 			    					  promise4.then(function(owner){
+			    						  var key = index;
 			    						  console.log("owner5:"+owner);
 			    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"'+owner.nickname+'"},';
 			    						  console.log("index:"+index);
+			    						  console.log("key:"+key);
 			    						  console.log("users.length:"+users.length);
-			    						  if(index == users.length-1){
+			    						  if(key == users.length-1){
 			    							  json = json.substring(0, json.length-1)+']}';
 			    			    			  console.log("JSON:==="+json);
 			    			    			  res.render('sign_up_list', {json}); 
@@ -277,7 +244,7 @@ module.exports = function(app) {
 		    						  }
 		    					  }
 		    				  });
-		    			  });	*/
+		    			  });	
 		    			  
 		    			  
 	    			  }
