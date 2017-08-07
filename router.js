@@ -216,34 +216,37 @@ module.exports = function(app) {
 	    		  var promise2 = mongoose.findGameUser(game);
 	    		  promise2.then(function(users){
 	    			  if(users != null){
-	    				  for(var i=0; i<users.length; i++){
-		    				  var promise3 = mongoose.findUserCar(users[i]);
+	    				  
+	    				  
+		    			  users.forEach(function(user,index){
+		    				  console.log("USER:"+user);
+		    				  var promise3 = mongoose.findUserCar(user);
 		    				  promise3.then(function(car){
 		    					  if(car != null){
 			    					  var promise4 = mongoose.fineCarOwner(car);
 			    					  promise4.then(function(owner){
 			    						  console.log("owner5:"+owner);
-			    						  console.log("index:"+i);
-			    						  console.log("users[i]:"+users[i]);
-			    						  console.log("users[i].get(nickname):"+users[i].get("nickname"));
-			    						  json += '{"nickname":"'+users[i].get("nickname")+'","imageurl":"'+users[i].get("imageurl")+'","carname":"'+owner.nickname+'"},';
+			    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"'+owner.nickname+'"},';
+			    						  console.log("index:"+index);
 			    						  console.log("users.length:"+users.length);
-			    						  if(i == users.length-1){
+			    						  if(index == users.length-1){
 			    							  json = json.substring(0, json.length-1)+']}';
 			    			    			  console.log("JSON:==="+json);
 			    			    			  res.render('sign_up_list', {json}); 
 			    						  }
 			    					  });
 		    					  }else{
-		    						  json += '{"nickname":"'+users[i].get("nickname")+'","imageurl":"'+users[i].get("imageurl")+'","carname":"出租车"},';
-		    						  if(i == users.length-1){
+		    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"出租车"},';
+		    						  if(index == users.length-1){
 		    							  json = json.substring(0, json.length-1)+']}';
 		    			    			  console.log("JSON2:==="+json);
 		    			    			  res.render('sign_up_list2', {json});
 		    						  }
 		    					  }
 		    				  });
-	    				  }
+		    			  });	
+		    			  
+		    			  
 	    			  }
 	    		  });
     		  }
