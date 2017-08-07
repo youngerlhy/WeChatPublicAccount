@@ -159,7 +159,7 @@ exports.findGameUsersCars = function(){
 										car.seatavailablenum -=1;
 										console.log("car.seatavailablenum:"+car.seatavailablenum);
 										
-										passengers[index*len+i].get("car").push(car._id);
+										passengers[index*len+i].car = car._id;
 										console.log("passengers[index*len+i]1:"+passengers[index*len+i]);
 									}else{
 										for(var j=0; j<car.passengers.length;j++){
@@ -167,7 +167,7 @@ exports.findGameUsersCars = function(){
 											   && (index*len+i)<passengers.length){
 												car.passengers.push(passengers[index*len+i].get("_id"));
 												car.seatavailablenum -=1;
-												passengers[index*len+i].get("car").push(car._id);
+												passengers[index*len+i].car = car._id;
 												console.log("passengers[index*len+i]:"+passengers[index*len+i]);
 											}
 										}
