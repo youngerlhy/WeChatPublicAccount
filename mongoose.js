@@ -174,13 +174,11 @@ exports.findGameUsersCars = function(){
 									car.save(function(err){
 										if(err)  return console.log(err);	
 										console.log("CARS3:"+car);
-										passengers[index*len+i].save(function(err){
-											if(err)  return console.log(err);	
-											console.log("passengers:"+passengers);
-										});
 									});
-									
-									
+									passengers[index*len+i].save(function(err){
+										if(err)  return console.log(err);	
+										console.log("passengers:"+passengers);
+									});
 								}
 							}
 						});		
