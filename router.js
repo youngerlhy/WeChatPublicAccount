@@ -226,7 +226,7 @@ module.exports = function(app) {
 			    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"'+owner.nickname+'"},';
 			    						  console.log("index:"+index);
 			    						  console.log("users.length:"+users.length);
-			    						  if(index == users.length -1){
+			    						  if(index == 0){
 			    							  json = json.substring(0, json.length-1)+']}';
 			    			    			  console.log("JSON:==="+json);
 			    			    			  res.render('sign_up_list', {json}); 
@@ -234,7 +234,7 @@ module.exports = function(app) {
 			    					  });
 		    					  }else{
 		    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"出租车"},';
-		    						  if(index == users.length -1){
+		    						  if(index == 0){
 		    							  json = json.substring(0, json.length-1)+']}';
 		    			    			  console.log("JSON2:==="+json);
 		    			    			  res.render('sign_up_list2', {json});
