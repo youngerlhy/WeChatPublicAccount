@@ -216,10 +216,11 @@ module.exports = function(app) {
 	    		  var promise2 = mongoose.findGameUser(game);
 	    		  promise2.then(function(users){
 	    			  if(users != null){
-	    				  
-	    				  for(var i in users){
+	    				  len = users.length;
+	    				  for(var i=0; i<len; i++){
 		    				  console.log("USER:"+user[i]);
 		    				  console.log("USER.nickname:"+user[i].nickname);
+		    				  console.log("USER.get(nickname):"+user[i].get("nickname"));
 		    				  var promise3 = mongoose.findUserCar(user[i]);
 		    				  promise3.then(function(car){
 		    					  if(car != null){
