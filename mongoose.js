@@ -147,8 +147,10 @@ exports.findGameUsersCars = function(){
 					console.log("PASSENGERS:"+passengers);
 					owners.forEach(function(owner, index){
 						Car.findOne({available:true,owner:owner._id}).then(function(car){
+							console.log("CARS1:"+car);
 							if(car != null){
 								var len=car.seatavailablenum;
+								console.log("len:"+len);
 								for(var i=0; i<len; i++){
 									if(car.passengers.length ==0){
 										car.passengers.push(passengers[index*len+i].get("_id"));
