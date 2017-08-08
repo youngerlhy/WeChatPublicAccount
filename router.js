@@ -31,9 +31,9 @@ module.exports = function(app) {
     res.render('no_publish', {});
    });
 
-  app.get('/sign_up_list', function(req, res) {
-    res.render('sign_up_list', {});
-   });
+//  app.get('/sign_up_list', function(req, res) {
+//    res.render('sign_up_list', {});
+//   });
 
   app.get('/history', function(req, res) {
 	    res.render('history', {});
@@ -209,45 +209,32 @@ module.exports = function(app) {
           + context.secret + '&code=' + code + '&grant_type=authorization_code',
     }, function(error, response, body) {
       if (response.statusCode == 200) {
-    	  var json = '"user":[';
-    	  var promise = mongoose.findGameUsersCars();
+    	  console.log("=====success=====");
+    	  var json = '{"user":[';
+    	  var promise = mongoose.findAllUsersCars();
     	  promise.then(function(game){
+    		  console.log("=====0=====");
     		  if(game != null){
+    			  console.log("=====1=====");
 	    		  var promise2 = mongoose.findGameUser(game);
 	    		  promise2.then(function(users){
 	    			  if(users != null){
+	    				  console.log("=====2=====");
 		    			  users.forEach(function(user,index){
-		    				  console.log("INDEX:"+index);
 		    				  var promise3 = mongoose.findUserCar(user);
 		    				  promise3.then(function(car){
-		    					  if(car != null){
-			    					  var promise4 = mongoose.fineCarOwner(car);
-			    					  promise4.then(function(owner){
-			    						  console.log("owner5:"+owner);
-			    						  
-			    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"'+owner.nickname+'"},';
-			    						  console.log("index:"+index);
-			    						  console.log("users.length:"+users.length);
-			    						  if(index == users.length-1){
-			    							  json = json.substring(0, json.length-1)+']';
-			    			    			  console.log("JSON:==="+json);
-			    			    			  
-			    			    			  var data = '[{"nickname":"Tiny Ding","imageurl":"http://wx.qlogo.cn/mmopen/vypzhLPqWka4cdIsQHWuU1IrztYcicz1icaibBW2rAoCbDFABK5TtLreFlnwvMbepkVgQDP7LcibcBbIicZ35bUEAbU5EjsCGUmAG/0","carname":"Phoenix"},{"nickname":"Phoenix","imageurl":"http://wx.qlogo.cn/mmopen/xJhQocZic7og1LicJVqXSc21aOPOUFDH0rBc3akeQkoU5kePONwWDKjmhqXv5W39rUKkHv83Uec3iaKPeZ5YZ8H2xqW4zueShRf/0","carname":"Phoenix"}]';
-			    			    			  data = JSON.stringify(data);
-			    			    			  res.render('sign_up_list', {data}); 
-			    						  }
-			    					  });
-		    					  }else{
-		    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"出租车"},';
-		    						  if(index == users.length-1){
-		    							  json = json.substring(0, json.length-1)+']';
-		    			    			  console.log("JSON2:==="+json);
-		    			    			  var data = '[{"nickname":"Tiny Ding","imageurl":"http://wx.qlogo.cn/mmopen/vypzhLPqWka4cdIsQHWuU1IrztYcicz1icaibBW2rAoCbDFABK5TtLreFlnwvMbepkVgQDP7LcibcBbIicZ35bUEAbU5EjsCGUmAG/0","carname":"Phoenix"},{"nickname":"Phoenix","imageurl":"http://wx.qlogo.cn/mmopen/xJhQocZic7og1LicJVqXSc21aOPOUFDH0rBc3akeQkoU5kePONwWDKjmhqXv5W39rUKkHv83Uec3iaKPeZ5YZ8H2xqW4zueShRf/0","carname":"Phoenix"}]';
-		    			    			  res.render('sign_up_list', {data});
-		    						  }
-		    					  }
+		    					  console.log("=====3=====");
+		    					  var promise4 = mongoose.fineCarOwner(car);
+		    					  promise4.then(function(owner){
+		    						  console.log("=====4=====");
+		    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"'+owner.nickname+'"},';
+		    					  });
 		    				  });
-		    			  });	
+		    			  });
+		    			  json = json.substring(0, json.length-1);
+		    			  json +=']}';
+		    			  console.log("JSON:==="+json);
+		    			  res.render('sign_up_list', {json}); 
 	    			  }
 	    		  });
     		  }
@@ -290,8 +277,6 @@ module.exports = function(app) {
           + context.secret + '&code=' + code + '&grant_type=authorization_code',
     }, function(error, response, body) {
       if (response.statusCode == 200) {
-    	  
-    	  console.log("RESPONSE1："+response);
 
         // 第三步：拉取用户信息(需scope为 snsapi_userinfo)
           body = body.toString("utf-8");
@@ -304,8 +289,6 @@ module.exports = function(app) {
               + openid + '&lang=zh_CN',
         }, function(error, response, body) {
           if (response.statusCode == 200) {
-        	  
-        	  console.log("RESPONSE2："+response);
 
              body = body.toString("utf-8");
             // 第四步：根据获取的用户信息进行对应操作
