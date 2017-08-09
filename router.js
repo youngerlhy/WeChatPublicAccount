@@ -235,7 +235,7 @@ module.exports = function(app) {
 			    						  if(index == users.length-1){
 			    							  json = json.substring(0, json.length-1)+']';
 			    			    			  console.log("JSON:==="+JSON.stringify(json));
-											  var data = JSON.stringify(json)；
+											  var data = JSON.stringify(json);
 			    			    			  res.render('sign_up_list', {users:data});
 			    						  }
 			    					  });
@@ -250,7 +250,7 @@ module.exports = function(app) {
 		    							  }
 		    							  json = json.substring(0, json.length-1)+']';
 		    			    			  console.log("JSON:==="+JSON.stringify(json));
-											var data = JSON.stringify(json)；
+											var data = JSON.stringify(json);
 											res.render('sign_up_list', {users:data});
 		    						  }
 		    					  }
