@@ -213,7 +213,7 @@ module.exports = function(app) {
     	  var taxiseat=4;
     	  var taxiseatnum=0;
     	  var taxinum=0;
-    	  var json = '"user":[';
+    	  var json = '"users":[';
     	  var promise = mongoose.findGameUsersCars();
     	  promise.then(function(game){
     		  if(game != null){
@@ -234,11 +234,8 @@ module.exports = function(app) {
 			    						  console.log("users.length:"+users.length);
 			    						  if(index == users.length-1){
 			    							  json = json.substring(0, json.length-1)+']';
-			    			    			  console.log("JSON:==="+json);
-			    			    			  
-			    			    			  var data = '[{"nickname":"Tiny Ding","imageurl":"http://wx.qlogo.cn/mmopen/vypzhLPqWka4cdIsQHWuU1IrztYcicz1icaibBW2rAoCbDFABK5TtLreFlnwvMbepkVgQDP7LcibcBbIicZ35bUEAbU5EjsCGUmAG/0","carname":"Phoenix"},{"nickname":"Phoenix","imageurl":"http://wx.qlogo.cn/mmopen/xJhQocZic7og1LicJVqXSc21aOPOUFDH0rBc3akeQkoU5kePONwWDKjmhqXv5W39rUKkHv83Uec3iaKPeZ5YZ8H2xqW4zueShRf/0","carname":"Phoenix"}]';
-			    			    			  data = JSON.stringify(data);
-			    			    			  res.render('sign_up_list', {user:data});
+			    			    			  console.log("JSON:==="+JSON.stringify(json));
+			    			    			  res.render('sign_up_list', {JSON.stringify(json)});
 			    						  }
 			    					  });
 		    					  }else{
@@ -251,10 +248,8 @@ module.exports = function(app) {
 		    								  taxinum =taxiseatnum/taxiseat+1
 		    							  }
 		    							  json = json.substring(0, json.length-1)+']';
-		    			    			  console.log("JSON2:==="+json);
-		    			    			  var data = '[{"nickname":"Tiny Ding","imageurl":"http://wx.qlogo.cn/mmopen/vypzhLPqWka4cdIsQHWuU1IrztYcicz1icaibBW2rAoCbDFABK5TtLreFlnwvMbepkVgQDP7LcibcBbIicZ35bUEAbU5EjsCGUmAG/0","carname":"Phoenix"},{"nickname":"Phoenix","imageurl":"http://wx.qlogo.cn/mmopen/xJhQocZic7og1LicJVqXSc21aOPOUFDH0rBc3akeQkoU5kePONwWDKjmhqXv5W39rUKkHv83Uec3iaKPeZ5YZ8H2xqW4zueShRf/0","carname":"Phoenix"}]';
-		    			    			  data = JSON.stringify(data);
-										  res.render('sign_up_list', {user:data});
+		    			    			  console.log("JSON:==="+JSON.stringify(json));
+			    			    		res.render('sign_up_list', {JSON.stringify(json)});
 		    						  }
 		    					  }
 		    				  });

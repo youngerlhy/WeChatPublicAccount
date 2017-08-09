@@ -10,14 +10,6 @@
 <link href="/css/style.css" rel="stylesheet">
 	<script src="/js/jquery.js"></script>
 	<script src="/js/main.js"></script>
-	<script type="text/javascript">
-		$(function(){
-			alert("ready");
-			//$.get("/show_sign_result",function(data,status){
-				//alert("Data: " + data + "nStatus: " + status);
-		 });
-		});
-	</script>
 </head>
 <body>
 	<div class="div-img">
@@ -36,13 +28,13 @@
 					</tr>
 				</thead>
 				<tbody id="sign_up_list_table">
-				<%= user%>
-					<!-- <tr>
-						<td><img src="http://wx.qlogo.cn/mmopen/xJhQocZic7og1LicJVqXSc21aOPOUFDH0rBc3akeQkoU5kePONwWDKjmhqXv5W39rUKkHv83Uec3iaKPeZ5YZ8H2xqW4zueShRf/0" style="width:60px;height:60px;"/></td>
-						<td>Phoenix</td>
-						<td>leaf</td>
-					</tr>
+					<% users.forEach(function(user){ %>
 					<tr>
+						<td><img src="<%=user.imageurl%>" style="width:60px;height:60px;"/></td>
+						<td><%=user.nickname%></td>
+						<td><%=user.carname%></td>
+					</tr>
+					<!--<tr>
 						<td><img src="http://wx.qlogo.cn/mmopen/xJhQocZic7og1LicJVqXSc23iabgtmGoBzYiaic4cfq4VfdeV9eYosQqzT5cHUPDz5Dh2uicUFmia5TCYLDJ68fuhngtNmAUv6Tf4eD/0" style="width:60px;height:60px;"/></td>
 						<td>danyang</td>
 						<td>leaf</td>
