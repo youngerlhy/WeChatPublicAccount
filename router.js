@@ -1,3 +1,4 @@
+
 var request = require('request');
 var mongoose = require('./mongoose');
 mongoose.Promise = require('bluebird');
@@ -20,7 +21,7 @@ module.exports = function(app) {
   });
   
    app.get('/newshistory', function(req, res) {
-    res.render('newshistory', {});
+    res.render('daily_english_history', {});
   });
 
    app.get('/no_action', function(req, res) {
@@ -31,9 +32,9 @@ module.exports = function(app) {
     res.render('no_publish', {});
    });
 
-//  app.get('/sign_up_list', function(req, res) {
-//    res.render('sign_up_list', {});
-//   });
+  app.get('/sign_up_list', function(req, res) {
+    res.render('sign_up_list', {});
+   });
 
   app.get('/history', function(req, res) {
 	    res.render('history', {});
@@ -57,8 +58,8 @@ module.exports = function(app) {
 	    			  var userGamesNum = result.length;
 	    			  var gameCount = {"count":count,"userGamesNum":userGamesNum};
 	    			  var gameCountJson = JSON.stringify(gameCount);
-	    			  console.log("gameCountJson:"+gameCountJson);
-	    			  res.send({gameCountJson});
+	    			  console.log('{'+gameCountJson+'}');
+	    			  res.json('{'+gameCountJson+'}');
 	    			  
 	    		  });
 	    	  });
@@ -169,7 +170,7 @@ module.exports = function(app) {
         if(gameStarted(result)){
           console.log(result.startTime.toISOString() + ' ' + result.endTime.toISOString());
           console.log('close_out_game info :'+result);
-          res.render('close_out_game',{startTime:Format(result.startTime.toISOString()),endTime:Format(result.endTime.toISOString())});
+          res.render('close_out_game',{startTime:result.startTime.toLocaleString(),endTime:result.endTime.toLocaleString()});
         }else{
           var show_sign_result = 'show_sign_result';
           res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'+ show_sign_result + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
@@ -209,26 +210,57 @@ module.exports = function(app) {
           + context.secret + '&code=' + code + '&grant_type=authorization_code',
     }, function(error, response, body) {
       if (response.statusCode == 200) {
-    	  console.log("=====success=====");
-    	  var json = "[";
-    	  var promise = mongoose.findAllUsersCars();
+    	  var taxiseat=4;
+    	  var taxiseatnum=0;
+    	  var taxinum=0;
+    	  var json = '"user":[';
+    	  var promise = mongoose.findGameUsersCars();
     	  promise.then(function(game){
-    		  var promise2 = mongoose.findGameUser(game);
-    		  promiese2.then(function(users){
-    			  users.forEach(function(user,index){
-    				  var promise3 = mongoose.findUserCar(user);
-    				  promise3.then(function(car){
-    					  var promise4 = mongoose.fineCarOwner(car);
-    					  promise4.then(function(owner){
-    						  json += "{nickname:"+user.nickname+",imageurl:"+user.imageurl+",carname:"+owner.nickname+"},";
-    					  });
-    				  });
-    			  });
-    			  json = json.substring(0, json.length-1);
-    			  json +="]";
-    			  console.log("JSON:==="+json);
-    			  res.render('sign_up_list', {json}); 
-    		  });
+    		  if(game != null){
+	    		  var promise2 = mongoose.findGameUser(game);
+	    		  promise2.then(function(users){
+	    			  if(users != null){
+		    			  users.forEach(function(user,index){
+		    				  console.log("INDEX:"+index);
+		    				  var promise3 = mongoose.findUserCar(user);
+		    				  promise3.then(function(car){
+		    					  if(car != null){
+			    					  var promise4 = mongoose.findCarOwner(car);
+			    					  promise4.then(function(owner){
+			    						  console.log("owner5:"+owner);
+			    						  
+			    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"'+owner.nickname+'"},';
+			    						  console.log("index:"+index);
+			    						  console.log("users.length:"+users.length);
+			    						  if(index == users.length-1){
+			    							  json = json.substring(0, json.length-1)+']';
+			    			    			  console.log("JSON:==="+json);
+			    			    			  
+			    			    			  var data = '[{"nickname":"Tiny Ding","imageurl":"http://wx.qlogo.cn/mmopen/vypzhLPqWka4cdIsQHWuU1IrztYcicz1icaibBW2rAoCbDFABK5TtLreFlnwvMbepkVgQDP7LcibcBbIicZ35bUEAbU5EjsCGUmAG/0","carname":"Phoenix"},{"nickname":"Phoenix","imageurl":"http://wx.qlogo.cn/mmopen/xJhQocZic7og1LicJVqXSc21aOPOUFDH0rBc3akeQkoU5kePONwWDKjmhqXv5W39rUKkHv83Uec3iaKPeZ5YZ8H2xqW4zueShRf/0","carname":"Phoenix"}]';
+			    			    			  data = JSON.stringify(data);
+			    			    			  res.render('sign_up_list', {data}); 
+			    						  }
+			    					  });
+		    					  }else{
+		    						  taxiseatnum += 1;
+		    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"出租车"},';
+		    						  if(index == users.length-1){
+		    							  if(taxiseatnum%taxiseat == 0){
+		    								  taxinum =taxiseatnum/taxiseat;
+		    							  }else{
+		    								  taxinum =taxiseatnum/taxiseat+1
+		    							  }
+		    							  json = json.substring(0, json.length-1)+']';
+		    			    			  console.log("JSON2:==="+json);
+		    			    			  var data = '[{"nickname":"Tiny Ding","imageurl":"http://wx.qlogo.cn/mmopen/vypzhLPqWka4cdIsQHWuU1IrztYcicz1icaibBW2rAoCbDFABK5TtLreFlnwvMbepkVgQDP7LcibcBbIicZ35bUEAbU5EjsCGUmAG/0","carname":"Phoenix"},{"nickname":"Phoenix","imageurl":"http://wx.qlogo.cn/mmopen/xJhQocZic7og1LicJVqXSc21aOPOUFDH0rBc3akeQkoU5kePONwWDKjmhqXv5W39rUKkHv83Uec3iaKPeZ5YZ8H2xqW4zueShRf/0","carname":"Phoenix"}]';
+		    			    			  res.render('sign_up_list', {data});
+		    						  }
+		    					  }
+		    				  });
+		    			  });	
+	    			  }
+	    		  });
+    		  }
     	  });    
       } else {
         console.log(response.statusCode);
@@ -268,6 +300,8 @@ module.exports = function(app) {
           + context.secret + '&code=' + code + '&grant_type=authorization_code',
     }, function(error, response, body) {
       if (response.statusCode == 200) {
+    	  
+    	  console.log("RESPONSE1："+response);
 
         // 第三步：拉取用户信息(需scope为 snsapi_userinfo)
           body = body.toString("utf-8");
@@ -280,6 +314,8 @@ module.exports = function(app) {
               + openid + '&lang=zh_CN',
         }, function(error, response, body) {
           if (response.statusCode == 200) {
+        	  
+        	  console.log("RESPONSE2："+response);
 
              body = body.toString("utf-8");
             // 第四步：根据获取的用户信息进行对应操作
@@ -325,6 +361,7 @@ module.exports = function(app) {
 }
 
 setInterval(mongoose.setGameStatusEnded,24*60*60*1000);
+//setInterval(mongoose.setGameStatusEnded,60*1000);
 
 function addPublishGame(startTime, endTime) {
   mongoose.insertPublishGame(startTime, endTime);
@@ -345,3 +382,4 @@ function Format(dateTime){
   var date = dateTime.replace('T',' ').substring(0,19);
   return date;
 }
+
