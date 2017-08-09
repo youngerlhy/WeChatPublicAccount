@@ -213,7 +213,6 @@ module.exports = function(app) {
     	  var taxiseat=4;
     	  var taxiseatnum=0;
     	  var taxinum=0;
-    	  var json = '[';
 		  var datas=[];
     	  var promise = mongoose.findGameUsersCars();
     	  promise.then(function(game){
@@ -230,27 +229,21 @@ module.exports = function(app) {
 			    					  promise4.then(function(owner){
 			    						  console.log("owner5:"+owner);
 			    						  datas.push({nickname: user.nickname,imageurl:user.imageurl,carname:owner.nickname});
-			    						  json += '{nickname: "'++'",imageurl: "'+user.imageurl+'",carname: "'+owner.nickname+'"},';
 			    						  console.log("index:"+index);
-			    						  console.log("users.length:"+users.length);
-			    						  if(index == users.length-1){
-			    							  json = json.substring(0, json.length-1)+']';
-			    			    			  console.log("JSON:==="+json);
-			    			    			  res.render('sign_up_list', {users :datas});
-			    						  }
+										  console.log("DATAS:==="+datas);
+										  res.render('sign_up_list', {users :datas});
 			    					  });
 		    					  }else{
 		    						  taxiseatnum += 1;
-		    						  json += '{"nickname":"'+user.nickname+'","imageurl":"'+user.imageurl+'","carname":"出租车"},';
+									  datas.push({nickname: user.nickname,imageurl:user.imageurl,carname:"出租车"});
 		    						  if(index == users.length-1){
 		    							  if(taxiseatnum%taxiseat == 0){
 		    								  taxinum =taxiseatnum/taxiseat;
 		    							  }else{
 		    								  taxinum =taxiseatnum/taxiseat+1
 		    							  }
-		    							  json = json.substring(0, json.length-1)+']';
-		    			    			  console.log("JSON:==="+json);
-			    			    			  res.render('sign_up_list', {json});
+		    							  console.log("DATAS:==="+datas);
+										  res.render('sign_up_list', {users :datas});
 		    						  }
 		    					  }
 		    				  });
