@@ -213,7 +213,7 @@ module.exports = function(app) {
     	  var taxiseat=4;
     	  var taxiseatnum=0;
     	  var taxinum=0;
-    	  var json = '"users":[';
+    	  var json = '[';
     	  var promise = mongoose.findGameUsersCars();
     	  promise.then(function(game){
     		  if(game != null){
@@ -235,7 +235,8 @@ module.exports = function(app) {
 			    						  if(index == users.length-1){
 			    							  json = json.substring(0, json.length-1)+']';
 			    			    			  console.log("JSON:==="+JSON.stringify(json));
-			    			    			  res.render('sign_up_list', {JSON.stringify(json)});
+											  var data = JSON.stringify(json)；
+			    			    			  res.render('sign_up_list', {users:data});
 			    						  }
 			    					  });
 		    					  }else{
@@ -249,7 +250,8 @@ module.exports = function(app) {
 		    							  }
 		    							  json = json.substring(0, json.length-1)+']';
 		    			    			  console.log("JSON:==="+JSON.stringify(json));
-			    			    		res.render('sign_up_list', {JSON.stringify(json)});
+											var data = JSON.stringify(json)；
+											res.render('sign_up_list', {users:data});
 		    						  }
 		    					  }
 		    				  });
