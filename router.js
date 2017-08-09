@@ -221,18 +221,15 @@ module.exports = function(app) {
 	    		  promise2.then(function(users){
 	    			  if(users != null){
 		    			  users.forEach(function(user,index){
-		    				  console.log("INDEX:"+index);
 		    				  var promise3 = mongoose.findUserCar(user);
 		    				  promise3.then(function(car){
 		    					  if(car != null){
 			    					  var promise4 = mongoose.findCarOwner(car);
 			    					  promise4.then(function(owner){
-			    						  console.log("owner5:"+owner);
 			    						  datas.push({nickname: user.nickname,imageurl:user.imageurl,carname:owner.nickname});
-			    						  console.log("index:"+index);
 										  if(index == users.length-1) {
 											  console.log("DATAS:==="+datas);
-											  res.render('sign_up_list', {datas :datas});
+											  res.render('sign_up_list', {datas : datas});
 										 }
 			    					  });
 		    					  }else{
@@ -245,7 +242,7 @@ module.exports = function(app) {
 		    								  taxinum =taxiseatnum/taxiseat+1
 		    							  }
 		    							  console.log("DATAS:==="+datas);
-										  res.render('sign_up_list', {datas :datas});
+										  res.render('sign_up_list', {datas : datas});
 		    						  }
 		    					  }
 		    				  });
