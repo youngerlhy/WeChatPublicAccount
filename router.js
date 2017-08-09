@@ -56,10 +56,9 @@ module.exports = function(app) {
 	    		  promise2.then(function(result){
 	    			  
 	    			  var userGamesNum = result.length;
-	    			  var gameCount = {"count":count,"userGamesNum":userGamesNum};
-	    			  var gameCountJson = JSON.stringify(gameCount);
-	    			  console.log('{'+gameCountJson+'}');
-	    			  res.json('{'+gameCountJson+'}');
+	    			  var gameCount = {count:count, userGamesNum:userGamesNum};
+	    			  console.log(gameCount);
+	    			  res.render('history', {gameCount : gameCount});
 	    			  
 	    		  });
 	    	  });
