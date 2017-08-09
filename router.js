@@ -231,7 +231,7 @@ module.exports = function(app) {
 			    						  datas.push({nickname: user.nickname,imageurl:user.imageurl,carname:owner.nickname});
 			    						  console.log("index:"+index);
 										  console.log("DATAS:==="+datas);
-										  res.render('sign_up_list', {users :datas});
+										  res.render('sign_up_list', {datas :datas});
 			    					  });
 		    					  }else{
 		    						  taxiseatnum += 1;
@@ -243,7 +243,7 @@ module.exports = function(app) {
 		    								  taxinum =taxiseatnum/taxiseat+1
 		    							  }
 		    							  console.log("DATAS:==="+datas);
-										  res.render('sign_up_list', {users :datas});
+										  res.render('sign_up_list', {datas :datas});
 		    						  }
 		    					  }
 		    				  });
