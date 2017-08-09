@@ -6,45 +6,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="Kuanghui Ding">
-<link href="/css/bootstrap.css" rel="stylesheet">
-<link href="/css/style.css" rel="stylesheet">
-	<script src="/js/jquery.js"></script>
-	<script src="/js/main.js"></script>
+<link href="public/css/bootstrap.css" rel="stylesheet">
+<link href="public/css/style.css" rel="stylesheet">
+	<script src="public/js/jquery.js"></script>
+	<script src="public/js/main.js"></script>
 	<script type="text/javascript">
 		$(function(){
-			alert("ready");
-			var htmlContent= "";
-			$.ajax({
-				async:false,
-				url:"/show_sign_result",
-				type:"get",
-				dataType:"json",
-				data:result;
-				
-				beforeSend：function(){
-					alert("before");
-				},
-				
-				error:function(err){
-					alert("fail:"+err.status);
-				},
-				success:function(result){
-					$.each(result.user, fucntion(index,item){
-						var name = item.nickname;
-						var image = item.imageurl;
-						//var carname  = item.car.owner.nickname;
-						var carname  = "陈兆杰*";
-						var addRow = "<tr><td style='width:60px;height:60px;'">"+image+"</td><td>"+name+"</td><td>"+carname+"</td></tr>";
-						$("#sign_up_list_table").append(addRow);
-					});
-				}
+			var data = '{"user":[{"nickname":"'+'xiao'+'","imageurl":"'+'http1'+'","carname":"'+'kh'+'"},{"nickname":"'+'kh'+'","imageurl":"'+'http2'+'","carname":"'+'xiao'+'"}]}';
+			var result = $.parseJSON(data);
+			console.log(result.user);		
+			$.each(result.user, function(index,item){
+				var name = item.nickname;
+				console.log();
+				var image = item.imageurl;
+				var carname = item.carname;
+				var addRow = "<tr><td style='width:60px;height:60px;'>"+image+"</td><td>"+name+"</td><td>"+carname+"</td></tr>";
+				$("#sign_up_list_table").append(addRow);
 			});
 		});
 	</script>
 </head>
 <body>
 	<div class="div-img">
-		<img src="/resource/badminton.png" class="img-responsive"
+		<img src="public/resource/badminton.png" class="img-responsive"
 			alt="badminton" />
 	</div>
 	<div id="sign_up_list" class="div-center">
@@ -59,16 +43,7 @@
 					</tr>
 				</thead>
 				<tbody id="sign_up_list_table">
-					<tr>
-						<td background="url">photo</td>
-						<td>Name</td>
-						<td>car</td>
-					</tr>
-					<tr>
-						<td background="url">photo2</td>
-						<td>Name2</td>
-						<td>&nbsp;</td>
-					</tr>
+					
 				</tbody>
 			</table>
 		</div>

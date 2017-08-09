@@ -58,7 +58,7 @@ module.exports = function(app) {
 	    			  var gameCount = {"count":count,"userGamesNum":userGamesNum};
 	    			  var gameCountJson = JSON.stringify(gameCount);
 	    			  console.log("gameCountJson:"+gameCountJson);
-	    			  res.send({"count":count, "userGamesNum":userGamesNum});
+	    			  res.send({gameCountJson});
 	    			  
 	    		  });
 	    	  });
@@ -167,8 +167,9 @@ module.exports = function(app) {
       game.then(function(result){
         console.log('result is :'+result);
         if(gameStarted(result)){
-//          console.log('close_out_game info :'+result);
-          res.render('close_out_game',{startTime:Format(result.startTime),endTime:Format(result.endTime)});
+          console.log(result.startTime.toISOString() + ' ' + result.endTime.toISOString());
+          console.log('close_out_game info :'+result);
+          res.render('close_out_game',{startTime:Format(result.startTime.toISOString()),endTime:Format(result.endTime.toISOString())});
         }else{
           var show_sign_result = 'show_sign_result';
           res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx067aa7e646581331&redirect_uri=http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'+ show_sign_result + '&response_type=code&scope=snsapi_base&state=home#wechat_redirect');
@@ -209,26 +210,26 @@ module.exports = function(app) {
     }, function(error, response, body) {
       if (response.statusCode == 200) {
     	  console.log("=====success=====");
+    	  var json = "[";
     	  var promise = mongoose.findAllUsersCars();
-//    	  var promise2 = mongoose.findUserCar();
-//    	  var promise3 = mongoose.findCarUser();
-//    	  var json;
-    	  promise.then(function(users){
-//    		  promise2.then(function(car){
-//    			  promise3.then(function());
-//    			  
-//    			  users.forEach(function(user,index){
-//    				  json = "{nickname:"+user.nickname+",imageurl:"+user.imageurl+",car:"+car.owner.nick+""}"    				  
-//    			  });
-//    			  
-    			  
-    			  
-        		  var allUsersJson = JSON.stringify(users);
-        		  console.log("JSON:==="+allUsersJson);
-        		  res.render('sign_up_list', {allUsersJson}); 
-    		  });    		  
-//    	  });
-    
+    	  promise.then(function(game){
+    		  var promise2 = mongoose.findGameUser(game);
+    		  promiese2.then(function(users){
+    			  users.forEach(function(user,index){
+    				  var promise3 = mongoose.findUserCar(user);
+    				  promise3.then(function(car){
+    					  var promise4 = mongoose.fineCarOwner(car);
+    					  promise4.then(function(owner){
+    						  json += "{nickname:"+user.nickname+",imageurl:"+user.imageurl+",carname:"+owner.nickname+"},";
+    					  });
+    				  });
+    			  });
+    			  json = json.substring(0, json.length-1);
+    			  json +="]";
+    			  console.log("JSON:==="+json);
+    			  res.render('sign_up_list', {json}); 
+    		  });
+    	  });    
       } else {
         console.log(response.statusCode);
       }
