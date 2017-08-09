@@ -41,7 +41,6 @@ module.exports = function(app) {
 	   });
   
   app.get('/game_history', function(req, res) {
-	    // 第二步：通过code换取网页授权access_token
 	    var code = req.query.code;
 	    request.get({
 	      url : 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + context.appid + '&secret='
