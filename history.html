@@ -28,7 +28,8 @@
 				<div class="game_info_block">
 					<label>您的次数：</label>
 					<div class="progress-bar">
-						<div class="progress-bar-core" id="your_game_progress"></div>
+						<div class="progress-bar-core" id="your_game_progress"
+						style="width:<%=userGamesNum/(count==0?1:count)*100 %>%"></div>
 					</div>
 					<label id="your_game_num"><%=userGamesNum %>次</label>
 				</div>
