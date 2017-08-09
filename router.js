@@ -230,8 +230,10 @@ module.exports = function(app) {
 			    						  console.log("owner5:"+owner);
 			    						  datas.push({nickname: user.nickname,imageurl:user.imageurl,carname:owner.nickname});
 			    						  console.log("index:"+index);
-										  console.log("DATAS:==="+datas);
-										  res.render('sign_up_list', {datas :datas});
+										  if(index == users.length-1) {
+											  console.log("DATAS:==="+datas);
+											  res.render('sign_up_list', {datas :datas});
+										 }
 			    					  });
 		    					  }else{
 		    						  taxiseatnum += 1;
