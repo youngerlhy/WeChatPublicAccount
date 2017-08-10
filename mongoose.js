@@ -136,7 +136,7 @@ Game.findOne({signupStatus: 'Started'}, function(error, gameResult) {
 
 exports.findGameUsersCars = function(){
 	var join = Promise.join;
-	var promise = Game.find({signupStatus: 'Ended', gameStatus: 'Started'}).sort({_id:-1}).limit(1).exec();
+	var promise = Game.find({signupStatus: 'Ended', gameStatus: 'Started'}).sort({'_id':-1}).limit(1).exec();
 	promise.then(function(error, gameResult){
 		if(gameResult != null){
 			var promise2 = User.find({game:gameResult._id, car:{$exists:true}}).exec();
@@ -280,7 +280,7 @@ exports.findStartedGame = function() {
 }
 
 exports.findEndedGame = function() {
-        var promise = Game.find({signupStatus: 'Ended', gameStatus: 'Started'}).sort({_id:-1}).limit(1).exec();
+        var promise = Game.find({signupStatus: 'Ended', gameStatus: 'Started'}).sort({'_id':-1}).limit(1).exec();
         return promise;
 }
 
