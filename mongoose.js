@@ -282,7 +282,7 @@ exports.findStartedGame = function() {
 }
 
 exports.findEndedGame = function() {
-        var promise = Game.find({signupStatus: 'Ended', gameStatus: 'Started'}).sort({'_id':-1}).limit(1).exec();
+        var promise = Game.findOne({signupStatus: 'Ended', gameStatus: 'Started'}).exec();
         return promise;
 }
 
