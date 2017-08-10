@@ -206,9 +206,6 @@ module.exports = function(app) {
           + context.secret + '&code=' + code + '&grant_type=authorization_code',
     }, function(error, response, body) {
       if (response.statusCode == 200) {
-    	  var taxiseat=4;
-    	  var taxiseatnum=0;
-    	  var taxinum=0;
 		  var datas=[];
     	  var promise = mongoose.findGameUsersCars();
     	  promise.then(function(game){
@@ -229,14 +226,8 @@ module.exports = function(app) {
 										 }
 			    					  });
 		    					  }else{
-		    						  taxiseatnum += 1;
 									  datas.push({nickname: user.nickname,imageurl:user.imageurl,carname:"出租车"});
 		    						  if(index == users.length-1){
-		    							  if(taxiseatnum%taxiseat == 0){
-		    								  taxinum =taxiseatnum/taxiseat;
-		    							  }else{
-		    								  taxinum =taxiseatnum/taxiseat+1
-		    							  }
 		    							  console.log("DATAS:==="+datas);
 										  res.render('sign_up_list', {datas : datas});
 		    						  }
