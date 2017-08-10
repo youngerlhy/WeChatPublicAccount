@@ -195,7 +195,7 @@ exports.findGameUsersCars = function(){
 		}else{
 			console.log("There is no available game.");
 		}
-	}).exec();
+	});
 	
 	return promise;
 }
