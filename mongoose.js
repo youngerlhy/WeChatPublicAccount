@@ -188,8 +188,8 @@ exports.findGameUsersCars = function(){
 							});		
 						});
 					}else{
-						if(owners != null) console.log("There is no cars.");
-						if(passengers != null) console.log("There is no passengers.");
+						if(owners == null) console.log("There is no cars.");
+						if(passengers == null) console.log("There is no passengers.");
 					}
 				
 				});
