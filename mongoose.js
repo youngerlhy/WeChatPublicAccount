@@ -177,11 +177,11 @@ exports.findGameUsersCars = function(){
 										}
 										console.log("CARS2:"+car);
 										
-										var promise4 = Car.update({_id:car._id},{$set:{passengers:car.passengers}});
+										var promise4 = Car.update({_id:car._id},{$set:{passengers:car.passengers,seatavailablenum:car.seatavailablenum}});
 										var promise5 = User.update({_id:passengers[index*len+i].get("_id")},{$set:{car:car._id}});
 										join2(promise4, promise5, function(){
-											console.log("CARS3:"+car);
 											console.log("passengers:"+passengers[index*len+i]);
+											console.log("CARS3:"+car);
 										});
 										
 //										car.save(function(err){
