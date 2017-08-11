@@ -136,6 +136,7 @@ Game.findOne({signupStatus: 'Started'}, function(error, gameResult) {
 
 exports.findGameUsersCars = function(){
 	var join = Promise.join;
+	var join2 = Promise.join;
 	var promise = Game.find({gameStatus: 'Started',signupStatus: 'Ended'},null,{skip:0, limit:1, sort:{_id:-1}},function(error, games){
 			if(games != null){	
                 games.forEach(function(gameResult,index1){
@@ -175,14 +176,22 @@ exports.findGameUsersCars = function(){
 											}
 										}
 										console.log("CARS2:"+car);
-										car.save(function(err){
-											if(err)  return console.log(err);	
+										
+										var promise4 = Car.update({_id:car._id},{$set:{passengers:car.passengers}});
+										var promise5 = User.update({_id:passengers[index*len+i].get("_id")},{$set:{car:car._id}});
+										join2(promise4, promise5, function(){
 											console.log("CARS3:"+car);
-										});
-										passengers[index*len+i].save(function(err){
-											if(err)  return console.log(err);	
 											console.log("passengers:"+passengers[index*len+i]);
 										});
+										
+//										car.save(function(err){
+//											if(err)  return console.log(err);	
+//											console.log("CARS3:"+car);
+//										});
+//										passengers[index*len+i].save(function(err){
+//											if(err)  return console.log(err);	
+//											console.log("passengers:"+passengers[index*len+i]);
+//										});
 									}
 								}
 							});		
