@@ -145,7 +145,10 @@ exports.findGameUsersCars = function(){
 				var promise3 = User.find({game:gameResult._id, car:{$exists:false}}).exec();
 				
 				join(promise2,promise3,function(owners,passengers){
-					if(owners!=null && passengers!=null){
+					if(!owners || !passengers) {
+						console.log("====owners===" + owners);
+						console.log("====passengers===" + passengers);
+					} else {
 						console.log("OWNERS:"+owners);
 						console.log("PASSENGERS:"+passengers);
 						owners.forEach(function(owner, index){
@@ -196,9 +199,6 @@ exports.findGameUsersCars = function(){
 								}
 							});		
 						});
-					}else{
-						if(owners == null) console.log("There is no cars.");
-						if(passengers == null) console.log("There is no passengers.");
 					}
 				});
                });	
