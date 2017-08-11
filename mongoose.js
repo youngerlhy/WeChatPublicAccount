@@ -179,7 +179,7 @@ exports.findGameUsersCars = function(){
 										
 										var promise4 = Car.update({_id:car._id},{$set:{passengers:car.passengers,seatavailablenum:car.seatavailablenum}});
 										var promise5 = User.update({_id:passengers[index*len+i].get("_id")},{$set:{car:car._id}});
-										join2(promise4, promise5, function(){
+										join2(promise5, promise4, function(){
 											console.log("passengers:"+passengers[index*len+i]);
 											console.log("CARS3:"+car);
 										});
@@ -200,7 +200,6 @@ exports.findGameUsersCars = function(){
 						if(owners == null) console.log("There is no cars.");
 						if(passengers == null) console.log("There is no passengers.");
 					}
-				
 				});
                });	
 			}else{

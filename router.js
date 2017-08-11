@@ -214,6 +214,7 @@ module.exports = function(app) {
 	    		  promise2.then(function(users){
 	    			  if(users != null){
 		    			  users.forEach(function(user,index){
+		    				  console.log("index:"+index);
 		    				  var promise3 = mongoose.findUserCar(user);
 		    				  promise3.then(function(car){
 		    					  if(car != null){
