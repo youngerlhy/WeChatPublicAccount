@@ -137,8 +137,9 @@ Game.findOne({signupStatus: 'Started'}, function(error, gameResult) {
 exports.findGameUsersCars = function(){
 	var join = Promise.join;
 	var join2 = Promise.join;
-	var promise = Game.find({gameStatus: 'Started',signupStatus: 'Ended'},null,{skip:0, limit:1, sort:{_id:-1}},function(error, gameResult){
-			if(gameResult != null){	
+	var promise = Game.find({gameStatus: 'Started',signupStatus: 'Ended'},null,{skip:0, limit:1, sort:{_id:-1}},function(error, games){
+			if(games != null){	
+                games.forEach(function(gameResult,index1){
                 console.log("Game:"+gameResult);
 				var promise2 = User.find({game:gameResult._id, car:{$exists:true}}).exec();
 				var promise3 = User.find({game:gameResult._id, car:{$exists:false}}).exec();
@@ -200,6 +201,7 @@ exports.findGameUsersCars = function(){
 						if(passengers == null) console.log("There is no passengers.");
 					}
 				});
+               });	
 			}else{
 				console.log("There is no available game.");
 			}
