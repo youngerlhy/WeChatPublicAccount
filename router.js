@@ -208,8 +208,9 @@ module.exports = function(app) {
       if (response.statusCode == 200) {
 		  var datas=[];
     	  var promise = mongoose.findGameUsersCars();
-    	  promise.then(function(game){
-    		  if(game != null){
+    	  promise.then(function(games){
+    		  if(games != null){
+    			  games.forEach(function(game,index1){
 	    		  var promise2 = mongoose.findGameUser(game);
 	    		  promise2.then(function(users){
 	    			  if(users != null){
@@ -237,6 +238,7 @@ module.exports = function(app) {
 		    			  });	
 	    			  }
 	    		  });
+    			 });
     		  }
     	  });    
       } else {
