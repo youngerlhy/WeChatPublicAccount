@@ -303,10 +303,10 @@ exports.setGameStatusEnded = function(){
             console.log("now: " + now);
 			if(item.endTime < now){
 				item.gameStatus = 'Ended';
+				item.save(function(err){
+					if(err)  return console.log(err);					
+				});	
 			}
-			item.save(function(err){
-				if(err)  return console.log(err);					
-			});	
 		});
 	});
 }
