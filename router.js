@@ -2,7 +2,6 @@
 var request = require('request');
 var mongoose = require('./mongoose');
 mongoose.Promise = require('bluebird');
-Promise.promisifyAll(mongoose);
 
 module.exports = function(app) {
   app.get('/', function(req, res) {
