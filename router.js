@@ -47,8 +47,15 @@ module.exports = function(app) {
 	          + context.secret + '&code=' + code + '&grant_type=authorization_code',
 	    }, function(error, response, body) {
 	      if (response.statusCode == 200) {
+	    	  console.log("REQ:"+req);
+	    	  console.log("RES:"+res);
+	    	  console.log("RESPONSE:"+response);
+	    	  console.log("BODY:"+body);
+	    	  
 	    	  var nickname = req.body.nickname;
 	    	  console.log("nickname:"+nickname);
+	    	  
+	    	  
 	    	  var userGamesNum=0; 
 	    	  var promise =mongoose.getCountGames();
 	    	  var promise2 =  mongoose.findOneUserGames(nickname);
