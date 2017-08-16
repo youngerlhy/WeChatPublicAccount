@@ -51,7 +51,7 @@ module.exports = function(app) {
 	    	  var userGamesNum; 
 	    	  var promise =mongoose.getCountGames();
 	    	  var promise2 =  mongoose.findOneUserGame(nickname);
-	    	  var join = Promise.join;
+	    	  var join = mongoose.Promise.join;
 	    	  join(promise,promise2,function(count,result){
 	    		  console.log("COUNT:"+count);
 	    		  console.log("RESULT:"+result);
