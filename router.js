@@ -50,10 +50,9 @@ module.exports = function(app) {
 	    	  body = body.toString("utf-8");
 	          var userinfo = JSON.parse(body);
 	          console.log("USERINFO:"+JSON.parse(body));
-	          var nickname = userinfo.nickname;
-
+	          var nickname = "Tiny Ding";
 	    	  console.log("nickname:"+ userinfo.nickname);
-	    	  console.log("nickname2:"+ userinfo.get("nickname"));
+	    	
 	    	  
 	    	  
 	    	  var userGamesNum=0; 
