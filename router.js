@@ -41,7 +41,7 @@ module.exports = function(app) {
 	   });
   
   app.get('/game_history', function(req, res) {
-	    var code = req.query.code;
+	  var code = req.query.code;
 	    request.get({
 	      url : 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + context.appid + '&secret='
 	          + context.secret + '&code=' + code + '&grant_type=authorization_code',
@@ -54,7 +54,7 @@ module.exports = function(app) {
 	        var openid = data.openid;
 	        console.log("token"+access_token);
 	        console.log("openid:"+openid);
-	    	  
+
 	      }
 	  });
   });  
