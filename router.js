@@ -49,13 +49,9 @@ module.exports = function(app) {
 	      if (response.statusCode == 200) {
 	    	  body = body.toString("utf-8");
 	          var userinfo = JSON.parse(body);
+	          console.log("USERINFO:"+JSON.parse(body));
 	          var nickname = userinfo.nickname;
-//	    	  console.log("REQ:"+req.body);
-//	    	  console.log("RES:"+res.body);
-//	    	  console.log("RESPONSE:"+response.body);
-//	    	  console.log("BODY:"+body);
-	    	  
-//	    	  var nickname = req.body.nickname;
+
 	    	  console.log("nickname:"+nickname);
 	    	  
 	    	  
