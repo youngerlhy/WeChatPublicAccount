@@ -14,8 +14,8 @@ app.set('view engine', 'html');
 app.engine('.html', require('ejs').__express);
 
 context = {	
-	appid: "wxb860e1a1c1845529",
-	secret: "ac4e9563cfbc194feef871831d342d76"
+	appid: "wx067aa7e646581331",
+	secret: "d26907f7504d80d5aea6305db84ec510"
 };
 require('./initiator')();
 require('./router')(app); //router config file
