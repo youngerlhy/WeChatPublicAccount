@@ -47,9 +47,9 @@ module.exports = function(app) {
 	          + context.secret + '&code=' + code + '&grant_type=authorization_code',
 	    }, function(error, response, body) {
 	      if (response.statusCode == 200) {
-	    	  console.log("REQ:"+req);
-	    	  console.log("RES:"+res);
-	    	  console.log("RESPONSE:"+response);
+	    	  console.log("REQ:"+req.body);
+	    	  console.log("RES:"+res.body);
+	    	  console.log("RESPONSE:"+response.body);
 	    	  console.log("BODY:"+body);
 	    	  
 	    	  var nickname = req.body.nickname;
