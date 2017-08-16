@@ -2,6 +2,7 @@
 var request = require('request');
 var mongoose = require('./mongoose');
 mongoose.Promise = require('bluebird');
+Promise.promisifyAll(mongoose);
 
 module.exports = function(app) {
   app.get('/', function(req, res) {
@@ -48,16 +49,20 @@ module.exports = function(app) {
 	    }, function(error, response, body) {
 	      if (response.statusCode == 200) {
 	    	  var nickname = req.body.nickname;
-	    	  
+	    	  var userGamesNum; 
 	    	  var promise =mongoose.getCountGames();
-	    	  promise.then(function (count){
-	    		  var promise2 =  mongoose.findOneUserGame(nickname);
-	    		  promise2.then(function(result){
-	    			  
-	    			  var userGamesNum = result.length;
-	    			  res.render('history', {count:count, userGamesNum:userGamesNum});
-	    			  
-	    		  });
+	    	  var promise2 =  mongoose.findOneUserGame(nickname);
+	    	  var join = Promise.join;
+	    	  join(promise,promise2,function(count,result){
+	    		  console.log("COUNT:"+count);
+	    		  console.log("RESULT:"+result);
+	    		  if(count!=null && result!=null){
+	    			  userGamesNum = result.length;	    			  
+	    		  }else{
+	    			  count = 0;
+	    			  userGamesNum = 0;
+	    		  }
+    			  res.render('history', {count:count, userGamesNum:userGamesNum});
 	    	  });
 	      }
 	    });
