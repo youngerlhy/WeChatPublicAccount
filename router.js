@@ -48,18 +48,20 @@ module.exports = function(app) {
 	    }, function(error, response, body) {
 	      if (response.statusCode == 200) {
 	    	  var nickname = req.body.nickname;
-	    	  var userGamesNum; 
+	    	  console.log("nickname:"+nickname);
+	    	  var userGamesNum=0; 
 	    	  var promise =mongoose.getCountGames();
-	    	  var promise2 =  mongoose.findOneUserGame(nickname);
+	    	  var promise2 =  mongoose.findOneUserGames(nickname);
 	    	  var join = mongoose.Promise.join;
 	    	  join(promise,promise2,function(count,result){
 	    		  console.log("COUNT:"+count);
 	    		  console.log("RESULT:"+result);
-	    		  if(count!=null && result!=null){
-	    			  userGamesNum = result.length;	    			  
-	    		  }else{
+	    		  if(count == null){
 	    			  count = 0;
+	    		  }else if(result == null){
 	    			  userGamesNum = 0;
+	    		  }else{
+	    			  userGamesNum = result.length;	    
 	    		  }
     			  res.render('history', {count:count, userGamesNum:userGamesNum});
 	    	  });

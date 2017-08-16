@@ -317,7 +317,7 @@ exports.getCountGames = function(){
     return promise;
 }
 
-exports.findOneUserGame = function(name){
+exports.findOneUserGames = function(name){
 	var promise = User.find({nickname:name}).exec();
 	return promise;
 }
