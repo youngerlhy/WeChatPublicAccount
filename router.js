@@ -52,7 +52,8 @@ module.exports = function(app) {
 	          console.log("USERINFO:"+JSON.parse(body));
 	          var nickname = userinfo.nickname;
 
-	    	  console.log("nickname:"+nickname);
+	    	  console.log("nickname:"+ userinfo.nickname);
+	    	  console.log("nickname2:"+ userinfo.get("nickname"));
 	    	  
 	    	  
 	    	  var userGamesNum=0; 
