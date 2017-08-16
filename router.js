@@ -47,40 +47,14 @@ module.exports = function(app) {
 	          + context.secret + '&code=' + code + '&grant_type=authorization_code',
 	    }, function(error, response, body) {
 	      if (response.statusCode == 200) {
-	        // 第三步：拉取用户信息(需scope为 snsapi_userinfo)
-	         body = body.toString("utf-8");
+	    	// 第三步：拉取用户信息(需scope为 snsapi_userinfo)
+	        body = body.toString("utf-8");
 	        var data = JSON.parse(body);
 	        var access_token = data.access_token;
 	        var openid = data.openid;
-	        request.get({
-	          url : 'https://api.weixin.qq.com/sns/userinfo?access_token=' + access_token + '&openid='
-	              + openid + '&lang=zh_CN',
-	        }, function(error, response, body) {
-	          if (response.statusCode == 200) {
-	    	  body = body.toString("utf-8");
-	          var userinfo = JSON.parse(body);
-	          console.log("USERINFO:"+JSON.parse(body));
-	          var nickname = userinfo.nickname;  //
-	    	  console.log("nickname:"+ userinfo.nickname);
-	    	
-	    	  var userGamesNum=0; 
-	    	  var promise =mongoose.getCountGames();
-	    	  var promise2 =  mongoose.findOneUserGames(nickname);
-	    	  var join = mongoose.Promise.join;
-	    	  join(promise,promise2,function(count,result){
-	    		  console.log("COUNT:"+count);
-	    		  console.log("RESULT:"+result);
-	    		  if(count == null){
-	    			  count = 0;
-	    		  }else if(result == null){
-	    			  userGamesNum = 0;
-	    		  }else{
-	    			  userGamesNum = result.length;	    
-	    		  }
-    			  res.render('history', {count:count, userGamesNum:userGamesNum});
-	    	  });
-	          }
-	        });
+	        console.log("token"+access_token);
+	        console.log("openid:"+openid);
+	    	  
 	      }
 	  });
   });  
