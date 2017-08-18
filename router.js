@@ -42,7 +42,6 @@ module.exports = function(app) {
   
   app.get('/game_history', function(req, res, next) {
 	    // 第一步：用户同意授权，获取code
-	  console.log("!!!");
 	    var get_code = 'game_history2';
 	    // 这是编码后的地址
 	    var return_uri = 'http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'
@@ -53,7 +52,6 @@ module.exports = function(app) {
 	        + '&redirect_uri=' + return_uri + '&response_type=code&scope=' + scope
 	        + '&state=STATE#wechat_redirect');
 	    
-	    console.log("!!!2");
 	  });
   
   app.get('/game_history2', function(req, res) {
@@ -68,8 +66,6 @@ module.exports = function(app) {
 	        var data = JSON.parse(body);
 	        var access_token = data.access_token;
 	        var openid = data.openid;
-	        console.log("token:"+access_token);
-	        console.log("openid:"+openid);
 	        
 	        request.get({
 		          url : 'https://api.weixin.qq.com/sns/userinfo?access_token=' + access_token + '&openid='
@@ -78,17 +74,13 @@ module.exports = function(app) {
 		          if (response.statusCode == 200) {
 		        	  body = body.toString("utf-8");
 			          var userinfo = JSON.parse(body);
-			          console.log("USERINFO:"+JSON.parse(body));
 			          var nickname = userinfo.nickname;
-			    	  console.log("nickname:"+ userinfo.nickname);
 			    	
 			    	  var userGamesNum=0; 
 			    	  var promise =mongoose.getCountGames();
 			    	  var promise2 =  mongoose.findOneUserGames(nickname);
 			    	  var join = mongoose.Promise.join;
 			    	  join(promise,promise2,function(count,result){
-			    		  console.log("COUNT:"+count);
-			    		  console.log("RESULT:"+result);
 			    		  if(count == null){
 			    			  count = 0;
 			    		  }else if(result == null){
