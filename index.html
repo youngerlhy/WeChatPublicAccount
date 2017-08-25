@@ -1,76 +1,314 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<title>羽毛球活动报名</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="Kuanghui Ding">
-    <link href="/css/bootstrap.css" rel="stylesheet">
-	<link href="/css/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+  <link rel="stylesheet" href="">
+  <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+  <script src="https://unpkg.com/jquery/dist/jquery.min.js"></script>
+  <script src="js/mainjs.js"></script>
 </head>
-<body>
 
-<div class="div-img">
-	<img src="/resource/badminton.png" class="img-responsive" alt="badminton"/> 
-</div>
-<span id="action_time"></span>
-<div id="sign_up" class="div-center">
-	<div class="div-center-div">
-		<div class="center-btn">
-		  <button id="confirm_sign_up" type="button" class="btn btn-primary btn-lg-center" >积极报名</button>
+<body>
+<ons-splitter>
+  <ons-splitter-side id="menu" side="left" width="220px" collapse swipeable>
+    <ons-page>
+      <ons-list>
+        <ons-list-item onclick="fn.load('home.html')" tappable>
+          羽毛球报名
+        </ons-list-item>
+		<ons-list-item onclick="fn.load('result.html')" tappable>
+          报名列表
+        </ons-list-item>
+        <ons-list-item onclick="fn.load('cancel.html')" tappable>
+          取消报名
+        </ons-list-item>
+        <ons-list-item onclick="fn.load('history.html')" tappable>
+          历史战报
+        </ons-list-item>
+      </ons-list>
+    </ons-page>
+  </ons-splitter-side>
+  <ons-splitter-content id="content" page="home.html"></ons-splitter-content>
+</ons-splitter>
+
+<template id="home.html">
+  <ons-page id="home-page">
+    <ons-toolbar>
+		<div class="left">
+		<ons-toolbar-button onclick="fn.open()">
+		  <ons-icon icon="md-menu"></ons-icon>
+		</ons-toolbar-button>
 		</div>
-		<div class="center-btn">
-		  <button id="next_time" type="button" class="btn btn-default btn-lg-center">下次再说</button>
+		<div class="center">
+			羽毛球活动报名
 		</div>
+    </ons-toolbar>
+	
+    <ons-list-header>8.23活动报名：</ons-list-header>
+	<img src="resource/badminton.jpg" alt="badminton" style="width: 100%">
+    <ons-list>
+      <ons-list-item class="input-items" modifier="nodivider">
+        <div class="left">
+          <ons-icon icon="md-face" style="color:blue;" class="list-item__icon"></ons-icon>
+        </div>
+        <label class="center">
+			<ons-input id="username" maxlength="20" placeholder="请输入姓名："></ons-input>
+		</label>
+      </ons-list-item>
+	  
+	  <ons-list-item class="input-items" modifier="nodivider">
+		<div class="left">
+			<ons-icon icon="fa-car" style="color:blue;" class="list-item__icon"></ons-icon>
+        </div>
+		<label id="enabled_label" class="center" for="switch1">
+			没车/有车
+		</label>
+        <label class="right right-label">
+          <ons-switch id="have_car" input-id="switch1"></ons-switch>
+        </label>
+      </ons-list-item>
+	  
+      <ons-list-item id="car_seats" class="input-items" style="display:none" modifier="nodivider">
+		<div class="left">
+			<ons-icon icon="fa-question-circle-o" style="color:blue;" class="list-item__icon"></ons-icon>
+		</div>
+		<label class="center">可提供几个座位(含司机):</label>
+		<div class="right right-label">
+			<ons-select id="select_input">
+				<option value="5">5</option>
+				<option value="4">4</option>
+				<option value="3">3</option>
+				<option value="2">2</option>
+				<option value="1">1</option>
+			</ons-select>
+		</div>
+      </ons-list-item>
+    </ons-list>
+	
+	<div class="sign-up-num-div" style="font-size:16px;">
+		已有
+		<p class="sign-up-num">3</p>
+		位童鞋报名，赶快加入吧...
 	</div>
-</div>
-<div id="whether_have_car" class="div-center" style="display:none;">
-	<div class="div-center-div">
-		<div class="center-btn">
-		  <button id="have_car" type="button" class="btn btn-primary btn-lg-center">有车</button>
-		</div>
-		<div class="center-btn">
-		  <button id="not_have_car" type="button" class="btn btn-default btn-lg-center">没车</button>
-		</div>
-	</div>
-</div>
-<div id="car_seat" class="div-center" style="display:none;">
-	<div class="div-center-div">
-		<label>可提供几个座位(包括司机)：</label>
-		<select name="seats" id="seat">
-			<option value="5" selected>5</option>
-			<option value="4">4</option>
-			<option value="3">3</option>
-			<option value="2">2</option>
-			<option value="1">1</option>
-		</select>
-		<p>
-			<button id="finish_sign_up" type="button" class="btn btn-primary btn-lg">完成报名</button>
+	<div style="margin-top:30px;">
+		<p style="width:100px; margin:0 auto;">
+			<ons-button class="sign-up-btn" onclick="signUp()">积极报名</ons-button>
 		</p>
 	</div>
-</div>
-<div id="sign_up_successful" class="div-center" style="display:none;">
-	<div class="div-center-txt">
-		<p>您已成功报名^_^</p>
-		<p>Have Fun!</p>
+	<div class="sign-up-num-div">
+		<p>
+			BID CBC 羽毛球俱乐部
+		</p>
+		<p>
+			Powered by Falcon Team
+		</p>
 	</div>
-</div>
-<div id="next_time_txt" class="div-center" style="display:none;">
-	<div class="div-center-txt">
-		<p>好遗憾-_-</p>
-		<p>下次一定要去哦</p>
+	<script>
+		document.getElementById('home-page').onInit = function () {
+			document.getElementById('have_car').addEventListener('change', function (event) {
+			  if (event.value) {
+				document.getElementById('car_seats').style.display = 'flex';
+			  } else {
+				document.getElementById("car_seats").style.display = 'none';
+			  }
+			});
+		}
+	</script>
+  </ons-page>
+</template>
+
+<template id="result.html">
+  <ons-page id="result-page">
+    <ons-toolbar>
+		<div class="left">
+		<ons-toolbar-button onclick="fn.open()">
+		  <ons-icon icon="md-menu"></ons-icon>
+		</ons-toolbar-button>
+		</div>
+		<div class="center">
+			羽毛球报名列表
+		</div>
+    </ons-toolbar>
+	
+    <ons-list-header>8.23活动报名：</ons-list-header>
+	<img src="resource/badminton.jpg" alt="badminton" style="width: 100%">
+	<ons-list>
+		<ons-list-item modifier="longdivider">
+		  <div class="left">
+			<img class="list-item__thumbnail" src="http://placekitten.com/g/40/40">
+		  </div>
+		  <div class="center">
+			<span class="list-item__title">李潇</span><span class="list-item__subtitle">有车（5座）</span>
+		  </div>
+		</ons-list-item>
+		<ons-list-item modifier="longdivider">
+		  <div class="left">
+			<img class="list-item__thumbnail" src="http://placekitten.com/g/10/40">
+		  </div>
+		  <div class="center">
+			<span class="list-item__title">丁矿辉</span><span class="list-item__subtitle">没车</span>
+		  </div>
+		</ons-list-item>
+		<ons-list-item modifier="longdivider">
+		  <div class="left">
+			<img class="list-item__thumbnail" src="http://placekitten.com/g/20/20">
+		  </div>
+		  <div class="center">
+			<span class="list-item__title">姜宏</span><span class="list-item__subtitle">没车</span>
+		  </div>
+		</ons-list-item>
+    </ons-list>
+	<div class="sign-up-num-div">
+		<p>
+			BID CBC 羽毛球俱乐部
+		</p>
+		<p>
+			Powered by Falcon Team
+		</p>
 	</div>
-</div>
-<footer>
-	<p>
-		BID CBC 羽毛球俱乐部
-	</p>
-	<p class="powered-by">
-		Powered by Falcon Team
-	</p>
-</footer>
-<script src="/js/jquery.js"></script>
-<script src="/js/main.js"></script>
+  </ons-page>
+</template>
+
+<template id="cancel.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-toolbar-button onclick="fn.open()">
+          <ons-icon icon="md-menu"></ons-icon>
+        </ons-toolbar-button>
+      </div>
+      <div class="center">
+        取消报名
+      </div>
+    </ons-toolbar>
+	<ons-list-header>8.23活动报名：</ons-list-header>
+	<img src="resource/badminton.jpg" alt="badminton" style="width: 100%">
+	<div style="display:none">
+		<div class="sign-up-num-div">
+			您还没有报名，请先
+		</div>
+		<div style="margin-top:30px;">
+			<p style="width:100px; margin:0 auto;">
+				<ons-button class="sign-up-btn" onclick="fn.load('home.html')">报名</ons-button>
+			</p>
+		</div>
+	</div>
+	<div>
+		<div class="sign-up-num-div">
+			您已报名，确认取消报名吗？
+		</div>
+		<div style="margin-top:30px;">
+			<p style="width:100px; margin:0 auto;">
+				<ons-button class="sign-up-btn" onclick="ons.notification.alert('成功取消报名!');">取消报名</ons-button>
+			</p>
+		</div>
+	</div>
+	<div class="sign-up-num-div">
+		<p>
+			BID CBC 羽毛球俱乐部
+		</p>
+		<p>
+			Powered by Falcon Team
+		</p>
+	</div>
+  </ons-page>
+</template>
+
+<template id="history.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-toolbar-button onclick="fn.open()">
+          <ons-icon icon="md-menu"></ons-icon>
+        </ons-toolbar-button>
+      </div>
+      <div class="center">
+        历史战报
+      </div>
+    </ons-toolbar>
+	<ons-list-header>8.23活动报名：</ons-list-header>
+	<img src="resource/badminton.jpg" alt="badminton" style="width: 100%">
+	<div class="center">
+		<div class="game_info">
+			<p>请查阅您的比赛战绩：</p>
+			<div class="game_info_block">
+				<label class="left">总次数：</label>
+				<div class="game-progress">
+					<div class="game-progress-core" id="total_game_progress"></div>
+				</div>
+				<label id="total_game_num">2次</label>
+			</div>
+			<div class="game_info_block">
+				<label>您的次数：</label>
+				<div class="game-progress">
+					<div class="game-progress-core" id="your_game_progress"
+					style="width:50%"></div>
+				</div>
+				<label id="your_game_num">1次</label>
+			</div>
+		</div>
+	</div>
+	<div class="sign-up-num-div" class="center" style="float:left;text-align:center;width:100%;">
+		<p>
+			BID CBC 羽毛球俱乐部
+		</p>
+		<p>
+			Powered by Falcon Team
+		</p>
+	</div>
+  </ons-page>
+</template>
+<style>
+	.sign-up-num-div{
+		padding-top:50px;
+		text-align:center;
+		line-height:30px;
+		font-size:10px;
+	}
+	.sign-up-num{
+		width:30px;
+		height:30px;
+		border:8px rgb(66, 131, 204) solid;
+		border-radius:30px;
+		display:inline-block;
+		text-align:center;
+	}
+	.sign-up-btn{
+		width:100px;
+		text-align:center;
+		border-radius:10px;
+	}
+	.game_info{
+		width:90%;
+		margin:0 auto;
+	}
+	.game_info label{
+		float:left;
+		font-size:10px;
+		width:20%;
+	}
+	.game_info .game_info_block{
+		float:left;
+		width:100%;
+		margin-top:20px;
+	}
+	.game-progress{
+		float:left;
+		height: 20px;
+		width: 60%;
+		border-radius: 10px;
+		background: #fff;
+	}
+	.game-progress-core{
+		border:2px solid #fff;
+		background:#00f;
+		height: 90%;
+		border-radius: 10px;
+	}
+	.list-item__thumbnail{
+		border-radius:40px;
+	}
+</style>
 </body>
 </html>
