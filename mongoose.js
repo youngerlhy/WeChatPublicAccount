@@ -136,64 +136,75 @@ Game.findOne({signupStatus: 'Started'}, function(error, gameResult) {
 
 exports.findGameUsersCars = function(){
 	var join = Promise.join;
-	var promise = Game.findOne({signupStatus: 'Ended', gameStatus: 'Started'}, function(error, gameResult) {
-		if(gameResult != null){
-			var promise2 = User.find({game:gameResult._id, car:{$exists:true}}).exec();
-			var promise3 = User.find({game:gameResult._id, car:{$exists:false}}).exec();
-			
-			join(promise2,promise3,function(owners,passengers){
-				if(owners!=null && passengers!=null){
-					console.log("OWNERS:"+owners);
-					console.log("PASSENGERS:"+passengers);
-					owners.forEach(function(owner, index){
-						Car.findOne({available:true,owner:owner._id}).then(function(car){
-							console.log("CARS1:"+car);
-							if(car != null){
-								var len=car.seatavailablenum;
-								console.log("len:"+len);
-								for(var i=0; i<len; i++){
-									console.log("car.passengers.length:"+car.passengers.length);
-									if(car.passengers.length ==0){
-										console.log("passengers[index*len+i].get(id):"+passengers[index*len+i].get("_id"));
-										car.passengers.push(passengers[index*len+i].get("_id"));
-										car.seatavailablenum -=1;
-										console.log("car.seatavailablenum:"+car.seatavailablenum);
-										
-										passengers[index*len+i].car = car._id;
-										console.log("passengers[index*len+i]1:"+passengers[index*len+i]);
-									}else{
-										for(var j=0; j<car.passengers.length;j++){
-											if(car.passenger[i] != passengers[index*len+i].get("_id") 
-											   && (index*len+i)<passengers.length){
-												car.passengers.push(passengers[index*len+i].get("_id"));
-												car.seatavailablenum -=1;
-												passengers[index*len+i].car = car._id;
-												console.log("passengers[index*len+i]:"+passengers[index*len+i]);
+	var join2 = Promise.join;
+	var promise = Game.find({gameStatus: 'Started',signupStatus: 'Ended'},null,{skip:0, limit:1, sort:{_id:-1}},function(error, games){
+			if(games != null){	
+                games.forEach(function(gameResult,index1){
+                console.log("Game:"+gameResult);
+				var promise2 = User.find({game:gameResult._id, car:{$exists:true}}).exec();
+				var promise3 = User.find({game:gameResult._id, car:{$exists:false}}).exec();
+				
+				join(promise2,promise3,function(owners,passengers){
+					if(!owners || !passengers) {
+						console.log("====owners===" + owners);
+						console.log("====passengers===" + passengers);
+					} else {
+						console.log("OWNERS:"+owners);
+						console.log("PASSENGERS:"+passengers);
+						owners.forEach(function(owner, index){
+							Car.findOne({available:true,owner:owner._id}).then(function(car){
+								console.log("CARS1:"+car);
+								if(car != null){
+									var len=car.seatavailablenum;
+									console.log("len:"+len);
+									for(var i=0; i<len; i++){
+										console.log("car.passengers.length:"+car.passengers.length);
+										if(car.passengers.length ==0){
+											console.log("passengers[index*len+i].get(id):"+passengers[index*len+i].get("_id"));
+											car.passengers.push(passengers[index*len+i].get("_id"));
+											car.seatavailablenum -=1;
+											console.log("car.seatavailablenum:"+car.seatavailablenum);
+											
+											passengers[index*len+i].car = car._id;
+											console.log("passengers[index*len+i]1:"+passengers[index*len+i]);
+										}else{
+											for(var j=0; j<car.passengers.length;j++){
+												if(car.passenger[i] != passengers[index*len+i].get("_id") 
+												   && (index*len+i)<passengers.length){
+													car.passengers.push(passengers[index*len+i].get("_id"));
+													car.seatavailablenum -=1;
+													passengers[index*len+i].car = car._id;
+													console.log("passengers[index*len+i]:"+passengers[index*len+i]);
+												}
 											}
 										}
+										console.log("CARS2:"+car);
+										
+										var promise4 = Car.update({_id:car._id},{$set:{passengers:car.passengers,seatavailablenum:car.seatavailablenum}});
+										var promise5 = User.update({_id:passengers[index*len+i].get("_id")},{$set:{car:car._id}});
+										join2(promise5, promise4, function(){
+											console.log("passengers:"+passengers[index*len+i]);
+											console.log("CARS3:"+car);
+										});
+										
+//										car.save(function(err){
+//											if(err)  return console.log(err);	
+//											console.log("CARS3:"+car);
+//										});
+//										passengers[index*len+i].save(function(err){
+//											if(err)  return console.log(err);	
+//											console.log("passengers:"+passengers[index*len+i]);
+//										});
 									}
-									console.log("CARS2:"+car);
-									car.save(function(err){
-										if(err)  return console.log(err);	
-										console.log("CARS3:"+car);
-									});
-									passengers[index*len+i].save(function(err){
-										if(err)  return console.log(err);	
-										console.log("passengers:"+passengers[index*len+i]);
-									});
 								}
-							}
-						});		
-					});
-				}else{
-					if(owners != null) console.log("There is no cars.");
-					if(passengers != null) console.log("There is no passengers.");
-				}
-			
-			});	
-		}else{
-			console.log("There is no available game.");
-		}
+							});		
+						});
+					}
+				});
+               });	
+			}else{
+				console.log("There is no available game.");
+			}
 	}).exec();
 	
 	return promise;
@@ -285,17 +296,17 @@ exports.findEndedGame = function() {
 
 exports.setGameStatusEnded = function(){
 	Game.find({signupStatus:'Ended', gameStatus:'Started'},function(err,result){
-                if(result == null) return;
+        if(result == null) return;
 		result.forEach(function(item,index){
 			var now = new Date();
-                        console.log("endTime: " + item.endTime);
-                        console.log("now: " + now);
+            console.log("endTime: " + item.endTime);
+            console.log("now: " + now);
 			if(item.endTime < now){
 				item.gameStatus = 'Ended';
+				item.save(function(err){
+					if(err)  return console.log(err);					
+				});	
 			}
-			item.save(function(err){
-				if(err)  return console.log(err);					
-			});	
 		});
 	});
 }
@@ -306,9 +317,7 @@ exports.getCountGames = function(){
     return promise;
 }
 
-exports.findOneUserGame = function(name){
+exports.findOneUserGames = function(name){
 	var promise = User.find({nickname:name}).exec();
 	return promise;
 }
-
-

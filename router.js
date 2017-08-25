@@ -40,27 +40,64 @@ module.exports = function(app) {
 	    res.render('history', {});
 	   });
   
-  app.get('/game_history', function(req, res) {
-	    var code = req.query.code;
+  app.get('/game_history', function(req, res, next) {
+	    // 第一步：用户同意授权，获取code
+	    var get_code = 'game_history2';
+	    // 这是编码后的地址
+	    var return_uri = 'http%3A%2F%2Fec2-34-210-237-255.us-west-2.compute.amazonaws.com%2F'
+	        + get_code;
+
+	    var scope = 'snsapi_userinfo';
+	    res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + context.appid
+	        + '&redirect_uri=' + return_uri + '&response_type=code&scope=' + scope
+	        + '&state=STATE#wechat_redirect');
+	    
+	  });
+  
+  app.get('/game_history2', function(req, res) {
+	  var code = req.query.code;
 	    request.get({
 	      url : 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + context.appid + '&secret='
 	          + context.secret + '&code=' + code + '&grant_type=authorization_code',
 	    }, function(error, response, body) {
 	      if (response.statusCode == 200) {
-	    	  var nickname = req.body.nickname;
-	    	  
-	    	  var promise =mongoose.getCountGames();
-	    	  promise.then(function (count){
-	    		  var promise2 =  mongoose.findOneUserGame(nickname);
-	    		  promise2.then(function(result){
-	    			  
-	    			  var userGamesNum = result.length;
-	    			  res.render('history', {count:count, userGamesNum:userGamesNum});
-	    			  
-	    		  });
-	    	  });
+	    	// 第三步：拉取用户信息(需scope为 snsapi_userinfo)
+	        body = body.toString("utf-8");
+	        var data = JSON.parse(body);
+	        var access_token = data.access_token;
+	        var openid = data.openid;
+	        
+	        request.get({
+		          url : 'https://api.weixin.qq.com/sns/userinfo?access_token=' + access_token + '&openid='
+		              + openid + '&lang=zh_CN',
+		        }, function(error, response, body) {
+		          if (response.statusCode == 200) {
+		        	  body = body.toString("utf-8");
+			          var userinfo = JSON.parse(body);
+			          var nickname = userinfo.nickname;
+			    	
+			    	  var userGamesNum=0; 
+			    	  var promise =mongoose.getCountGames();
+			    	  var promise2 =  mongoose.findOneUserGames(nickname);
+			    	  var join = mongoose.Promise.join;
+			    	  join(promise,promise2,function(count,result){
+			    		  if(count == null){
+			    			  count = 0;
+			    		  }else if(result == null){
+			    			  userGamesNum = 0;
+			    		  }else{
+			    			  userGamesNum = result.length;	    
+			    		  }
+		    			  res.render('history', {count:count, userGamesNum:userGamesNum});
+			    	  });
+		          }else{
+		        	  console.log(response.statusCode);
+		          }
+		        });
+	      }else{
+	    	  console.log(response.statusCode);
 	      }
-	    });
+	  });
   });  
  
   app.get('/tony', function(req, res) {
@@ -206,17 +243,16 @@ module.exports = function(app) {
           + context.secret + '&code=' + code + '&grant_type=authorization_code',
     }, function(error, response, body) {
       if (response.statusCode == 200) {
-    	  var taxiseat=4;
-    	  var taxiseatnum=0;
-    	  var taxinum=0;
 		  var datas=[];
     	  var promise = mongoose.findGameUsersCars();
-    	  promise.then(function(game){
-    		  if(game != null){
+    	  promise.then(function(games){
+    		  if(games != null){
+    			  games.forEach(function(game,index1){
 	    		  var promise2 = mongoose.findGameUser(game);
 	    		  promise2.then(function(users){
 	    			  if(users != null){
 		    			  users.forEach(function(user,index){
+		    				  console.log("index:"+index);
 		    				  var promise3 = mongoose.findUserCar(user);
 		    				  promise3.then(function(car){
 		    					  if(car != null){
@@ -229,14 +265,8 @@ module.exports = function(app) {
 										 }
 			    					  });
 		    					  }else{
-		    						  taxiseatnum += 1;
 									  datas.push({nickname: user.nickname,imageurl:user.imageurl,carname:"出租车"});
 		    						  if(index == users.length-1){
-		    							  if(taxiseatnum%taxiseat == 0){
-		    								  taxinum =taxiseatnum/taxiseat;
-		    							  }else{
-		    								  taxinum =taxiseatnum/taxiseat+1
-		    							  }
 		    							  console.log("DATAS:==="+datas);
 										  res.render('sign_up_list', {datas : datas});
 		    						  }
@@ -245,6 +275,7 @@ module.exports = function(app) {
 		    			  });	
 	    			  }
 	    		  });
+    			 });
     		  }
     	  });    
       } else {
